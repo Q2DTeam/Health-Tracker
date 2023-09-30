@@ -1,16 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import ProgressCircle from 'react-native-progress-circle'
 
 // Import components
 import KcalValue from '../components/KcalValue';
+import NutriValue from '../components/NutriValue';
 
 const user = {
     totalKcal: 2500,
     totalCarbs: 257,
     totalProtein: 257,
     totalFats: 98,
-    kcalBurned: 750,
-    kcalEaten: 1000,
+    kcalBurned: 1000,
+    kcalEaten: 1400,
+    carbEaten: 100,
+    proteinEaten: 100,
+    fatEaten: 100,
 }
 
 export default function Home() {
@@ -21,11 +26,26 @@ export default function Home() {
                 <View style={styles.topBar}></View>
                 <View style={styles.infoContainer}>
                     <View style={styles.kcalWrapper}>
-                        <KcalValue icon='fire' title='burned' value={690} />
-                        <KcalValue icon='silverware-variant' title='eaten' value={690} />
+                        <KcalValue icon='fire' title='burned' value={user.kcalBurned} />
+                        <ProgressCircle 
+                             percent={Math.round(user.kcalEaten / (user.totalKcal + user.kcalBurned) * 100)}
+                             radius={90}
+                             borderWidth={8}
+                             color="#2ED12E"
+                             shadowColor="#999"
+                             bgColor="#fff"
+                        >
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={styles.remainKcalValue}>{user.totalKcal + user.kcalBurned - user.kcalEaten}</Text>
+                                <Text style={styles.remainKcalText}>Kcal remaining</Text>
+                            </View>
+                        </ProgressCircle>
+                        <KcalValue icon='silverware-variant' title='eaten' value={user.kcalEaten} />
                     </View>
                     <View style={styles.nutriWrapper}>
-
+                        <NutriValue title="Carbs" total={user.totalCarbs} consumed={user.carbEaten} />
+                        <NutriValue title="Proteins" total={user.totalProtein} consumed={user.proteinEaten} />
+                        <NutriValue title="Fats" total={user.totalFats} consumed={user.fatEaten} />
                     </View>
                 </View>
             </View>
@@ -41,11 +61,11 @@ const styles = StyleSheet.create({
         borderRadius: 350,
         borderColor: '#E0E6F3',
         borderWidth: 3,
-        position: 'relative',
+        position: 'absolute',
         top: '-45%',
         left: '-35%',
         paddingTop: 400,
-        paddingHorizontal: 175,
+        alignItems: 'center',
     },
     kcalWrapper: {
         //borderWidth: 1,
@@ -53,6 +73,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         height: 175,
-        paddingBottom: 20,
-    }
+        width: 375,
+    },
+    remainKcalValue: {
+        fontSize: 36,
+        color: "#2ED12E",
+        fontFamily: 'inter-bold',
+    },
+    remainKcalText: {
+        fontSize: 12,
+        color: "#9DA8C3",
+        fontFamily: 'inter-regular',
+    },
+
+    // Nutrients Values
+    nutriWrapper: {
+        //borderWidth: 1,
+        marginTop: 20,
+        width: 375,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
 });

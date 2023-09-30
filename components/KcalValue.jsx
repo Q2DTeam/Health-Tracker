@@ -11,18 +11,25 @@ export default function KcalValue({icon, title, value}) {
                 color={icon === 'fire' ? '#FFA935' : '#2ED12E'}
             />
             <Text style={styles.kcalValue}>{value}</Text>
-            <Text>{title}</Text>
+            <Text style={styles.kcalText}>{title}</Text>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     kcalWrapper: {
+        //borderWidth: 1,
         flexDirection: 'column',
         alignItems: 'center',
+        width: 75,
     },
     kcalValue: {
         fontSize: 26,
-
+        fontFamily: 'inter-semibold',
+    },
+    kcalText: {
+        fontSize: 12,
+        color: "#9DA8C3",
+        fontFamily: 'inter-regular',
     }
 });
