@@ -3,11 +3,35 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { globalColors } from '../global/styles';
 
-export default function ItemCard({ title, info, color }) {
+
+export default function ItemCard({ title, info, type }) {
+    let color;
+    switch (type) {
+        case 'breakfast':
+            color = globalColors.breakfastGreen;
+            break;
+        case 'lunch':
+            color = globalColors.lunchOrange;
+            break;
+        case 'dinner':
+            color = globalColors.dinnerCyan;
+            break;
+        case 'snack':
+            color = globalColors.snackPurple;
+            break;
+        default:
+            color = globalColors.vibrantBlue;
+            break;
+    }
     return (
         <View style={styles.card}>
-            <View style={{ backgroundColor: {color}, width: 10, height: '100%' }}></View>
+            <View style={{
+                backgroundColor: color,
+                width: 10, 
+                height: '100%' 
+            }}/>
             <View style={styles.cardBody}>
                 <Text style={styles.cardTitle}>{title}</Text>
                 <Text style={styles.cardSubtext}>{info}</Text>
