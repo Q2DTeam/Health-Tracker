@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         overflow: 'hidden',
+        marginVertical: 7,
     },
     cardBody: {
         padding: 10,

@@ -6,10 +6,27 @@ import { AntDesign } from '@expo/vector-icons';
 
 // Import global styles
 import { globalColors } from '../global/styles';
+import ItemCard from './ItemCard';
 
 
 // Sample item list, delete later
-
+const foodList = [
+    {
+        id: 1,
+        title: 'Rice',
+        info: '2 bowl x 100g - 260kcal',
+    },
+    {
+        id: 2,
+        title: 'Rice',
+        info: '2 bowl x 100g - 260kcal',
+    },
+    {
+        id: 3,
+        title: 'Rice',
+        info: '2 bowl x 100g - 260kcal',
+    },
+]
 
 
 export default function MealItem({ type }) {
@@ -34,13 +51,30 @@ export default function MealItem({ type }) {
 
     const [isExpanded, setExpanded] = React.useState(false);
 
+    const expandHandler = () => {
+        setExpanded(old => !old);
+    }
+
     return (
         <View style={styles.mealContainer}>
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, color: color }}>Breakfast</Text>
-                <Text style={styles.mealKcal}>537 kcal</Text>
+                <TouchableOpacity onPress={expandHandler}>
+                    <Text style={styles.mealKcal}>537 kcal</Text>
+                </TouchableOpacity>
             </View>
-            
+            {
+                isExpanded ? 
+                <FlatList 
+                    keyExtractor={(item) => item.id}
+                    data={foodList}
+                    renderItem={({item}) => (
+                        <ItemCard title={item.title} info={item.info} type={type} />
+                    )}
+                />
+                :
+                <View/>
+            }
         </View>
     )
 }
@@ -49,12 +83,12 @@ const styles = StyleSheet.create({
     mealContainer: {
         width: 334,
         minHeight: 75,
-        borderWidth: 1,
     },
     titleContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderWidth: 1,
+        marginBottom: 20,
+
     },
     mealKcal: {
         fontSize: 20,
