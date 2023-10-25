@@ -44,8 +44,7 @@ export default function Navigation() {
 
 const styles = StyleSheet.create({
     tabBar: {
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+
         overflow: "hidden",
     }
 });

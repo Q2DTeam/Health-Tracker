@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+
 export const globalColors = {
     'vibrantBlue': '#0099FF',
     'breakfastGreen': '#2ED12E',
@@ -8,16 +10,6 @@ export const globalColors = {
     'textGray': '#9EA9C3',
 }
 
-/*
-    Normal Shadow:
-    shadowColor: "#000",
-    shadowOffset: {
-        width: 0,
-        height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-
-    elevation: 4,
-
-*/
+const globalStyles = StyleSheet.create({
+    
+});

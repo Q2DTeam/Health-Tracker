@@ -26,10 +26,21 @@ const foodList = [
         title: 'Rice',
         info: '2 bowl x 100g - 260kcal',
     },
+    {
+        id: 4,
+        title: 'Rice',
+        info: '2 bowl x 100g - 260kcal',
+    },
+    {
+        id: 5,
+        title: 'Rice',
+        info: '2 bowl x 100g - 260kcal',
+    },
 ]
 
 
-export default function MealItem({ type }) {
+
+export default function MealItem({ info = '527 kcal', type }) {
     let color;
     switch (type) {
         case 'breakfast':
@@ -58,9 +69,11 @@ export default function MealItem({ type }) {
     return (
         <View style={styles.mealContainer}>
             <View style={styles.titleContainer}>
-                <Text style={{ fontSize: 20, color: color }}>Breakfast</Text>
+                <Text style={{ fontSize: 20, color: color }}>{type[0].toUpperCase() + type.slice(1)}</Text>
                 <TouchableOpacity onPress={expandHandler}>
-                    <Text style={styles.mealKcal}>537 kcal</Text>
+                    <Text style={styles.mealKcal}>{info}
+                    { isExpanded ? <AntDesign name='up' size={18} /> : <AntDesign name='down' size={18} />}
+                    </Text>
                 </TouchableOpacity>
             </View>
             {
@@ -88,7 +101,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 20,
-
     },
     mealKcal: {
         fontSize: 20,

@@ -6,6 +6,7 @@ import { globalColors } from '../global/styles';
 
 // Import components
 import BMI from '../components/BMI';
+import NutritionWheel from '../components/NutritionWheel';
 
 
 export default function Me() {
@@ -16,6 +17,11 @@ export default function Me() {
                 <View style={{marginVertical: 20,}}>
                     <Text style={styles.bmiTitle}>BMI</Text>
                     <BMI />
+                </View>
+
+                <View style={{marginVertical: 20,}}>
+                    <Text style={styles.bmiTitle}>Daily Intake</Text>
+                    <NutritionWheel />
                 </View>
             </View>
         </View>
