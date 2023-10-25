@@ -18,7 +18,10 @@ export default function Home() {
                 name="HomeMain" 
                 component={HomeMain}
                 options={homeOptions} />
-            <Stack.Screen name="AddMeal" component={AddMeal} />
+            <Stack.Screen 
+                name="AddMeal" 
+                component={AddMeal}
+                options={addMealOptions} />
         </Stack.Navigator>
     )
 }
@@ -29,4 +32,8 @@ const styles = StyleSheet.create({
 
 const homeOptions = {
     headerShown: false,
+};
+
+const addMealOptions = {
+    animation: 'slide_from_bottom',
 };
