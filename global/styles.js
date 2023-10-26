@@ -18,7 +18,7 @@ export const globalStyles = StyleSheet.create({
     },
     header: {
         width: '100%',
-        height: 100,
+        height: 150,
         backgroundColor: '#fff',
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
@@ -33,5 +33,20 @@ export const globalStyles = StyleSheet.create({
     },
     headerTitle: {
         fontSize: 20,
+    },
+    searchBar: {
+        width: '100%',
+        height: 44,
+        backgroundColor: globalColors.backgroundGray,
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+    },
+    searchInput: {
+        flex: 1,
+        fontSize: 16,
+        paddingLeft: 5,
     },
 });

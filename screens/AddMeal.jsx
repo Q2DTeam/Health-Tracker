@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
@@ -11,14 +11,29 @@ function Header({ title='breakfast', backFunc }) {
         <View style={globalStyles.header}>
             <View style={styles.top}>
                 <TouchableOpacity style={globalStyles.backButton} onPress={backFunc}>
-                    <AntDesign name='left' size={30} />
+                    <MaterialCommunityIcons name='chevron-left' size={30} />
                 </TouchableOpacity>
                 <Text style={globalStyles.headerTitle}>{title[0].toUpperCase() + title.slice(1)}</Text>
                 <Text style={styles.kcalText}>{0} kcal</Text>
             </View>
+            <View style={styles.mid}>
+                <SearchBar />
+            </View>
         </View>
     )
 }
+
+function SearchBar({}) {
+    return (
+        <View style={globalStyles.searchBar}>
+            <MaterialCommunityIcons name='magnify' size={26} color={globalColors.textGray} />
+            <TextInput 
+                style={globalStyles.searchInput} 
+                placeholder='What did you eat ?' />
+        </View>
+    );
+}
+
 
 export default function AddMeal({ navigation }) {
     const goBack = () => {
@@ -35,7 +50,6 @@ export default function AddMeal({ navigation }) {
 
 const styles = StyleSheet.create({
     top: {
-        //borderWidth: 1,
         margin: 10,
         padding: 10,
         flexDirection: 'row',
@@ -45,5 +59,8 @@ const styles = StyleSheet.create({
     kcalText: {
         color: globalColors.textGray,
         fontSize: 16,
+    },
+    mid: {
+        marginHorizontal: 20,
     }
 });
