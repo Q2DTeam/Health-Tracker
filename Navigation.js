@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
 
 // Import Screens
 import Home from './screens/Home';
@@ -15,7 +14,6 @@ const Tab = createBottomTabNavigator();
 
 export default function Navigation() {
   return (
-    <NavigationContainer>
       <Tab.Navigator initialRouteName='Home'
         screenOptions={({ route, navigation }) => ({
           tabBarIcon: ({ color, focused, size }) => {
@@ -37,13 +35,11 @@ export default function Navigation() {
         <Tab.Screen name="My meals" component={MyMeals} />
         <Tab.Screen name="Me" component={Me} />
       </Tab.Navigator>
-    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
     tabBar: {
-
         overflow: "hidden",
     }
 });

@@ -6,6 +6,7 @@ import Navigation from './Navigation';
 // For loading fonts
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import RegisterStack from './RegisterStack';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -28,6 +29,6 @@ export default function App() {
   else SplashScreen.hideAsync();
 
   return (
-    <Navigation />
+    <RegisterStack />
   );
 }
