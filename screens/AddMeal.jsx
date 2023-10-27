@@ -1,9 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import {useState, useEffect, useCallback} from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, RefreshControl, ScrollView } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { fetchFoods } from '../utils/fetchFoods';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
+import AddMealItem from '../components/AddMealItem';
 
 
 function Header({ title='breakfast', backFunc }) {
@@ -36,13 +38,39 @@ function SearchBar({}) {
 
 
 export default function AddMeal({ navigation }) {
+    const [foods, setFoods] = useState([]);
+
     const goBack = () => {
         navigation.goBack();
     }
 
+    const getFoods = async() => {
+        const data = await fetchFoods();
+        if (data != undefined) {
+            data.map((food) => {
+                setFoods((old) => [{
+                    id: Math.random().toString().slice(2, 5),
+                    name: food.strCategory,
+                    calorie: Math.random().toString().slice(2, 5),
+                }, ...old]);
+            })
+        }
+    }
+
+    useEffect(() => {
+        getFoods();
+    }, [])
+
     return (
         <View style={globalStyles.container}>
             <Header backFunc={goBack} />
+            <FlatList 
+                data={foods}
+                keyExtractor={(item) => item.id}
+                renderItem={({item}) => (
+                    <AddMealItem name={item.name} kcal={item.calorie} />
+                )}
+            />
             
         </View>
     )

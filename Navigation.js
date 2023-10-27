@@ -30,7 +30,6 @@ export default function Navigation() {
             return <MaterialCommunityIcons name={iconName} size={24} color={ focused ? '#0099FF' : '#9DA8C3'} />
           },
           tabBarStyle: styles.tabBar,
-          
           headerShown: false,
         })}
       >

@@ -14,7 +14,6 @@ export default function NutriValue({title, consumed, total}) {
 
 const styles = StyleSheet.create({
     kcalWrapper: {
-        //borderWidth: 1,
         flexDirection: 'column',
         alignItems: 'center',
         width: 100,
