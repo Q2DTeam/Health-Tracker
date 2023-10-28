@@ -10,8 +10,27 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import BMI from '../components/BMI';
 import NutritionWheel from '../components/NutritionWheel';
 
-function Header() {
+function Header({ signOutFunc }) {
     const user = auth.currentUser;
+
+    return (
+        <View style={[globalStyles.header, styles.profileHeader]}>
+            <View style={{alignItems: 'center'}}>
+                <MaterialCommunityIcons name='account-circle' size={40} />
+                {
+                    user !== null && <Text>Hello, {user.displayName}</Text>
+                }
+            </View>
+            <TouchableOpacity style={{alignItems: 'center'}} onPress={signOutFunc}>
+                <MaterialCommunityIcons name='exit-to-app' size={30} />
+                <Text>Sign Out</Text>
+            </TouchableOpacity>
+        </View>
+    )
+}
+
+
+export default function Me({ navigation }) {
 
     const handleSignOut = () => {
         Alert.alert('Log Out', 'Do you want to log out?', [
@@ -20,7 +39,7 @@ function Header() {
             onPress: () => {
                 auth.signOut()
                 .then(() => {
-                    navigation.navigate('Home');
+                    navigation.navigate('RegisterStack', { screen: 'Register' })
                 })
             },
         },
@@ -29,25 +48,11 @@ function Header() {
         },
         ]);
     }
-
-    return (
-        <View style={[globalStyles.header, styles.profileHeader]}>
-            <TouchableOpacity onPress={handleSignOut}>
-                <Text style={{fontSize: 20}}>Sign Out</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-                <MaterialCommunityIcons name='cog' size={30} />
-            </TouchableOpacity>
-        </View>
-    )
-}
-
-
-export default function Me() {
+    
     return (
         <View style={globalStyles.container}>
             <StatusBar barStyle="light-content" />
-            <Header />
+            <Header signOutFunc={handleSignOut} />
             <View style={styles.profileBody}>
                 <View style={{marginVertical: 20,}}>
                     <Text style={styles.bmiTitle}>BMI</Text>
