@@ -1,14 +1,22 @@
 import { useState, useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import Navigation from './Navigation';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { auth } from './utils/firebase';
 
 // For loading fonts
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import RegisterStack from './RegisterStack';
+import Navigation from './Navigation';
+
+
+const Stack = createNativeStackNavigator();
+
 
 export default function App() {
+  const user = auth.currentUser;
+
   const [fontsLoaded] = useFonts({
     'inter-regular': require('./assets/fonts/Inter-Regular.ttf'),
     'inter-medium': require('./assets/fonts/Inter-Medium.ttf'),
@@ -29,6 +37,18 @@ export default function App() {
   else SplashScreen.hideAsync();
 
   return (
-    <RegisterStack />
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}} 
+        initialRouteName={user !== null ? 'MainNavigation' : 'RegisterStack'}>
+            <Stack.Screen 
+                name="RegisterStack" 
+                component={RegisterStack}
+            />
+            <Stack.Screen 
+                name="MainNavigation" 
+                component={Navigation}
+            />
+        </Stack.Navigator>
+    </NavigationContainer>
   );
 }

@@ -16,24 +16,22 @@ export default function RegisterStack() {
     const user = auth.currentUser;
     
     return (
-        <NavigationContainer>
-            <Stack.Navigator 
-                screenOptions={{headerShown: false}}
-                initialRouteName={user ? 'Main' : 'Register'}
-            >
-                <Stack.Screen 
-                    name="Register" 
-                    component={Register} />
-                <Stack.Screen 
-                    name="Login" 
-                    component={Login} />
-                <Stack.Screen 
-                    name="Signup" 
-                    component={SignUp} />
-                <Stack.Screen 
-                    name="Main" 
-                    component={Navigation} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Navigator 
+            screenOptions={{headerShown: false}}
+            //initialRouteName={user ? 'Main' : 'Register'}
+        >
+            <Stack.Screen 
+                name="Register" 
+                component={Register} />
+            <Stack.Screen 
+                name="Login" 
+                component={Login} />
+            <Stack.Screen 
+                name="Signup" 
+                component={SignUp} />
+            <Stack.Screen 
+                name="Main" 
+                component={Navigation} />
+        </Stack.Navigator>
     )
 }
