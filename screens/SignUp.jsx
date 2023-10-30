@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { Formik } from 'formik';
 import { auth, createUserWithEmailAndPassword, updateProfile } from '../utils/firebase';
@@ -45,7 +45,8 @@ export default function Signup({navigation}) {
 
 
     return (
-        <KeyboardAvoidingView style={[globalStyles.container, styles.signUp1]}>
+        <ScrollView style={[globalStyles.container, styles.signUp1]}
+            contentContainerStyle={{justifyContent: 'space-between',}}>
             <Text style={styles.title}>Sign up</Text>
             <View style={globalStyles.formContainer}>
                 <Formik
@@ -126,14 +127,14 @@ export default function Signup({navigation}) {
                     <Text style={styles.bottomTextBold}>Log In</Text>
                 </TouchableOpacity>
             </View>
-        </KeyboardAvoidingView>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     signUp1: {
         backgroundColor: globalColors.vibrantBlue,
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
     },
     title: {
         fontSize: 30,
