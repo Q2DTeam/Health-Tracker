@@ -4,13 +4,13 @@ import { getFirestore, collection, addDoc, setDoc, doc, getDoc, getDocs } from "
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA7SO41j-p4__gGPt3EZeLj4512A1-43nE",
-  authDomain: "health-tracker-2f82c.firebaseapp.com",
-  projectId: "health-tracker-2f82c",
-  storageBucket: "health-tracker-2f82c.appspot.com",
-  messagingSenderId: "841999811278",
-  appId: "1:841999811278:web:b19a57ad049e1be3b0869f",
-  measurementId: "G-0R3CY9947K"
+  apiKey: "AIzaSyDSQMJ6JAY1g1rD09pyC1M-EhbsjK06p4U",
+  authDomain: "health-trackr-214d0.firebaseapp.com",
+  projectId: "health-trackr-214d0",
+  storageBucket: "health-trackr-214d0.appspot.com",
+  messagingSenderId: "353638544673",
+  appId: "1:353638544673:web:bb12a6e1fa768219e6ba60",
+  measurementId: "G-J3GK85J74W"
 };
 
 // Initialize Firebase
