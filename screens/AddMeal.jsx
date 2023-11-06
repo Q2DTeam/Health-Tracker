@@ -37,8 +37,9 @@ function SearchBar({}) {
 }
 
 
-export default function AddMeal({ navigation }) {
+export default function AddMeal({ navigation, route }) {
     const [foods, setFoods] = useState([]);
+    const { title } = route.params;
 
     const goBack = () => {
         navigation.goBack();
@@ -63,7 +64,7 @@ export default function AddMeal({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <Header backFunc={goBack} />
+            <Header title={title} backFunc={goBack} />
             <FlatList 
                 data={foods}
                 keyExtractor={(item) => item.id}

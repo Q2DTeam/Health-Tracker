@@ -11,7 +11,7 @@ const actions = [
     {
         text: "Exercise",
         icon: <MaterialCommunityIcons name='dumbbell' size={24} color='#fff' />,
-        name: "bt_exercise",
+        name: "exercise",
         color: globalColors.vibrantBlue,
         textBackground: globalColors.vibrantBlue,
         textColor: '#fff',
@@ -20,7 +20,7 @@ const actions = [
     {
         text: "Breakfast",
         icon: <MaterialCommunityIcons name='coffee' size={24} color='#fff' />,
-        name: "bt_breakfast",
+        name: "breakfast",
         color: globalColors.breakfastGreen,
         textBackground: globalColors.breakfastGreen,
         textColor: '#fff',
@@ -29,7 +29,7 @@ const actions = [
     {
         text: "Lunch",
         icon: <MaterialCommunityIcons name='food-drumstick' size={24} color='#fff' />,
-        name: "bt_lunch",
+        name: "lunch",
         color: globalColors.lunchOrange,
         textBackground: globalColors.lunchOrange,
         textColor: '#fff',
@@ -38,7 +38,7 @@ const actions = [
     {
         text: "Dinner",
         icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
-        name: "bt_dinner",
+        name: "dinner",
         color: globalColors.dinnerCyan,
         textBackground: globalColors.dinnerCyan,
         textColor: '#fff',
@@ -47,7 +47,7 @@ const actions = [
     {
         text: "Snack",
         icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
-        name: "bt_snack",
+        name: "snack",
         color: globalColors.snackPurple,
         textBackground: globalColors.snackPurple,
         textColor: '#fff',

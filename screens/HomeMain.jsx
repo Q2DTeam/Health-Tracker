@@ -25,7 +25,7 @@ const user = {
 export default function HomeMain({ navigation }) {
 
     const handleNavigation = (name) => {
-        navigation.navigate('AddMeal');
+        navigation.navigate('AddMeal', {title: name});
     }
 
     return (
