@@ -29,6 +29,22 @@ const SignUpSchema = yup.object({
 
 
 export default function Signup({navigation}) {
+    // const addUserData = async(userID) => {
+    //     try {
+    //         const docRef = await setDoc(collection(db, "users"), {
+    //             id: userID, 
+    //             gender: true,
+    //             age: 18,
+    //             weight: 70,
+    //             height: 175,
+    //             activityLevel: 2,
+    //         });
+    //         console.log("Document written with ID: ", docRef.id);
+    //     } catch (e) {
+    //         console.error("Error adding document: ", e);
+    //     }
+    // }
+
     const handleSignUp = (values) => {
         createUserWithEmailAndPassword(auth, values.email, values.password)
         .then(() => {
@@ -36,7 +52,7 @@ export default function Signup({navigation}) {
                 displayName: values.username,
             });
             Alert.alert('User registered successfully!');
-            navigation.navigate('Main');
+            navigation.navigate('SignUpBMI');
         })
         .catch(() => {
             Alert.alert("Registrations failed", "There's an error that's preventing you from creating the account. Please try again.");

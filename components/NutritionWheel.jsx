@@ -22,9 +22,9 @@ export default function NutritionWheel() {
                 sliceColor={sliceColors}
                 coverRadius={0.5} />
             <View style={styles.details}>
-                <Text>333</Text>
-                <Text>333</Text>
-                <Text>333</Text>
+                <Text></Text>
+                <Text></Text>
+                <Text></Text>
             </View>
         </View>
     );
