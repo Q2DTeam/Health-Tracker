@@ -31,22 +31,22 @@ function BMI({ bmi, height, weight }) {
         <View style={styles.bmiContainer}>
             <View style={styles.bmiHalf}>
                 <View>
-                    <Text style={{fontSize: 18}}>BMI</Text>
-                    <Text style={{fontSize: 18, color: '#E61313'}}>{bmi}</Text>
+                    <Text style={{fontSize: 18, fontFamily: 'inter-regular'}}>BMI</Text>
+                    <Text style={{fontSize: 20, fontFamily: 'inter-bold', color: '#E61313'}}>{bmi}</Text>
                 </View>
-                <Text style={{fontSize: 20, color: statusColor}}>
+                <Text style={{fontSize: 20, color: statusColor, fontFamily: 'inter-semibold'}}>
                     {status}
                 </Text>
             </View>
             <View style={{borderWidth: 1, width: '100%', borderColor: globalColors.textGray}} />
             <View style={styles.bmiHalf}>
                 <View>
-                    <Text>{height} cm</Text> 
-                    <Text style={{color: globalColors.textGray}}>Height</Text>
+                    <Text style={{fontSize: 16, textAlign: 'left'}}>{height} cm</Text> 
+                    <Text style={{fontSize: 16, color: globalColors.textGray}}>Height</Text>
                 </View>
                 <View>
-                    <Text style={{textAlign: 'right'}}>{weight} kg</Text> 
-                    <Text style={{color: globalColors.textGray}}>Weight</Text>
+                    <Text style={{fontSize: 16, textAlign: 'right'}}>{weight} kg</Text> 
+                    <Text style={{fontSize: 16, color: globalColors.textGray}}>Weight</Text>
                 </View>
             </View>
         </View>
@@ -83,8 +83,14 @@ export default function Me({ navigation }) {
     const [bmi, setBMI] = React.useState(0.0);
 
     const getUserData = async() => {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+        let docRef, docSnap;
+        try {
+            docRef = doc(db, "users", user.uid);
+            docSnap = await getDoc(docRef);
+        }
+        catch (error) {
+            Alert.alert('Oops, we cannot retrieve your data', 'Due inconsistent internet connection, we cannot fetch the data you need. Please refresh the screen to try again.');
+        }
 
         if (docSnap.exists()) {
             let userData = docSnap.data();
@@ -138,7 +144,7 @@ export default function Me({ navigation }) {
             <Header signOutFunc={handleSignOut} bmiFunc={handleUpdateBMI} />
             <View style={styles.profileBody}>
                 <View style={{marginVertical: 20,}}>
-                    <Text style={styles.bmiTitle}>BMI</Text>
+                    <Text style={styles.bmiTitle}>Your BMI</Text>
                     <BMI bmi={bmi} age={age} height={height} weight={weight} />
                 </View>
 
@@ -165,12 +171,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     bmiTitle: {
-        fontSize: 20,
+        fontSize: 24,
+        fontFamily: 'inter-semibold',
         marginBottom: 10,
     },
     bmiContainer: {
         width: 334,
-        height: 140,
+        minHeight: 140,
         backgroundColor: '#fff',
         borderRadius: 10,
         paddingHorizontal: 20,
@@ -187,7 +194,8 @@ const styles = StyleSheet.create({
     },
     bmiHalf: {
         width: '100%',
-        height: 60,
+        minHeight: 60,
+        paddingHorizontal: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

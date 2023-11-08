@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 // Import Screens
-import Home from './screens/Home';
+import HomeNavigation from './HomeNavigation';
 import MyMeals from './screens/MyMeals';
 import Me from './screens/Me';
 
@@ -13,7 +13,8 @@ const Tab = createBottomTabNavigator();
 
 export default function Navigation() {
   return (
-      <Tab.Navigator initialRouteName='Home'
+      <Tab.Navigator 
+        initialRouteName='Home'
         screenOptions={({ route, navigation }) => ({
           tabBarIcon: ({ color, focused, size }) => {
             let iconName;
@@ -29,8 +30,9 @@ export default function Navigation() {
           tabBarStyle: styles.tabBar,
           headerShown: false,
         })}
+        
       >
-        <Tab.Screen name="Home" component={Home}/>
+        <Tab.Screen name="Home" component={HomeNavigation}/>
         <Tab.Screen name="My meals" component={MyMeals} />
         <Tab.Screen name="Me" component={Me} />
       </Tab.Navigator>
