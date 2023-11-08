@@ -103,7 +103,7 @@ const bmiSchema = yup.object({
 });
 
 
-export default function SignUpBMI({navigation, route}) {
+export default function SignUpBMI({ navigation }) {
     const userID = auth.currentUser.uid;
 
     // True = male, false = female
@@ -115,7 +115,20 @@ export default function SignUpBMI({navigation, route}) {
     // 0 = lose weight, 1 = maintain, 2 = gain
     const [goal, setGoal] = React.useState(1);
 
+    const getActivityLevel = (minPerDay, dayPerWeek) => {
+        // 0 = low, 1 = medium, 2 = high
+        if (minPerDay < 15 && dayPerWeek < 3) {
+            return 0;
+        }
+        else if (minPerDay > 60 && dayPerWeek >= 5) {
+            return 2;
+        }
+        else return 1;
+    }
+
+
     const saveUserData = async(values) => {
+        let level = getActivityLevel(values.minPerDay, values.dayPerWeek);
         try {
             const docRef = await setDoc(doc(db, "users", userID), {
                 id: userID.toString(),
@@ -123,7 +136,7 @@ export default function SignUpBMI({navigation, route}) {
                 age: age,
                 weight: weight,
                 height: height,
-                activityLevel: 2
+                activityLevel: level
             }, { merge: true });
         } catch (e) {
             console.error("Error adding document: ", e);
@@ -153,7 +166,7 @@ export default function SignUpBMI({navigation, route}) {
                 <ScrollView style={{padding: 20,}}
                     contentContainerStyle={{alignItems: 'center'}}>
                     <View style={styles.activityContainer}>
-                        <Text style={styles.title}>Your activity per week</Text>
+                        <Text style={styles.title}>Your activity per week *</Text>
                         <View>
                             <View style={styles.inputLine}>
                                 <TextInput 
