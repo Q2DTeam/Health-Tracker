@@ -39,6 +39,7 @@ function SearchBar({}) {
 
 export default function AddMeal({ navigation, route }) {
     const [foods, setFoods] = useState([]);
+    const [IDs, setIDs] = useState([]);
     const { title } = route.params;
 
     const goBack = () => {
@@ -46,14 +47,18 @@ export default function AddMeal({ navigation, route }) {
     }
 
     const getFoods = async() => {
+        // CAll API
         const data = await fetchFoods();
         if (data != undefined) {
             data.map((food) => {
-                setFoods((old) => [{
-                    id: Math.random().toString().slice(2, 5),
-                    name: food.strCategory,
-                    calorie: Math.random().toString().slice(2, 5),
-                }, ...old]);
+                if (IDs.indexOf(food.ID) === -1) {
+                    setFoods((old) => [{
+                        id: food.ID,
+                        name: food.name,
+                        calorie: food.Calories
+                    }, ...old]);
+                    setIDs(old => [food.ID, ...old]);
+                }
             })
         }
     }

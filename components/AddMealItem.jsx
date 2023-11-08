@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     container: {
         marginVertical: 10,
         marginHorizontal: 20,
-        height: 75,
+        minHeight: 80,
         paddingHorizontal: 20,
         backgroundColor: '#fff',
         borderRadius: 10,
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     },
     foodName: {
         fontSize: 18,
+        marginBottom: 5,
     },
     foodKcal: {
         color: globalColors.textGray,
