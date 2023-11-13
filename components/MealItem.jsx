@@ -14,28 +14,18 @@ const foodList = [
     {
         id: 1,
         title: 'Rice',
-        info: '2 bowl x 100g - 260kcal',
+        info: '2 bowl x 100g - 360kcal',
     },
     {
         id: 2,
-        title: 'Rice',
-        info: '2 bowl x 100g - 260kcal',
+        title: 'Pork',
+        info: '75g - 140kcal',
     },
     {
         id: 3,
-        title: 'Rice',
-        info: '2 bowl x 100g - 260kcal',
-    },
-    {
-        id: 4,
-        title: 'Rice',
-        info: '2 bowl x 100g - 260kcal',
-    },
-    {
-        id: 5,
-        title: 'Rice',
-        info: '2 bowl x 100g - 260kcal',
-    },
+        title: 'Salad',
+        info: '1 bowl x 200g - 250kcal',
+    }
 ]
 
 

@@ -1,5 +1,5 @@
 import {useState, useEffect, useCallback} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, RefreshControl, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, RefreshControl } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fetchFoods } from '../utils/fetchFoods';
 
@@ -54,7 +54,7 @@ export default function AddMeal({ navigation, route }) {
                 if (IDs.indexOf(food.ID) === -1) {
                     setFoods((old) => [{
                         id: food.ID,
-                        name: food.name,
+                        name: food.Name,
                         calorie: food.Calories
                     }, ...old]);
                     setIDs(old => [food.ID, ...old]);
