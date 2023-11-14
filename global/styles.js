@@ -59,13 +59,13 @@ export const globalStyles = StyleSheet.create({
         alignItems: 'center',
     },
     submitBtn: {
-        minWidth: 200,
         margin: 20,
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#282ddb',
         borderRadius: 25,
+        backgroundColor: globalColors.vibrantBlue,
     },
     errorText: {
         color: '#fff',
@@ -100,7 +100,6 @@ export const globalStyles = StyleSheet.create({
     },
     formContainer: {
         flex: 1,
-        padding: 20,
         alignItems: 'center',
         justifyContent: 'center',
     }

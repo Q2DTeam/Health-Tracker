@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ImageBackground, Alert } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ImageBackground, Alert, Image } from 'react-native';
 import { globalStyles, globalColors } from '../global/styles';
 import { Formik } from 'formik';
 import { auth, signInWithEmailAndPassword} from '../utils/firebase';
@@ -31,9 +31,9 @@ export default function Login({navigation}) {
     }
 
     return (
-        <View style={[globalStyles.container, styles.login]}>
-            <View>
-                <Text style={styles.title}>Login</Text>
+        <ImageBackground source={require('../assets/images/register_BG.jpg')} alt='Background image' resizeMode='cover'  style={[globalStyles.container, styles.login]}>
+            <View style={styles.logo}>
+                <Image source={require('../assets/images/Logo.png')}/>
             </View>
             <View style={globalStyles.formContainer}>
                 <Formik
@@ -88,7 +88,7 @@ export default function Login({navigation}) {
                     <Text style={styles.bottomTextBold}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </ImageBackground>
     )
 }
 
@@ -96,6 +96,12 @@ const styles = StyleSheet.create({
     login: {
         backgroundColor: globalColors.vibrantBlue,
         justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    logo: {
+        height: 130,
+        width: 240,
+        marginTop: 40,
     },
     title: {
         fontSize: 30,

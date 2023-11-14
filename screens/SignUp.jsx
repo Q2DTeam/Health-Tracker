@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, Alert, ScrollView, ImageBackground, Image } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { Formik } from 'formik';
 import { auth, createUserWithEmailAndPassword, updateProfile } from '../utils/firebase';
@@ -46,101 +46,106 @@ export default function Signup({navigation}) {
 
 
     return (
-        <ScrollView style={[globalStyles.container, styles.signUp1]}
-            contentContainerStyle={{justifyContent: 'space-between',}}>
-            <Text style={styles.title}>Sign up</Text>
-            <View style={globalStyles.formContainer}>
-                <Formik
-                    initialValues={{username: '', email: '', password: '', confirmPass: ''}}
-                    validationSchema={SignUpSchema}
-                    onSubmit={(values) => {
-                        handleSignUp(values);
-                    }}
-                >
-                {
-                    ({handleChange, handleSubmit, values, errors}) => (
-                    <View>
+        <ImageBackground source={require('../assets/images/register_BG.jpg')} alt='Background image' resizeMode='cover' style={globalStyles.container}>
+            <ScrollView
+                contentContainerStyle={{justifyContent: 'space-between', alignItems: 'center'}}
+            >
+                <View style={styles.logo}>
+                    <Image source={require('../assets/images/Logo.png')}/>
+                </View>
+                <View style={globalStyles.formContainer}>
+                    <Formik
+                        initialValues={{username: '', email: '', password: '', confirmPass: ''}}
+                        validationSchema={SignUpSchema}
+                        onSubmit={(values) => {
+                            handleSignUp(values);
+                        }}
+                    >
+                    {
+                        ({handleChange, handleSubmit, values, errors}) => (
                         <View>
-                            <View style={globalStyles.form_inputWrapper}>
-                                <MaterialCommunityIcons name='account-circle' size={24} />
-                                <TextInput
-                                    placeholder='Username' 
-                                    style={globalStyles.form_input}
-                                    value={values.username}
-                                    onChangeText={handleChange('username')}
-                                />
+                            <View>
+                                <View style={globalStyles.form_inputWrapper}>
+                                    <MaterialCommunityIcons name='account-circle' size={24} />
+                                    <TextInput
+                                        placeholder='Username' 
+                                        style={globalStyles.form_input}
+                                        value={values.username}
+                                        onChangeText={handleChange('username')}
+                                    />
+                                </View>
+                                <Text style={globalStyles.errorText}>{errors.username}</Text>
                             </View>
-                            <Text style={globalStyles.errorText}>{errors.username}</Text>
-                        </View>
 
-                        <View>
-                            <View style={globalStyles.form_inputWrapper}>
-                                <MaterialCommunityIcons name='email' size={24}/>
-                                <TextInput 
-                                    placeholder='Email'
-                                    style={globalStyles.form_input}
-                                    value={values.email}
-                                    onChangeText={handleChange('email')}
-                                />
+                            <View>
+                                <View style={globalStyles.form_inputWrapper}>
+                                    <MaterialCommunityIcons name='email' size={24}/>
+                                    <TextInput 
+                                        placeholder='Email'
+                                        style={globalStyles.form_input}
+                                        value={values.email}
+                                        onChangeText={handleChange('email')}
+                                        />
+                                </View>
+                                <Text style={globalStyles.errorText}>{errors.email}</Text>
                             </View>
-                            <Text style={globalStyles.errorText}>{errors.email}</Text>
-                        </View>
 
-                        <View>
-                            <View style={globalStyles.form_inputWrapper}>
-                                <MaterialCommunityIcons name='lock' size={24}/>
-                                <TextInput 
-                                    placeholder='Password'
-                                    style={globalStyles.form_input}
-                                    secureTextEntry
-                                    value={values.password}
-                                    onChangeText={handleChange('password')}
-                                />
+                            <View>
+                                <View style={globalStyles.form_inputWrapper}>
+                                    <MaterialCommunityIcons name='lock' size={24}/>
+                                    <TextInput 
+                                        placeholder='Password'
+                                        style={globalStyles.form_input}
+                                        secureTextEntry
+                                        value={values.password}
+                                        onChangeText={handleChange('password')}
+                                        />
+                                </View>
+                                <Text style={globalStyles.errorText}>{errors.password}</Text>
                             </View>
-                            <Text style={globalStyles.errorText}>{errors.password}</Text>
-                        </View>
 
-                        <View>
-                            <View style={globalStyles.form_inputWrapper}>
-                                <MaterialCommunityIcons name='lock' size={24}/>
-                                <TextInput 
-                                    placeholder='Confirm Password'
-                                    style={globalStyles.form_input}
-                                    secureTextEntry
-                                    value={values.confirmPass}
-                                    onChangeText={handleChange('confirmPass')}
-                                    />    
+                            <View>
+                                <View style={globalStyles.form_inputWrapper}>
+                                    <MaterialCommunityIcons name='lock' size={24}/>
+                                    <TextInput 
+                                        placeholder='Confirm Password'
+                                        style={globalStyles.form_input}
+                                        secureTextEntry
+                                        value={values.confirmPass}
+                                        onChangeText={handleChange('confirmPass')}
+                                        />    
+                                </View>
+                                <Text style={globalStyles.errorText}>{errors.confirmPass}</Text>
                             </View>
-                            <Text style={globalStyles.errorText}>{errors.confirmPass}</Text>
-                        </View>
 
-                        <TouchableOpacity style={globalStyles.submitBtn} onPress={handleSubmit}>
-                            <Text style={{color: '#fff', fontSize: 20,}}>Sign up</Text>
-                        </TouchableOpacity>
-                    </View>)
-                }
-                </Formik>
-            </View>
-
-            <View style={{margin: 20,}}>
-                <Text style={styles.bottomText}>Already have an account?</Text>
-                <TouchableOpacity onPress={() => navigation.replace('Login')}>
-                    <Text style={styles.bottomTextBold}>Log In</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+                            <TouchableOpacity style={globalStyles.submitBtn} onPress={handleSubmit}>
+                                <Text style={{color: '#fff', fontSize: 20,}}>Sign up</Text>
+                            </TouchableOpacity>
+                        </View>)
+                    }
+                    </Formik>
+                </View>
+                <View style={{marginTop: 20}}>
+                    <Text style={styles.bottomText}>Already have an account?</Text>
+                    <TouchableOpacity onPress={() => navigation.replace('Login')}>
+                        <Text style={styles.bottomTextBold}>Log In</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
-    signUp1: {
-        backgroundColor: globalColors.vibrantBlue,
-        // justifyContent: 'space-between',
-    },
     title: {
         fontSize: 30,
         textAlign: 'center',
         color: '#fff',
+        marginTop: 40,
+    },
+    logo: {
+        height: 130,
+        width: 240,
         marginTop: 40,
     },
     bottomText: {
