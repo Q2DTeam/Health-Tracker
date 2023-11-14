@@ -46,9 +46,9 @@ export default function Signup({navigation}) {
 
 
     return (
-        <ImageBackground source={require('../assets/images/register_BG.jpg')} alt='Background image' resizeMode='cover' style={globalStyles.container}>
+        <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover' style={globalStyles.container}>
             <ScrollView
-                contentContainerStyle={{justifyContent: 'space-between', alignItems: 'center'}}
+                contentContainerStyle={{ alignItems: 'center'}}
             >
                 <View style={styles.logo}>
                     <Image source={require('../assets/images/Logo.png')}/>
@@ -125,7 +125,7 @@ export default function Signup({navigation}) {
                     }
                     </Formik>
                 </View>
-                <View style={{marginTop: 20}}>
+                <View style={{marginTop: 50}}>
                     <Text style={styles.bottomText}>Already have an account?</Text>
                     <TouchableOpacity onPress={() => navigation.replace('Login')}>
                         <Text style={styles.bottomTextBold}>Log In</Text>
@@ -150,12 +150,12 @@ const styles = StyleSheet.create({
     },
     bottomText: {
         color: '#fff', 
-        fontSize: 18, 
+        fontSize: 20, 
         textAlign: 'center'
     },
     bottomTextBold: {
         color: '#fff', 
-        fontSize: 18, 
+        fontSize: 20, 
         textAlign: 'center',
         fontWeight: 'bold',
     },

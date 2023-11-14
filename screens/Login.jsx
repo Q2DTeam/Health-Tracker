@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ImageBackground, Alert, Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ImageBackground, Alert, Image, ScrollView } from 'react-native';
 import { globalStyles, globalColors } from '../global/styles';
 import { Formik } from 'formik';
 import { auth, signInWithEmailAndPassword} from '../utils/firebase';
@@ -31,63 +31,68 @@ export default function Login({navigation}) {
     }
 
     return (
-        <ImageBackground source={require('../assets/images/register_BG.jpg')} alt='Background image' resizeMode='cover'  style={[globalStyles.container, styles.login]}>
-            <View style={styles.logo}>
-                <Image source={require('../assets/images/Logo.png')}/>
-            </View>
-            <View style={globalStyles.formContainer}>
-                <Formik
-                    initialValues={{email: '', password: ''}}
-                    validationSchema={LoginSchema}
-                    onSubmit={(values) => {
-                        handleLogin(values);
-                    }}
-                >
-                {
-                    ({handleChange, handleSubmit, values, errors}) => (
-                    <View style={{padding: 20, paddingBottom: 0}}>
+        <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover'  style={[globalStyles.container, styles.login]}>
+            <ScrollView
+                contentContainerStyle={{ alignItems: 'center' }}
+            >
+                <View style={styles.logo}>
+                    <Image source={require('../assets/images/Logo.png')}/>
+                </View>
 
-                        <View>
-                            <View style={globalStyles.form_inputWrapper}>
-                                <MaterialCommunityIcons name='email' size={24}/>
-                                <TextInput
-                                    placeholder='Email' 
-                                    style={globalStyles.form_input}
-                                    value={values.email}
-                                    onChangeText={handleChange('email')}
-                                />
+                <View style={[globalStyles.formContainer, {marginTop: 40}]}>
+                    <Formik
+                        initialValues={{email: '', password: ''}}
+                        validationSchema={LoginSchema}
+                        onSubmit={(values) => {
+                            handleLogin(values);
+                        }}
+                    >
+                    {
+                        ({handleChange, handleSubmit, values, errors}) => (
+                        <View style={{padding: 20, paddingBottom: 0}}>
+
+                            <View>
+                                <View style={globalStyles.form_inputWrapper}>
+                                    <MaterialCommunityIcons name='email' size={24}/>
+                                    <TextInput
+                                        placeholder='Email' 
+                                        style={globalStyles.form_input}
+                                        value={values.email}
+                                        onChangeText={handleChange('email')}
+                                    />
+                                </View>
+                                <Text style={globalStyles.errorText}>{errors.email}</Text>
                             </View>
-                            <Text style={globalStyles.errorText}>{errors.email}</Text>
-                        </View>
 
-                        <View>
-                            <View style={globalStyles.form_inputWrapper}>
-                                <MaterialCommunityIcons name='lock' size={24}/>
-                                <TextInput 
-                                    placeholder='Password'
-                                    style={globalStyles.form_input}
-                                    value={values.password}
-                                    onChangeText={handleChange('password')}
-                                    secureTextEntry
-                                />
+                            <View>
+                                <View style={globalStyles.form_inputWrapper}>
+                                    <MaterialCommunityIcons name='lock' size={24}/>
+                                    <TextInput 
+                                        placeholder='Password'
+                                        style={globalStyles.form_input}
+                                        value={values.password}
+                                        onChangeText={handleChange('password')}
+                                        secureTextEntry
+                                    />
+                                </View>
+                                <Text style={globalStyles.errorText}>{errors.password}</Text>
                             </View>
-                            <Text style={globalStyles.errorText}>{errors.password}</Text>
-                        </View>
 
-                        <TouchableOpacity style={globalStyles.submitBtn} onPress={handleSubmit}>
-                            <Text style={{color: '#fff', fontSize: 20,}}>Login</Text>
-                        </TouchableOpacity>
-                    </View>)
-                }
-                </Formik>
-            </View>
+                            <TouchableOpacity style={globalStyles.submitBtn} onPress={handleSubmit}>
+                                <Text style={{color: '#fff', fontSize: 20,}}>Login</Text>
+                            </TouchableOpacity>
+                        </View>)
+                    }
+                    </Formik>
+                </View>
 
-            <View style={{margin: 20,}}>
-                <Text style={styles.bottomText}>Don't have an account?</Text>
-                <TouchableOpacity onPress={() => navigation.replace('Signup')}>
-                    <Text style={styles.bottomTextBold}>Sign Up</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={{marginTop: 140,}}>
+                    <Text style={styles.bottomText}>Don't have an account?</Text>
+                    <TouchableOpacity onPress={() => navigation.replace('Signup')}>
+                        <Text style={styles.bottomTextBold}>Sign Up</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </ImageBackground>
     )
 }
@@ -111,12 +116,12 @@ const styles = StyleSheet.create({
     },
     bottomText: {
         color: '#fff', 
-        fontSize: 18, 
+        fontSize: 20, 
         textAlign: 'center'
     },
     bottomTextBold: {
         color: '#fff', 
-        fontSize: 18, 
+        fontSize: 20, 
         textAlign: 'center',
         fontWeight: 'bold',
     }
