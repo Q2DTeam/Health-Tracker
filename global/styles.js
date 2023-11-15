@@ -8,6 +8,10 @@ export const globalColors = {
     'snackPurple': '#B575E7',
     'backgroundGray': '#F2F5FC',
     'textGray': '#9EA9C3',
+    'chillGreen': '#91C788',
+    'chillCyan': '#2FC9EF',
+    'darkerGreen': '#7CBC71',
+    'calmRed': '#FF8473',
 }
 
 export const globalStyles = StyleSheet.create({
@@ -51,7 +55,7 @@ export const globalStyles = StyleSheet.create({
         paddingLeft: 5,
     },
     addButton: {
-        backgroundColor: globalColors.vibrantBlue,
+        backgroundColor: globalColors.darkerGreen,
         height: 40,
         width: 40,
         borderRadius: 20,
@@ -59,13 +63,13 @@ export const globalStyles = StyleSheet.create({
         alignItems: 'center',
     },
     submitBtn: {
-        margin: 20,
+        marginTop: 40,
         padding: 10,
+        width: Platform.OS === 'android' ? 300 : 260,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#282ddb',
         borderRadius: 25,
-        backgroundColor: globalColors.vibrantBlue,
+        backgroundColor: globalColors.darkerGreen,
     },
     errorText: {
         color: '#fff',

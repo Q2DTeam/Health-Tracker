@@ -63,7 +63,7 @@ export default function Signup({navigation}) {
                     >
                     {
                         ({handleChange, handleSubmit, values, errors}) => (
-                        <View>
+                        <View style={{alignItems: 'center'}}>
                             <View>
                                 <View style={globalStyles.form_inputWrapper}>
                                     <MaterialCommunityIcons name='account-circle' size={24} />

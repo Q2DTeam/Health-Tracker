@@ -49,8 +49,7 @@ export default function Login({navigation}) {
                     >
                     {
                         ({handleChange, handleSubmit, values, errors}) => (
-                        <View style={{padding: 20, paddingBottom: 0}}>
-
+                        <View style={{padding: 20, paddingBottom: 0, alignItems: 'center'}}>
                             <View>
                                 <View style={globalStyles.form_inputWrapper}>
                                     <MaterialCommunityIcons name='email' size={24}/>
