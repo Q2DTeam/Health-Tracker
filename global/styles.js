@@ -55,7 +55,7 @@ export const globalStyles = StyleSheet.create({
         paddingLeft: 5,
     },
     addButton: {
-        backgroundColor: globalColors.darkerGreen,
+        backgroundColor: globalColors.vibrantBlue,
         height: 40,
         width: 40,
         borderRadius: 20,
@@ -69,7 +69,7 @@ export const globalStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 25,
-        backgroundColor: globalColors.darkerGreen,
+        backgroundColor: globalColors.vibrantBlue,
     },
     errorText: {
         color: '#fff',

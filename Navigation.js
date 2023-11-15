@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -7,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import HomeNavigation from './HomeNavigation';
 import MyMeals from './screens/MyMeals';
 import Me from './screens/Me';
+import { globalColors, globalStyles } from './global/styles';
 
 
 const Tab = createBottomTabNavigator();
@@ -25,8 +25,9 @@ export default function Navigation() {
                 iconName = 'food';
             }
             else iconName = 'account'
-            return <MaterialCommunityIcons name={iconName} size={24} color={ focused ? '#0099FF' : '#9DA8C3'} />
+            return <MaterialCommunityIcons name={iconName} size={26} color={ focused ? '#0099FF' : '#9DA8C3'} />
           },
+          tabBarLabelStyle: {fontSize: 12},
           tabBarStyle: styles.tabBar,
           headerShown: false,
         })}
@@ -42,5 +43,15 @@ export default function Navigation() {
 const styles = StyleSheet.create({
     tabBar: {
         overflow: "hidden",
+        backgroundColor: globalColors.backgroundGray,
+        borderTopWidth: 0,
+        borderTopColor: "transparent",
+        elevation: 0,
+        shadowColor : '#5bc4ff',
+        shadowOpacity: 0,
+        shadowOffset: {
+          height: 0,
+        },
+        shadowRadius: 0,
     }
 });
