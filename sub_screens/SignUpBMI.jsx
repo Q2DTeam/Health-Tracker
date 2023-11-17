@@ -115,20 +115,39 @@ export default function SignUpBMI({ navigation }) {
     // 0 = lose weight, 1 = maintain, 2 = gain
     const [goal, setGoal] = React.useState(1);
 
+
+    const getTDEE = (gender, weight, height, age, activity) => {
+        let bmr = 10 * weight + 6.25 * (height/100) + 5 * age;
+        if (gender == true)
+            bmr += 5;
+        else bmr -= 161;
+        return Math.round(bmr*activity);
+    }
+
     const getActivityLevel = (minPerDay, dayPerWeek) => {
-        // 0 = low, 1 = medium, 2 = high
-        if (minPerDay < 15 && dayPerWeek < 3) {
-            return 0;
+        let R;
+        if (dayPerWeek >= 1 && dayPerWeek <= 3) {
+            R = 1.375;
         }
-        else if (minPerDay > 60 && dayPerWeek >= 5) {
-            return 2;
+        else if (dayPerWeek >= 4 && dayPerWeek <= 5) {
+            R = 1.55;
         }
-        else return 1;
+        else if (dayPerWeek >= 6 && dayPerWeek <=7) {
+            if (minPerDay >= 120) 
+                R = 1.725;
+            else R = 1.9;
+        }
+        else {
+            R = 1.2;
+        }
+        return R;
     }
 
 
     const saveUserData = async(values) => {
         let level = getActivityLevel(values.minPerDay, values.dayPerWeek);
+        let tdee = getTDEE(gender, weight, height, age, level);
+
         try {
             const docRef = await setDoc(doc(db, "users", userID), {
                 id: userID.toString(),
@@ -136,7 +155,10 @@ export default function SignUpBMI({ navigation }) {
                 age: age,
                 weight: weight,
                 height: height,
-                activityLevel: level
+                tdee: tdee,
+                carbRatio: 40,
+                proteinRatio: 30,
+                fatRatio: 30,
             }, { merge: true });
         } catch (e) {
             console.error("Error adding document: ", e);
