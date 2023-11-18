@@ -101,7 +101,6 @@ export default function HomeMain({ navigation }) {
             setcarbTotal(carb);
             setproteinTotal(protein);
             setfatTotal(fat);
-            console.log(totalKcal, totalCarb, totalProtein, totalFat);
         } 
         else {
             console.log("No such document!");
