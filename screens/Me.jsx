@@ -92,7 +92,7 @@ export default function Me({ navigation }) {
             Alert.alert('Oops, we cannot retrieve your data', 'Due inconsistent internet connection, we cannot fetch the data you need. Please refresh the screen to try again.');
         }
 
-        if (docSnap.exists()) {
+        if (docSnap) {
             let userData = docSnap.data();
             console.log("Document data:", userData);
             setAge(userData.age);
@@ -136,7 +136,7 @@ export default function Me({ navigation }) {
         if (user !== null) {
             getUserData();
         }
-    }, [])
+    }, []);
     
     return (
         <View style={globalStyles.container}>
