@@ -2,6 +2,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { setPersistence, initializeAuth, getReactNativePersistence, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ReactNativeAsyncStorage } from "firebase/auth";
 
 
 const firebaseConfig = {
@@ -23,7 +24,7 @@ if (!getApps().length) {
   try {
     app = initializeApp(firebaseConfig);
     auth = initializeAuth(app, {
-      persistence: getReactNativePersistence(AsyncStorage),
+      persistence: getReactNativePersistence(ReactNativeAsyncStorage),
     });
   } catch (error) {
     console.log('Error initializing app: ' + error);
