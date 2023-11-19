@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // Import styles
@@ -84,6 +85,34 @@ export default function Me({ navigation }) {
     const [height, setHeight] = React.useState(175);
     const [bmi, setBMI] = React.useState(0.0);
 
+
+    const getDataLocal = async(key = 'userData') => {
+        try {
+            const value = await AsyncStorage.getItem(key);
+            if (value !== null) {
+                // value previously stored
+                const userData = JSON.parse(value);
+                if (user.uid == userData.id) {
+                    console.log("Data fetched, id matched: ", userData);
+                    setAge(userData.age);
+                    setWeight(userData.weight);
+                    setHeight(userData.height);
+                    let bmiValue = bmiCalculation(weight, height);
+                    setBMI(bmiValue);
+                }
+                else {
+                    console.log("ID not matched");
+                    await getUserData();
+                }
+            }
+            else {
+                await getUserData();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const getUserData = async() => {
         let docRef, docSnap;
         try {
@@ -136,7 +165,7 @@ export default function Me({ navigation }) {
 
     React.useEffect(() => {
         if (user !== null) {
-            getUserData();
+            getDataLocal();
         }
     }, []);
     

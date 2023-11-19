@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, FlatList, Alert } from 'react-native';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
 import ProgressCircle from 'react-native-progress-circle';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // Import components
@@ -53,6 +54,7 @@ function HomeBody() {
 
 export default function HomeMain({ navigation }) {
     const user = auth.currentUser;
+
     const [totalKcal, setkcalTotal] = React.useState(0);
     const [totalCarb, setcarbTotal] = React.useState(0);
     const [totalProtein, setproteinTotal] = React.useState(0);
@@ -82,9 +84,46 @@ export default function HomeMain({ navigation }) {
             title: 'snack',
         }
     ]);
+
+
+    const storeDataLocal = async(value) => {
+        try {
+            const jsonValue = JSON.stringify(value);
+            await AsyncStorage.setItem('userData', jsonValue);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getDataLocal = async(key = 'userData') => {
+        try {
+            const value = await AsyncStorage.getItem(key);
+            if (value !== null) {
+                // value previously stored
+                const userData = JSON.parse(value);
+                if (user.uid == userData.id) {
+                    console.log("Data fetched, id matched: ", userData);
+                    let {tdee, carb, protein, fat} = getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
+                    setkcalTotal(tdee);
+                    setcarbTotal(carb);
+                    setproteinTotal(protein);
+                    setfatTotal(fat);
+                }
+                else {
+                    console.log("ID not matched");
+                    await getData();
+                }
+            }
+            else {
+                await getData();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
 
-    const getData = async() => {
+    const getData = async () => {
         let docRef, docSnap;
         try {
             docRef = doc(db, "users", user.uid);
@@ -94,7 +133,7 @@ export default function HomeMain({ navigation }) {
             Alert.alert('Oops, we cannot retrieve your data', 'Due inconsistent internet connection, we cannot fetch the data you need. Please refresh the screen to try again.');
         }
 
-        if (docSnap.exists()) {
+        if (docSnap) {
             let userData = docSnap.data();
             console.log("Document data:", userData);
             let {tdee, carb, protein, fat} = getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
@@ -102,6 +141,8 @@ export default function HomeMain({ navigation }) {
             setcarbTotal(carb);
             setproteinTotal(protein);
             setfatTotal(fat);
+            // Save data to local
+            storeDataLocal(userData);
         } 
         else {
             console.log("No such document!");
@@ -110,7 +151,7 @@ export default function HomeMain({ navigation }) {
 
     React.useEffect(() => {
         if (user !== null) {
-            getData();
+            getDataLocal();
         }
     }, []);
 
