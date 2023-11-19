@@ -1,7 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, FlatList, Alert } from 'react-native';
-import { auth, db, doc, getDoc  } from '../utils/firebase';
+import { auth } from '../utils/firebase';
+import { db, doc, getDoc } from '../utils/firestore';
 import ProgressCircle from 'react-native-progress-circle';
 
 

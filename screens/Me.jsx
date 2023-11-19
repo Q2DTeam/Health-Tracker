@@ -1,7 +1,9 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
-import { auth, db, doc, getDoc } from '../utils/firebase';
+import { auth } from '../utils/firebase';
+import { db, doc, getDoc } from '../utils/firestore';
+
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
