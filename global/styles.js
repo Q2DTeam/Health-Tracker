@@ -10,7 +10,7 @@ export const globalColors = {
     'textGray': '#9EA9C3',
     'chillGreen': '#91C788',
     'chillCyan': '#2FC9EF',
-    'darkerGreen': '#7CBC71',
+    'darkerGreen': '#72B766',
     'calmRed': '#FF8473',
 }
 
