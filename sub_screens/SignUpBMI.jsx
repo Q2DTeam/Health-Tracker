@@ -119,7 +119,7 @@ export default function SignUpBMI({ navigation }) {
 
 
     const getTDEE = (gender, weight, height, age, activity) => {
-        let bmr = 10 * weight + 6.25 * (height/100) + 5 * age;
+        let bmr = 10 * weight + 6.25 * height + 5 * age;
         if (gender == true)
             bmr += 5;
         else bmr -= 161;
@@ -136,8 +136,8 @@ export default function SignUpBMI({ navigation }) {
         }
         else if (dayPerWeek >= 6 && dayPerWeek <=7) {
             if (minPerDay >= 120) 
-                R = 1.725;
-            else R = 1.9;
+                R = 1.9;
+            else R = 1.725;
         }
         else {
             R = 1.2;
