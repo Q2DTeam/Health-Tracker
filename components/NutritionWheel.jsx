@@ -9,7 +9,7 @@ import { globalColors } from '../global/styles';
 
 const sliceColors = [globalColors.vibrantBlue, globalColors.lunchOrange, globalColors.snackPurple];
 
-export default function NutritionWheel({ nutritions = [40, 30, 30] }) {
+export default function NutritionWheel({ nutritions }) {
 
     return (
         <View style={styles.wheelContainer}>

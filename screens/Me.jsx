@@ -85,7 +85,7 @@ export default function Me({ navigation }) {
     const [weight, setWeight] = React.useState(70);
     const [height, setHeight] = React.useState(175);
     const [bmi, setBMI] = React.useState(0.0);
-    const [ratio, setRatio] = React.useState([]);
+    const [ratio, setRatio] = React.useState([40, 30, 30]);
 
     const getDataLocal = async(key = 'userData') => {
         try {
