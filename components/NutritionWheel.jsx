@@ -1,30 +1,37 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import PieChart from 'react-native-pie-chart'
 
 // Import global styles
 import { globalColors } from '../global/styles';
 
 
+const sliceColors = [globalColors.vibrantBlue, globalColors.lunchOrange, globalColors.snackPurple];
 
-const sliceColors = [globalColors.snackPurple, globalColors.vibrantBlue, globalColors.lunchOrange];
+export default function NutritionWheel({ nutritions = [40, 30, 30] }) {
 
-// Tempo data, delete later
-const nutritions = [30, 40, 30];
-
-export default function NutritionWheel() {
     return (
         <View style={styles.wheelContainer}>
             <PieChart 
                 widthAndHeight={150} 
                 series={nutritions} 
                 sliceColor={sliceColors}
-                coverRadius={0.5} />
+                coverRadius={0.001} 
+            />
             <View style={styles.details}>
-                <Text></Text>
-                <Text></Text>
-                <Text></Text>
+                <View style={styles.infoItem}>
+                    <FontAwesome name='circle' color={globalColors.vibrantBlue} size={18} />
+                    <Text style={styles.infoName}>Carbs</Text>
+                </View>
+                <View style={styles.infoItem}>
+                    <FontAwesome name='circle' color={globalColors.lunchOrange} size={18} />
+                    <Text style={styles.infoName}>Protein</Text>
+                </View>
+                <View style={styles.infoItem}>
+                    <FontAwesome name='circle' color={globalColors.snackPurple} size={18} />
+                    <Text style={styles.infoName}>Fats</Text>
+                </View>
             </View>
         </View>
     );
@@ -49,5 +56,17 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+    },
+    details: {
+        justifyContent: 'space-around',
+        height: 120,
+    },
+    infoItem: {
+        minWidth: 100,
+        flexDirection: 'row',
+    },
+    infoName: {
+        marginLeft: 10,
+        fontSize: 16,
     },
 });

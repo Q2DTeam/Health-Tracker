@@ -85,7 +85,7 @@ export default function Me({ navigation }) {
     const [weight, setWeight] = React.useState(70);
     const [height, setHeight] = React.useState(175);
     const [bmi, setBMI] = React.useState(0.0);
-
+    const [ratio, setRatio] = React.useState([]);
 
     const getDataLocal = async(key = 'userData') => {
         try {
@@ -101,6 +101,7 @@ export default function Me({ navigation }) {
                     setGender(userData.gender);
                     let bmiValue = bmiCalculation(weight, height);
                     setBMI(bmiValue);
+                    setRatio([userData.carbRatio, userData.proteinRatio, userData.fatRatio]);
                 }
                 else {
                     console.log("ID not matched");
@@ -134,6 +135,7 @@ export default function Me({ navigation }) {
             setGender(userData.gender);
             let bmiValue = bmiCalculation(weight, height);
             setBMI(bmiValue);
+            setRatio([userData.carbRatio, userData.proteinRatio, userData.fatRatio]);
         } 
         else {
             console.log("No such document!");
@@ -186,7 +188,7 @@ export default function Me({ navigation }) {
 
                 <View style={{marginVertical: 20,}}>
                     <Text style={styles.bmiTitle}>Daily Intake</Text>
-                    <NutritionWheel />
+                    <NutritionWheel nutritions={ratio} />
                 </View>
             </View>
         </View>
