@@ -8,6 +8,7 @@ import { Formik } from 'formik';
 import { auth, db, setDoc, doc } from '../utils/firebase';
 import * as yup from 'yup';
 import Slider from "react-native-a11y-slider";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import icons
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -103,15 +104,14 @@ const bmiSchema = yup.object({
 });
 
 
-export default function SignUpBMI({ navigation, route }) {
+export default function SignUpBMI({ navigation }) {
     const userID = auth.currentUser.uid;
 
-    const { iGender, iHeight, iWeight, iAge } = route.params; 
     // True = male, false = female
-    const [gender, setGender] = React.useState(iGender);
-    const [height, setHeight] = React.useState(iHeight);
-    const [weight, setWeight] = React.useState(iWeight);
-    const [age, setAge] = React.useState(iAge);
+    const [gender, setGender] = React.useState(true);
+    const [height, setHeight] = React.useState(175);
+    const [weight, setWeight] = React.useState(70);
+    const [age, setAge] = React.useState(18);
 
     // 0 = lose weight, 1 = maintain, 2 = gain
     const [goal, setGoal] = React.useState(1);
@@ -144,13 +144,43 @@ export default function SignUpBMI({ navigation, route }) {
         return R;
     }
 
+    const getDataLocal = async(key = 'userData') => {
+        try {
+            const value = await AsyncStorage.getItem(key);
+            if (value !== null) {
+                // value previously stored
+                const userData = JSON.parse(value);
+                if (userID == userData.id) {
+                    console.log("Data fetched, id matched: ", userData);
+                    setAge(userData.age);
+                    setWeight(userData.weight);
+                    setHeight(userData.height);
+                    setGender(userData.gender);
+                }
+                else {
+                    console.log("ID not matched");
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const storeDataLocal = async(value) => {
+        try {
+            const jsonValue = JSON.stringify(value);
+            await AsyncStorage.setItem('userData', jsonValue);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const saveUserData = async(values) => {
         let level = getActivityLevel(values.minPerDay, values.dayPerWeek);
         let tdee = getTDEE(gender, weight, height, age, level);
 
         try {
-            const docRef = await setDoc(doc(db, "users", userID), {
+            const newData = {
                 id: userID.toString(),
                 gender: gender,
                 age: age,
@@ -160,7 +190,12 @@ export default function SignUpBMI({ navigation, route }) {
                 carbRatio: 40,
                 proteinRatio: 30,
                 fatRatio: 30,
-            }, { merge: true });
+            };
+            // Save data to database
+            await setDoc(doc(db, "users", userID), newData, { merge: true });
+            // Save data to local
+            storeDataLocal(newData);
+            console.log("New data: ", newData);
         } catch (e) {
             console.error("Error adding document: ", e);
         }
@@ -169,6 +204,12 @@ export default function SignUpBMI({ navigation, route }) {
     const goBack = () => {
         navigation.goBack();
     }
+
+    React.useEffect(() => {
+        if (userID !== null) {
+            getDataLocal();
+        }
+    }, []);
 
     return (
         <View style={globalStyles.container}>

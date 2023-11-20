@@ -165,12 +165,6 @@ export default function Me({ navigation }) {
     const handleUpdateBMI = () => {
         navigation.navigate('RegisterStack', { 
             screen: 'SignUpBMI',
-            params: {
-                iGender: gender,
-                iHeight: height,
-                iWeight: weight,
-                iAge: age
-            } 
         });
     }
 
