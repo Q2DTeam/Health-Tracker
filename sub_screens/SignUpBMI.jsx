@@ -5,7 +5,8 @@ import React from 'react';
 import { ScrollView, Text, View, StyleSheet, TouchableOpacity, TextInput, RefreshControl } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { Formik } from 'formik';
-import { auth, db, setDoc, doc } from '../utils/firebase';
+import { auth } from '../utils/firebase';
+import { db, setDoc, doc } from '../utils/firestore';
 import * as yup from 'yup';
 import Slider from "react-native-a11y-slider";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -258,7 +259,7 @@ export default function SignUpBMI({ navigation }) {
                             <WeightAgeButton title='Age' value={age} setValue={setAge} />
                         </View>
                     </View>
-                    <TouchableOpacity style={globalStyles.submitBtn} onPress={handleSubmit}>
+                    <TouchableOpacity style={[globalStyles.submitBtn, {marginBottom: 30,}]} onPress={handleSubmit}>
                         <Text style={{color: '#fff', fontSize: 20,}}>Update</Text>
                     </TouchableOpacity>
                 </ScrollView>
