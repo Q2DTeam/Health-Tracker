@@ -80,6 +80,7 @@ function Header({ signOutFunc, bmiFunc }) {
 
 export default function Me({ navigation }) {
     const user = auth.currentUser;
+    const [gender, setGender] = React.useState(true);
     const [age, setAge] = React.useState(18);
     const [weight, setWeight] = React.useState(70);
     const [height, setHeight] = React.useState(175);
@@ -97,6 +98,7 @@ export default function Me({ navigation }) {
                     setAge(userData.age);
                     setWeight(userData.weight);
                     setHeight(userData.height);
+                    setGender(userData.gender);
                     let bmiValue = bmiCalculation(weight, height);
                     setBMI(bmiValue);
                 }
@@ -129,6 +131,7 @@ export default function Me({ navigation }) {
             setAge(userData.age);
             setWeight(userData.weight);
             setHeight(userData.height);
+            setGender(userData.gender);
             let bmiValue = bmiCalculation(weight, height);
             setBMI(bmiValue);
         } 
@@ -160,7 +163,15 @@ export default function Me({ navigation }) {
     }
 
     const handleUpdateBMI = () => {
-        navigation.navigate('RegisterStack', { screen: 'SignUpBMI' });
+        navigation.navigate('RegisterStack', { 
+            screen: 'SignUpBMI',
+            params: {
+                iGender: gender,
+                iHeight: height,
+                iWeight: weight,
+                iAge: age
+            } 
+        });
     }
 
     React.useEffect(() => {

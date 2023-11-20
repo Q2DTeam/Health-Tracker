@@ -103,14 +103,15 @@ const bmiSchema = yup.object({
 });
 
 
-export default function SignUpBMI({ navigation }) {
+export default function SignUpBMI({ navigation, route }) {
     const userID = auth.currentUser.uid;
 
+    const { iGender, iHeight, iWeight, iAge } = route.params; 
     // True = male, false = female
-    const [gender, setGender] = React.useState(true);
-    const [height, setHeight] = React.useState(175);
-    const [weight, setWeight] = React.useState(70);
-    const [age, setAge] = React.useState(18);
+    const [gender, setGender] = React.useState(iGender);
+    const [height, setHeight] = React.useState(iHeight);
+    const [weight, setWeight] = React.useState(iWeight);
+    const [age, setAge] = React.useState(iAge);
 
     // 0 = lose weight, 1 = maintain, 2 = gain
     const [goal, setGoal] = React.useState(1);
