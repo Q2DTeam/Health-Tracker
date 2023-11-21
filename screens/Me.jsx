@@ -187,7 +187,7 @@ export default function Me({ navigation }) {
                 </View>
 
                 <View style={{marginVertical: 20,}}>
-                    <Text style={styles.bmiTitle}>Daily Intake</Text>
+                    <Text style={styles.bmiTitle}>Nutritional Ratio</Text>
                     <NutritionWheel nutritions={ratio} />
                 </View>
             </View>

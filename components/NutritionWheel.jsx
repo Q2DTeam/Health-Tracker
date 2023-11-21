@@ -22,15 +22,15 @@ export default function NutritionWheel({ nutritions }) {
             <View style={styles.details}>
                 <View style={styles.infoItem}>
                     <FontAwesome name='circle' color={globalColors.vibrantBlue} size={18} />
-                    <Text style={styles.infoName}>Carbs</Text>
+                    <Text style={styles.infoName}>Carbs ({nutritions[0]}%)</Text>
                 </View>
                 <View style={styles.infoItem}>
                     <FontAwesome name='circle' color={globalColors.lunchOrange} size={18} />
-                    <Text style={styles.infoName}>Protein</Text>
+                    <Text style={styles.infoName}>Protein ({nutritions[1]}%)</Text>
                 </View>
                 <View style={styles.infoItem}>
                     <FontAwesome name='circle' color={globalColors.snackPurple} size={18} />
-                    <Text style={styles.infoName}>Fats</Text>
+                    <Text style={styles.infoName}>Fats ({nutritions[2]}%)</Text>
                 </View>
             </View>
         </View>
