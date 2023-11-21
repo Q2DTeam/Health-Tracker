@@ -130,12 +130,18 @@ export default function SignUpBMI({ navigation }) {
     const [goal, setGoal] = React.useState(1);
 
 
-    const getTDEE = (gender, weight, height, age, activity) => {
+    const getTDEE = (gender, weight, height, age, activity, goal) => {
         let bmr = 10 * weight + 6.25 * height + 5 * age;
         if (gender == true)
             bmr += 5;
         else bmr -= 161;
-        return Math.round(bmr*activity);
+
+        let kcal = Math.round(bmr*activity);
+        if (goal == 0) 
+            return kcal - 500;
+        else if (goal == 1)
+            return kcal;
+        else return kcal + 500;
     }
 
     const getActivityLevel = (minPerDay, dayPerWeek) => {
@@ -190,7 +196,7 @@ export default function SignUpBMI({ navigation }) {
 
     const saveUserData = async(values) => {
         let level = getActivityLevel(values.minPerDay, values.dayPerWeek);
-        let tdee = getTDEE(gender, weight, height, age, level);
+        let tdee = getTDEE(gender, weight, height, age, level, goal);
 
         try {
             const newData = {
@@ -199,10 +205,11 @@ export default function SignUpBMI({ navigation }) {
                 age: age,
                 weight: weight,
                 height: height,
+                goal: goal,
                 tdee: tdee,
                 carbRatio: 40,
                 proteinRatio: 30,
-                fatRatio: 30,
+                fatRatio: 30
             };
             // Save data to database
             await setDoc(doc(db, "users", userID), newData, { merge: true });
