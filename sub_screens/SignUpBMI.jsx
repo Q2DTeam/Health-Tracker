@@ -28,6 +28,18 @@ function Header({ backFunc }) {
     )
 }
 
+function GoalButton({value, setValue, desireVal, title, subtitle}) {
+    return (
+        <TouchableOpacity 
+            style={[goalStyles.btn, { borderColor: value == desireVal ? globalColors.breakfastGreen : '#fff' }]} 
+            onPress={() => {setValue(desireVal);}}
+        >
+            <Text style={[goalStyles.title, {color: value == desireVal ? globalColors.breakfastGreen : '#000'}]}>{title}</Text>
+            <Text style={goalStyles.subtitle}>{subtitle}</Text>
+        </TouchableOpacity>
+    )
+}
+
 function GenderButton({ value, setValue }) {
     return (
         <View style={styles.genderContainer}>
@@ -230,6 +242,38 @@ export default function SignUpBMI({ navigation }) {
                 ({handleChange, handleSubmit, values, errors}) => (
                 <ScrollView style={{padding: 20,}}
                     contentContainerStyle={{alignItems: 'center'}}>
+                    <View style={goalStyles.container}>
+                        <Text style={{
+                            fontSize: 18,
+                            fontFamily: 'inter-bold',
+                            color: globalColors.breakfastGreen,
+                        }}>
+                            What is your goal?
+                        </Text>
+                        <View>
+                            <GoalButton
+                                value={goal}
+                                setValue={setGoal}
+                                desireVal={0}
+                                title='Lose Weight'
+                                subtitle='Manage your weight by eating smarter'
+                            />
+                            <GoalButton
+                                value={goal}
+                                setValue={setGoal}
+                                desireVal={1}
+                                title='Maintain Weight'
+                                subtitle='Optimizes your well-being'
+                            />
+                            <GoalButton
+                                value={goal}
+                                setValue={setGoal}
+                                desireVal={2}
+                                title='Gain Weight'
+                                subtitle='Build strength with high-protein food'
+                            />
+                        </View>
+                    </View>
                     <View style={styles.activityContainer}>
                         <Text style={styles.title}>Your activity per week *</Text>
                         <View>
@@ -386,4 +430,39 @@ const weightAgeStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+});
+
+const goalStyles = StyleSheet.create({
+    container: {
+        marginBottom: 20,
+        alignItems: 'center',
+        padding: 10,
+    },
+    btn: {
+        marginTop: 15,
+        backgroundColor: '#fff',
+        width: 300,
+        padding: 10,
+        alignItems: 'center',
+        borderRadius: 30,
+        borderWidth: 2,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+
+        elevation: 2,
+    },
+    title: {
+        fontSize: 16,
+        fontFamily: 'inter-semibold'
+    },
+    subtitle: {
+        fontSize: 14,
+        fontFamily: 'inter-regular',
+        color: globalColors.textGray,
+    }
 });
