@@ -1,98 +1,69 @@
 // Display a full meal
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 // Import global styles
 import { globalColors } from '../global/styles';
 import ItemCard from './ItemCard';
 
 
-// Sample item list, delete later
-const foodList = [
-    {
-        id: 1,
-        title: 'Rice',
-        info: '2 bowl x 100g - 360kcal',
-    },
-    {
-        id: 2,
-        title: 'Pork',
-        info: '75g - 140kcal',
-    },
-    {
-        id: 3,
-        title: 'Salad',
-        info: '1 bowl x 200g - 250kcal',
-    }
-]
+export default function MealItem({ type, kcal=0 }) {
 
-
-
-export default function MealItem({ kcal=0, type }) {
     let color;
+    let image;
     switch (type) {
         case 'breakfast':
-            color = globalColors.breakfastGreen;
+            image = require('../assets/images/breakfast_img.jpg');
             break;
         case 'lunch':
-            color = globalColors.lunchOrange;
+            image = require('../assets/images/lunch_img.jpg');
             break;
         case 'dinner':
-            color = globalColors.dinnerCyan;
+            image = require('../assets/images/dinner_img.jpg');
             break;
         case 'snack':
-            color = globalColors.snackPurple;
-            break;
-        default:
-            color = globalColors.vibrantBlue;
+            image = require('../assets/images/snack_img.jpg');
             break;
     }
-
-    const [isExpanded, setExpanded] = React.useState(false);
 
     const expandHandler = () => {
         setExpanded(old => !old);
     }
 
+    const [foodList, setFoodList] = React.useState([]);
+
     return (
-        <View style={styles.mealContainer}>
+        <ImageBackground style={styles.mealContainer} source={image} alt='Background image' resizeMode='cover'>
             <View style={styles.titleContainer}>
-                <Text style={{ fontSize: 20, color: color }}>{type[0].toUpperCase() + type.slice(1)}</Text>
-                <TouchableOpacity onPress={expandHandler}>
-                    <Text style={styles.mealKcal}>{kcal} kcal
-                    { isExpanded ? <AntDesign name='up' size={18} /> : <AntDesign name='down' size={18} />}
-                    </Text>
+                <View style={{marginLeft: 20}}>
+                    <Text style={{ fontSize: 18, fontFamily: 'inter-semibold' }}>{type[0].toUpperCase() + type.slice(1)}</Text>
+                    <Text>{kcal} kcal</Text>
+                </View>
+                <TouchableOpacity style={styles.detailBtn}>
+                    <MaterialCommunityIcons name='pencil-box' size={30} />
                 </TouchableOpacity>
             </View>
-            {
-                isExpanded ? 
-                <FlatList 
-                    keyExtractor={(item) => item.id}
-                    data={foodList}
-                    renderItem={({item}) => (
-                        <ItemCard title={item.title} info={item.info} type={type} />
-                    )}
-                />
-                :
-                <View/>
-            }
-        </View>
+        </ImageBackground>
     )
 }
 
 const styles = StyleSheet.create({
     mealContainer: {
         width: 334,
-        minHeight: 75,
-        marginBottom: 20,
+        minHeight: 80,
+        marginVertical: 10,
+        borderRadius: 10,
+        overflow: 'hidden',
+        justifyContent: 'center',
     },
     titleContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    mealKcal: {
-        fontSize: 20,
+    detailBtn: {
+        justifyContent: 'center',
+        marginRight: 10,
     },
 });

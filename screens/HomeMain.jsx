@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
 import ProgressCircle from 'react-native-progress-circle';
@@ -12,6 +12,7 @@ import KcalValue from '../components/KcalValue';
 import NutriValue from '../components/NutriValue';
 import MealItem from '../components/MealItem';
 import ActionButton from '../components/ActionButton';
+import { globalColors, globalStyles } from '../global/styles';
 
 
 function TopBar({ totalKcal, totalCarb, totalProtein, totalFat, kcalBurned, kcalEaten, carbEaten, proteinEaten, fatEaten }) {
@@ -47,7 +48,7 @@ function TopBar({ totalKcal, totalCarb, totalProtein, totalFat, kcalBurned, kcal
     )
 }
 
-function HomeBody() {
+function ActivityBar() {
 
 }
 
@@ -66,24 +67,10 @@ export default function HomeMain({ navigation }) {
     const [proteinEaten, setProteinEaten] = React.useState(0);
     const [fatEaten, setFatEaten] = React.useState(0); 
     
-    const [meals, setMeals] = React.useState([
-        {
-            key: 1,
-            title: 'breakfast',
-        },
-        {
-            key: 2,
-            title: 'lunch',
-        },
-        {
-            key: 3,
-            title: 'dinner',
-        },
-        {
-            key: 4,
-            title: 'snack',
-        }
-    ]);
+    const [breakfast, setBreakfast] = React.useState([]);
+    const [lunch, setLunch] = React.useState([]);
+    const [dinner, setDinner] = React.useState([]);
+    const [snack, setSnack] = React.useState([]);
 
 
     const storeDataLocal = async(value) => {
@@ -168,23 +155,35 @@ export default function HomeMain({ navigation }) {
 
 
     return (
-        <View style={{backgroundColor: '#F2F5FC', flex: 1}}>
+        <View style={globalStyles.container}>
             <StatusBar barStyle="light-content" />
-            <FlatList
-                ListHeaderComponent={
-                    <TopBar totalKcal={totalKcal} totalCarb={totalCarb} totalProtein={totalProtein} totalFat={totalFat} kcalEaten={kcalEaten}
-                            kcalBurned={kcalBurned} carbEaten={carbEaten} proteinEaten={proteinEaten} fatEaten={fatEaten}  />
-                }
-                style={{backgroundColor: '#F2F5FC', flex: 1}}
+            <ScrollView 
+                style={{
+                    backgroundColor: '#F2F5FC', 
+                    flex: 1, 
+                    marginBottom: 10,  
+                }}
                 contentContainerStyle={{
-                    marginVertical: 10,
                     alignItems: 'center'
                 }}
-                data={meals}
-                renderItem={({item}) => (
-                    <MealItem type={item.title} kcal={750} />
-                )}
-            /> 
+            >
+                <TopBar totalKcal={totalKcal} totalCarb={totalCarb} totalProtein={totalProtein} totalFat={totalFat} kcalEaten={kcalEaten}
+                        kcalBurned={kcalBurned} carbEaten={carbEaten} proteinEaten={proteinEaten} fatEaten={fatEaten}  
+                />
+                <View>
+                    <Text style={{
+                        fontSize: 20,
+                        fontFamily: 'inter-bold',
+                        marginVertical: 10
+                    }}>
+                        Daily meals
+                    </Text>
+                    <MealItem type='breakfast' />
+                    <MealItem type='lunch' />
+                    <MealItem type='dinner' />
+                    <MealItem type='snack' />
+                </View>
+            </ScrollView>
             <ActionButton handleNavigation={handleNavigation} />
         </View>
     )
