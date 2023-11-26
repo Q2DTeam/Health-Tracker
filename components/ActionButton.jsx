@@ -64,7 +64,7 @@ export default function ActionButton({ handleNavigation }) {
                 onPressItem={name => {
                     handleNavigation(name);
                 }}
-                color={globalColors.vibrantBlue}
+                color={globalColors.chillCyan}
                 distanceToEdge={15}
                 overlayColor='rgba(255, 255, 255, 0.75)'
                 showBackground={true}

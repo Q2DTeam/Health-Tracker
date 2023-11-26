@@ -25,10 +25,11 @@ export default function Navigation() {
                 iconName = 'food';
             }
             else iconName = 'account'
-            return <MaterialCommunityIcons name={iconName} size={26} color={ focused ? '#0099FF' : '#9DA8C3'} />
+            return <MaterialCommunityIcons name={iconName} size={26} color={ focused ? globalColors.chillCyan : '#9DA8C3'} />
           },
           tabBarLabelStyle: {fontSize: 12},
           tabBarStyle: styles.tabBar,
+          tabBarActiveTintColor: globalColors.chillCyan,
           headerShown: false,
         })}
         
