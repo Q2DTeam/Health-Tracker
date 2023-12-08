@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { auth } from './utils/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,18 +14,10 @@ import SignUpBMI from './sub_screens/SignUpBMI';
 
 
 export default function RegisterStack() {
-    const user = auth.currentUser;
-
-    useEffect(() =>{
-        if (user == null) {
-            console.log("RUn this");
-        }
-    }, [])
-    
     return (
         <Stack.Navigator 
             screenOptions={{headerShown: false}}
-            initialRouteName={user ? 'Main' : 'Register'}
+            initialRouteName='Register'
         >
             <Stack.Screen 
                 name="Register" 

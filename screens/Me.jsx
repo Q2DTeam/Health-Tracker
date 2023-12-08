@@ -79,13 +79,26 @@ function Header({ signOutFunc, bmiFunc }) {
 
 
 export default function Me({ navigation }) {
-    const user = auth.currentUser;
+    const [user, setUser] = React.useState(auth.currentUser);
     const [gender, setGender] = React.useState(true);
     const [age, setAge] = React.useState(18);
     const [weight, setWeight] = React.useState(70);
     const [height, setHeight] = React.useState(175);
     const [bmi, setBMI] = React.useState(0.0);
     const [ratio, setRatio] = React.useState([40, 30, 30]);
+
+    const getAuth = async () => {
+        try {
+            const value = await AsyncStorage.getItem('auth');
+            if (value !== null) {
+                const userAuth = JSON.parse(value);
+                setUser(userAuth.currentUser);
+                console.log('User data fetched');
+            }
+        } catch (e) {
+            console.log("Can't fetch user auth");
+        }
+    };
 
     const getDataLocal = async(key = 'userData') => {
         try {
@@ -171,10 +184,12 @@ export default function Me({ navigation }) {
     }
 
     React.useEffect(() => {
-        if (user !== null) {
-            getDataLocal();
-        }
+        getAuth();
     }, []);
+
+    React.useEffect(() => {
+        getDataLocal();
+    }, [user]);
     
     return (
         <View style={globalStyles.container}>

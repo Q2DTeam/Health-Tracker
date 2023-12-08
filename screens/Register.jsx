@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground } from 'react-native';
 import { globalStyles } from '../global/styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import icons
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 export default function Register({navigation}) {
+    const getAuth = async() => {
+        try {
+            const value = await AsyncStorage.getItem('auth');
+            if (value !== null) {
+                navigation.replace('Main');
+            }
+        } catch (e) {
+            console.log("Can't fetch auth");
+        }
+    };
+
+    useEffect(() => {
+        getAuth();
+    }, [])
+
     return (
         <View style={globalStyles.container}>
             <ImageBackground source={require('../assets/images/register_BG.jpg')} alt='Background image' resizeMode='cover' style={styles.registerContainer}>

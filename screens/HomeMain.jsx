@@ -54,7 +54,7 @@ function ActivityBar() {
 
 
 export default function HomeMain({ navigation }) {
-    const user = auth.currentUser;
+    const [user, setUser] = React.useState(auth.currentUser);
 
     const [totalKcal, setkcalTotal] = React.useState(0);
     const [totalCarb, setcarbTotal] = React.useState(0);
@@ -71,6 +71,19 @@ export default function HomeMain({ navigation }) {
     const [lunch, setLunch] = React.useState([]);
     const [dinner, setDinner] = React.useState([]);
     const [snack, setSnack] = React.useState([]);
+
+    const getAuth = async () => {
+        try {
+            const value = await AsyncStorage.getItem('auth');
+            if (value !== null) {
+                const userAuth = JSON.parse(value);
+                setUser(userAuth.currentUser);
+                console.log('User data fetched');
+            }
+        } catch (e) {
+            console.log("Can't fetch user auth");
+        }
+    };
 
 
     const storeDataLocal = async(value) => {
@@ -137,12 +150,12 @@ export default function HomeMain({ navigation }) {
     }
 
     React.useEffect(() => {
-        if (user !== null) {
-            getDataLocal();
-            console.log("User: ", auth);
-            console.log("User type: ", typeof(auth));
-        }
+        getAuth();
     }, []);
+
+    React.useEffect(() => {
+        getDataLocal();
+    }, [user]);
 
     const getNutriValue = (tdee, carbRatio, proteinRatio, fatRatio) => {
         let carb = Math.round(tdee * carbRatio / 400);
