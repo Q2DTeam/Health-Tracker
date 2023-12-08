@@ -6,11 +6,13 @@ export const globalColors = {
     'lunchOrange': '#FFA935',
     'dinnerCyan': '#12E5B0',
     'snackPurple': '#B575E7',
-    'backgroundGray': '#F2F5FC',
+    'backgroundGray': '#ebf1ff',
     'textGray': '#9EA9C3',
     'chillGreen': '#91C788',
     'chillCyan': '#2FC9EF',
     'darkerGreen': '#72B766',
+    'darkerCyan': '#42cd8c',
+    'backgroundCyan': '#60dda3',
     'calmRed': '#FF8473',
 }
 

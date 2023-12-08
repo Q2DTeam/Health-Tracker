@@ -10,7 +10,7 @@ export default function KcalValue({icon, title, value}) {
             <MaterialCommunityIcons 
                 name={icon} 
                 size={30}
-                color={icon === 'fire' ? '#FFA935' : '#2ED12E'}
+                color={icon === 'fire' ? '#FFA935' : '#B575E7'}
             />
             <Text style={styles.kcalValue}>{value}</Text>
             <Text style={styles.kcalText}>{title}</Text>
@@ -20,18 +20,18 @@ export default function KcalValue({icon, title, value}) {
 
 const styles = StyleSheet.create({
     kcalWrapper: {
-        //borderWidth: 1,
         flexDirection: 'column',
         alignItems: 'center',
         width: 75,
     },
     kcalValue: {
-        fontSize: 26,
+        fontSize: 24,
+        color: "#fff",
         fontFamily: 'inter-semibold',
     },
     kcalText: {
-        fontSize: 12,
-        color: "#9DA8C3",
+        fontSize: 16,
+        color: "#fff",
         fontFamily: 'inter-regular',
     }
 });

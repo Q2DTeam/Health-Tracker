@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, ImageBackground, Alert, Image, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, ImageBackground, Alert, Image, ScrollView } from 'react-native';
 import { globalStyles, globalColors } from '../global/styles';
 import { Formik } from 'formik';
 import { auth, signInWithEmailAndPassword} from '../utils/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
 
 // Import icons

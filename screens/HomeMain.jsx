@@ -26,9 +26,9 @@ function TopBar({ totalKcal, totalCarb, totalProtein, totalFat, kcalBurned, kcal
                             percent={Math.round(kcalEaten / (totalKcal + kcalBurned) * 100)}
                             radius={90}
                             borderWidth={8}
-                            color="#2ED12E"
-                            shadowColor="#999"
-                            bgColor="#fff"
+                            color="#fff"
+                            shadowColor={globalColors.backgroundCyan}
+                            bgColor={globalColors.darkerCyan}
                         >
                             <View style={{alignItems: 'center'}}>
                                 <Text style={styles.remainKcalValue}>{totalKcal + kcalBurned - kcalEaten}</Text>
@@ -139,6 +139,8 @@ export default function HomeMain({ navigation }) {
     React.useEffect(() => {
         if (user !== null) {
             getDataLocal();
+            console.log("User: ", auth);
+            console.log("User type: ", typeof(auth));
         }
     }, []);
 
@@ -159,7 +161,7 @@ export default function HomeMain({ navigation }) {
             <StatusBar barStyle="light-content" />
             <ScrollView 
                 style={{
-                    backgroundColor: '#F2F5FC', 
+                    backgroundColor: globalColors.backgroundGray, 
                     flex: 1, 
                     marginBottom: 10,  
                 }}
@@ -197,13 +199,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
-    kcalContainer: { // The white circle
-        backgroundColor: '#fff',
+    kcalContainer: { 
+        backgroundColor: globalColors.darkerCyan,
         width: 700,
         height: 700,
         borderRadius: 350,
-        borderColor: '#E0E6F3',
-        borderWidth: 3,
         paddingTop: 400,
         alignItems: 'center',
     },
@@ -216,12 +216,12 @@ const styles = StyleSheet.create({
     },
     remainKcalValue: {
         fontSize: 36,
-        color: "#2ED12E",
+        color: "#fff",
         fontFamily: 'inter-bold',
     },
     remainKcalText: {
         fontSize: 12,
-        color: "#9DA8C3",
+        color: "#fff",
         fontFamily: 'inter-regular',
     },
 

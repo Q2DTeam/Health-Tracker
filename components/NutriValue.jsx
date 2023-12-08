@@ -20,11 +20,12 @@ const styles = StyleSheet.create({
     },
     kcalValue: {
         fontSize: 16,
-        color: "#9DA8C3",
+        color: "#fff",
         fontFamily: 'inter-regular',
     },
     kcalText: {
         fontSize: 12,
+        color: "#fff",
         fontFamily: 'inter-semibold',
     }
 });
