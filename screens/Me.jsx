@@ -160,6 +160,15 @@ export default function Me({ navigation }) {
         return bmi.toFixed(1);
     }
 
+    const removeAuth = async() => {
+        try {
+            await AsyncStorage.removeItem('auth');
+        }
+        catch (err) {
+            Alert.alert("There has been a network error. Please try again later.");
+        }
+    }
+
     const handleSignOut = () => {
         Alert.alert('Log Out', 'Do you want to log out?', [
         {
@@ -167,6 +176,7 @@ export default function Me({ navigation }) {
             onPress: () => {
                 auth.signOut()
                 .then(() => {
+                    removeAuth();
                     navigation.navigate('RegisterStack', { screen: 'Register' });
                 })
             },
