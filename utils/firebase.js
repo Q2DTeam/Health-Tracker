@@ -24,7 +24,7 @@ if (!getApps().length) {
   try {
     app = initializeApp(firebaseConfig);
     auth = initializeAuth(app, {
-      persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+      persistence: getReactNativePersistence(AsyncStorage),
     });
   } catch (error) {
     console.log('Error initializing app: ' + error);

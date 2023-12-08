@@ -54,7 +54,7 @@ function ActivityBar() {
 
 
 export default function HomeMain({ navigation }) {
-    const [user, setUser] = React.useState(auth.currentUser);
+    const [user, setUser] = React.useState();
 
     const [totalKcal, setkcalTotal] = React.useState(0);
     const [totalCarb, setcarbTotal] = React.useState(0);
@@ -71,20 +71,6 @@ export default function HomeMain({ navigation }) {
     const [lunch, setLunch] = React.useState([]);
     const [dinner, setDinner] = React.useState([]);
     const [snack, setSnack] = React.useState([]);
-
-    const getAuth = async () => {
-        try {
-            const value = await AsyncStorage.getItem('auth');
-            if (value !== null) {
-                const userAuth = JSON.parse(value);
-                setUser(userAuth.currentUser);
-                console.log('User data fetched');
-            }
-        } catch (e) {
-            console.log("Can't fetch user auth");
-        }
-    };
-
 
     const storeDataLocal = async(value) => {
         try {
@@ -122,7 +108,6 @@ export default function HomeMain({ navigation }) {
         }
     }
     
-
     const getData = async () => {
         let docRef, docSnap;
         try {
@@ -150,7 +135,8 @@ export default function HomeMain({ navigation }) {
     }
 
     React.useEffect(() => {
-        getAuth();
+        const subscriber = auth.onAuthStateChanged((val) => {setUser(val)});
+        return subscriber;
     }, []);
 
     React.useEffect(() => {
@@ -199,7 +185,6 @@ export default function HomeMain({ navigation }) {
                     <MealItem type='snack' />
                 </View>
             </ScrollView>
-            <ActionButton handleNavigation={handleNavigation} />
         </View>
     )
 }

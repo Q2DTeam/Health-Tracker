@@ -15,7 +15,8 @@ const Stack = createNativeStackNavigator();
 
 
 export default function App() {
-  const user = auth.currentUser;
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
 
   const [fontsLoaded] = useFonts({
     'inter-regular': require('./assets/fonts/Inter-Regular.ttf'),
@@ -24,12 +25,18 @@ export default function App() {
     'inter-bold': require('./assets/fonts/Inter-Bold.ttf'),
   });
 
+  const onStateChanged = (user) => {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
 
   useEffect(() => {
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
     }
     prepare();
+    const subscriber = auth.onAuthStateChanged(onStateChanged);
+    return subscriber;
   }, []);
 
   if (!fontsLoaded)
@@ -38,16 +45,22 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}} 
-        initialRouteName={user !== null ? 'MainNavigation' : 'RegisterStack'}>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        {
+          user == null ? (
             <Stack.Screen 
-                name="RegisterStack" 
-                component={RegisterStack}
+              name="RegisterStack" 
+              component={RegisterStack}
             />
+          )
+          :
+          (
             <Stack.Screen 
-                name="MainNavigation" 
-                component={Navigation}
+              name="MainNavigation" 
+              component={Navigation}
             />
+          )
+        }
         </Stack.Navigator>
     </NavigationContainer>
   );
