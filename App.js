@@ -27,7 +27,8 @@ export default function App() {
 
   const onStateChanged = (user) => {
     setUser(user);
-    if (initializing) setInitializing(false);
+    if (initializing) 
+      setInitializing(false);
   }
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function App() {
     return subscriber;
   }, []);
 
-  if (!fontsLoaded)
+  if (!fontsLoaded || initializing)
     return null;
   else SplashScreen.hideAsync();
 
