@@ -1,56 +1,20 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert, Modal, TouchableOpacity } from 'react-native';
+import { globalColors, globalStyles } from '../global/styles';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
 import ProgressCircle from 'react-native-progress-circle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { Calendar } from 'react-native-calendars';
+import moment from 'moment'; 
 
 // Import components
 import KcalValue from '../components/KcalValue';
 import NutriValue from '../components/NutriValue';
 import MealItem from '../components/MealItem';
 import ActionButton from '../components/ActionButton';
-import { globalColors, globalStyles } from '../global/styles';
-
-
-function TopBar({ totalKcal, totalCarb, totalProtein, totalFat, kcalBurned, kcalEaten, carbEaten, proteinEaten, fatEaten }) {
-    return (
-        <View style={styles.topBar}>
-            <View style={styles.kcalContainer}> 
-                <View style={styles.infoContainer}>
-                    <View style={styles.kcalWrapper}>
-                        <KcalValue icon='fire' title='burned' value={kcalBurned} />
-                        <ProgressCircle 
-                            percent={Math.round(kcalEaten / (totalKcal + kcalBurned) * 100)}
-                            radius={90}
-                            borderWidth={8}
-                            color="#fff"
-                            shadowColor={globalColors.backgroundCyan}
-                            bgColor={globalColors.darkerCyan}
-                        >
-                            <View style={{alignItems: 'center'}}>
-                                <Text style={styles.remainKcalValue}>{totalKcal + kcalBurned - kcalEaten}</Text>
-                                <Text style={styles.remainKcalText}>Kcal remaining</Text>
-                            </View>
-                        </ProgressCircle>
-                        <KcalValue icon='silverware-variant' title='eaten' value={kcalEaten} />
-                    </View>
-                    <View style={styles.nutriWrapper}>
-                        <NutriValue title="Carbs" total={totalCarb} consumed={carbEaten} />
-                        <NutriValue title="Proteins" total={totalProtein} consumed={proteinEaten} />
-                        <NutriValue title="Fats" total={totalFat} consumed={fatEaten} />
-                    </View>
-                </View>
-            </View>
-        </View>
-    )
-}
-
-function ActivityBar() {
-
-}
+import DatePicker from '../components/DatePicker';
 
 
 export default function HomeMain({ navigation }) {
@@ -71,6 +35,8 @@ export default function HomeMain({ navigation }) {
     const [lunch, setLunch] = React.useState([]);
     const [dinner, setDinner] = React.useState([]);
     const [snack, setSnack] = React.useState([]);
+
+    const[calenVisible, setCalenVisible] = React.useState(false);
 
     const storeDataLocal = async(value) => {
         try {
@@ -154,6 +120,100 @@ export default function HomeMain({ navigation }) {
         navigation.navigate('AddMeal', {title: name});
     }
 
+    function Calen() {
+        const [selected, setSelected] = React.useState(moment().format('YYYY-MM-DD'));
+
+        const handleOK = () => {
+            setCalenVisible(false);
+        }
+
+        const handleCancel = () => {
+            setCalenVisible(false);
+        }
+
+        return (
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={calenVisible}
+            >
+                <View style={calenStyles.centeredView}>
+                    <View>
+                        <Text style={calenStyles.title}>Select date</Text>
+                        <Calendar
+                            onDayPress={day => {
+                                setSelected(day.dateString);
+                                console.log(day.dateString);
+                            }}
+                            markedDates={{
+                                [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}
+                            }}
+                            style={{
+                                borderColor: 'gray',
+                                width: 350,
+                            }}
+                            theme={{
+                                backgroundColor: '#ffffff',
+                                calendarBackground: '#ffffff',
+                                textSectionTitleColor: '#b6c1cd',
+                                selectedDayBackgroundColor: '#00adf5',
+                                selectedDayTextColor: '#fff',
+                                todayTextColor: '#00adf5',
+                                dayTextColor: '#2d4150',
+                                textDisabledColor: '#dedede',
+                            }}
+                        />
+                        <View style={calenStyles.bottom}>
+                            <TouchableOpacity onPress={handleOK}>
+                                <Text style={calenStyles.btnText}>OK</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handleCancel}>
+                                <Text style={calenStyles.btnText}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+    
+    function handleSetCalen() {
+        setCalenVisible(true);
+    }
+
+    function TopBar() {
+        return (
+            <View style={styles.topBar}>
+                <View style={styles.kcalContainer}> 
+                    <DatePicker setShowCalendar={handleSetCalen} />
+                    <View style={styles.infoContainer}>
+                        <View style={styles.kcalWrapper}>
+                            <KcalValue icon='fire' title='burned' value={kcalBurned} />
+                            <ProgressCircle 
+                                percent={Math.round(kcalEaten / (totalKcal + kcalBurned) * 100)}
+                                radius={90}
+                                borderWidth={8}
+                                color="#fff"
+                                shadowColor={globalColors.backgroundCyan}
+                                bgColor={globalColors.darkerCyan}
+                            >
+                                <View style={{alignItems: 'center'}}>
+                                    <Text style={styles.remainKcalValue}>{totalKcal + kcalBurned - kcalEaten}</Text>
+                                    <Text style={styles.remainKcalText}>Kcal remaining</Text>
+                                </View>
+                            </ProgressCircle>
+                            <KcalValue icon='silverware-variant' title='eaten' value={kcalEaten} />
+                        </View>
+                        <View style={styles.nutriWrapper}>
+                            <NutriValue title="Carbs" total={totalCarb} consumed={carbEaten} />
+                            <NutriValue title="Proteins" total={totalProtein} consumed={proteinEaten} />
+                            <NutriValue title="Fats" total={totalFat} consumed={fatEaten} />
+                        </View>
+                    </View>
+                </View>
+            </View>
+        )
+    }
 
     return (
         <View style={globalStyles.container}>
@@ -164,13 +224,10 @@ export default function HomeMain({ navigation }) {
                     flex: 1, 
                     marginBottom: 10,  
                 }}
-                contentContainerStyle={{
-                    alignItems: 'center'
-                }}
+                contentContainerStyle={{ alignItems: 'center' }}
             >
-                <TopBar totalKcal={totalKcal} totalCarb={totalCarb} totalProtein={totalProtein} totalFat={totalFat} kcalEaten={kcalEaten}
-                        kcalBurned={kcalBurned} carbEaten={carbEaten} proteinEaten={proteinEaten} fatEaten={fatEaten}  
-                />
+                <Calen />
+                <TopBar/>
                 <View>
                     <Text style={{
                         fontSize: 20,
@@ -202,7 +259,7 @@ const styles = StyleSheet.create({
         width: 700,
         height: 700,
         borderRadius: 350,
-        paddingTop: 400,
+        paddingTop: 320,
         alignItems: 'center',
     },
     kcalWrapper: {
@@ -235,5 +292,34 @@ const styles = StyleSheet.create({
         flex: 1,
         marginVertical: 10,
         height: '100%',
+    },
+});
+
+
+const calenStyles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    title: {
+        fontFamily: 'inter-semibold',
+        fontSize: 20,
+        height: 30,
+        textAlign: 'center',
+        backgroundColor: '#00adf5',
+        color: '#fff',
+    },
+    bottom: {
+        height: 40,
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',        
+    },
+    btnText: {
+        fontSize: 16,
+        color: '#00adf5'
     },
 });
