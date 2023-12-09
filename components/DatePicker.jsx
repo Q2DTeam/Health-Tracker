@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import moment from 'moment'; 
 
 
-export default function DatePicker({ setShowCalendar }) {
-    const weekDay = moment().format('dddd');
-    const [date, setDate] = useState(moment().format('MMM Do'));
+export default function DatePicker({ currentDate, setShowCalendar }) {
+    const weekDay = moment(currentDate, 'YYYY-MM-DD').format('dddd');
+    const date = moment(currentDate, 'YYYY-MM-DD').format('MMM Do');
 
     return (
         <View style={styles.container}>
@@ -18,7 +18,6 @@ export default function DatePicker({ setShowCalendar }) {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {

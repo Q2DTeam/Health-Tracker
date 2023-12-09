@@ -36,7 +36,8 @@ export default function HomeMain({ navigation }) {
     const [dinner, setDinner] = React.useState([]);
     const [snack, setSnack] = React.useState([]);
 
-    const[calenVisible, setCalenVisible] = React.useState(false);
+    const [calenVisible, setCalenVisible] = React.useState(false);
+    const [date, setDate] = React.useState(moment().format('YYYY-MM-DD'));
 
     const storeDataLocal = async(value) => {
         try {
@@ -120,10 +121,11 @@ export default function HomeMain({ navigation }) {
         navigation.navigate('AddMeal', {title: name});
     }
 
-    function Calen() {
-        const [selected, setSelected] = React.useState(moment().format('YYYY-MM-DD'));
+    function CalenModal() {
+        const [selected, setSelected] = React.useState(date);
 
         const handleOK = () => {
+            setDate(selected);
             setCalenVisible(false);
         }
 
@@ -143,7 +145,6 @@ export default function HomeMain({ navigation }) {
                         <Calendar
                             onDayPress={day => {
                                 setSelected(day.dateString);
-                                console.log(day.dateString);
                             }}
                             markedDates={{
                                 [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'}
@@ -185,7 +186,7 @@ export default function HomeMain({ navigation }) {
         return (
             <View style={styles.topBar}>
                 <View style={styles.kcalContainer}> 
-                    <DatePicker setShowCalendar={handleSetCalen} />
+                    <DatePicker currentDate={date} setShowCalendar={handleSetCalen} />
                     <View style={styles.infoContainer}>
                         <View style={styles.kcalWrapper}>
                             <KcalValue icon='fire' title='burned' value={kcalBurned} />
@@ -226,8 +227,8 @@ export default function HomeMain({ navigation }) {
                 }}
                 contentContainerStyle={{ alignItems: 'center' }}
             >
-                <Calen />
-                <TopBar/>
+                <CalenModal />
+                <TopBar />
                 <View>
                     <Text style={{
                         fontSize: 20,
@@ -250,7 +251,6 @@ const styles = StyleSheet.create({
     topBar: {
         height: 400,
         width: '100%',
-        overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
