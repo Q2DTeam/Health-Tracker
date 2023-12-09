@@ -21,22 +21,9 @@ const LoginSchema = yup.object({
 });
 
 export default function Login({navigation}) {
-
-    const storeAuth = async(value) => {
-        try {
-            const jsonValue = JSON.stringify(value);
-            await AsyncStorage.setItem('auth', jsonValue);
-            console.log("Auth storing OK");
-        }
-        catch (error) {
-            console.log("Auth storing error: ",error);
-        }
-    }
-
     const handleLogin = (values) => {
         signInWithEmailAndPassword(auth, values.email, values.password)
         .then(() => {
-            storeAuth(auth);
             navigation.navigate('Main');
         })
         .catch(() => {

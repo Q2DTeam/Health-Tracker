@@ -1,7 +1,4 @@
-import { useState, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { auth } from './utils/firebase';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
