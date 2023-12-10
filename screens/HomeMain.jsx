@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
 
     // Nutrients Values
     nutriWrapper: {
-        marginTop: 20,
+        marginTop: 30,
         width: 375,
         flexDirection: 'row',
         justifyContent: 'space-between'

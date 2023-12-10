@@ -154,7 +154,7 @@ export default function Me({ navigation }) {
             onPress: () => {
                 auth.signOut()
                 .then(() => {
-                    navigation.navigate('RegisterStack', { screen: 'Register' });
+                    navigation.navigate('RegisterStack');
                 })
             },
         },
