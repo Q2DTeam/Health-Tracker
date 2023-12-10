@@ -1,17 +1,11 @@
 // Display a full meal
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-// Import global styles
-import { globalColors } from '../global/styles';
-import ItemCard from './ItemCard';
 
-
-export default function MealItem({ type, kcal=0 }) {
-
-    let color;
+export default function MealItem({ type, handleNav, kcal=0 }) {
     let image;
     switch (type) {
         case 'breakfast':
@@ -28,12 +22,6 @@ export default function MealItem({ type, kcal=0 }) {
             break;
     }
 
-    const expandHandler = () => {
-        setExpanded(old => !old);
-    }
-
-    const [foodList, setFoodList] = React.useState([]);
-
     return (
         <ImageBackground style={styles.mealContainer} source={image} alt='Background image' resizeMode='cover'>
             <View style={styles.titleContainer}>
@@ -41,7 +29,7 @@ export default function MealItem({ type, kcal=0 }) {
                     <Text style={{ fontSize: 18, fontFamily: 'inter-semibold' }}>{type[0].toUpperCase() + type.slice(1)}</Text>
                     <Text>{kcal} kcal</Text>
                 </View>
-                <TouchableOpacity style={styles.detailBtn}>
+                <TouchableOpacity style={styles.detailBtn} onPress={handleNav}>
                     <MaterialCommunityIcons name='pencil-box' size={30} />
                 </TouchableOpacity>
             </View>
