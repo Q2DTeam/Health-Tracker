@@ -63,15 +63,15 @@ function Header({ signOutFunc, bmiFunc }) {
         <View style={[globalStyles.header, styles.profileHeader]}>
             <View style={{alignItems: 'center'}}>
                 <TouchableOpacity onPress={bmiFunc}>
-                    <MaterialCommunityIcons name='account-circle' size={40} />
+                    <MaterialCommunityIcons name='account-circle' size={40} color='#fff' />
                     {
-                        user !== null && <Text>{user.displayName}</Text>
+                        user !== null && <Text style={{color: '#fff'}}>{user.displayName}</Text>
                     }
                 </TouchableOpacity>
             </View>
             <TouchableOpacity style={{alignItems: 'center'}} onPress={signOutFunc}>
-                <MaterialCommunityIcons name='exit-to-app' size={30} />
-                <Text>Sign Out</Text>
+                <MaterialCommunityIcons name='exit-to-app' size={30} color='#fff' />
+                <Text style={{color: '#fff'}}>Sign Out</Text>
             </TouchableOpacity>
         </View>
     )
