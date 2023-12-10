@@ -118,8 +118,12 @@ export default function HomeMain({ navigation }) {
     }
 
     const handleNavigation = (name) => {
-        navigation.navigate('AddMeal', {title: name});
+        navigation.navigate('MealInfo', {
+            title: name,
+        });
     }
+
+    
 
     function CalenModal() {
         const [selected, setSelected] = React.useState(date);
@@ -237,10 +241,22 @@ export default function HomeMain({ navigation }) {
                     }}>
                         Daily meals
                     </Text>
-                    <MealItem type='breakfast' />
-                    <MealItem type='lunch' />
-                    <MealItem type='dinner' />
-                    <MealItem type='snack' />
+                    <MealItem 
+                        type='breakfast' 
+                        handleNav={() => {handleNavigation('breakfast')}}
+                    />
+                    <MealItem 
+                        type='lunch' 
+                        handleNav={() => {handleNavigation('lunch')}}
+                    />
+                    <MealItem 
+                        type='dinner' 
+                        handleNav={() => {handleNavigation('dinner')}} 
+                    />
+                    <MealItem 
+                        type='snack' 
+                        handleNav={() => {handleNavigation('snack')}}
+                    />
                 </View>
             </ScrollView>
         </View>
