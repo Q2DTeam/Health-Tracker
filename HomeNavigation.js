@@ -6,8 +6,8 @@ const Stack = createNativeStackNavigator();
 
 // Import Stack screens
 import HomeMain from './screens/HomeMain';
-import AddMeal from './screens/AddMeal';
 import FoodInfo from './sub_screens/FoodInfo';
+import MealInfo from './sub_screens/MealInfo';
 
 
 export default function HomeNavigation() {
@@ -19,8 +19,8 @@ export default function HomeNavigation() {
                 options={homeOptions} 
             />
             <Stack.Screen 
-                name="AddMeal" 
-                component={AddMeal}
+                name="MealInfo" 
+                component={MealInfo}
                 options={addMealOptions} 
             />
             <Stack.Screen
