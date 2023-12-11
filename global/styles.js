@@ -27,6 +27,7 @@ export const globalStyles = StyleSheet.create({
         backgroundColor: globalColors.darkerCyan,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
+        overflow: 'hidden',
     },
     backButton: {
         width: 40,
@@ -41,14 +42,13 @@ export const globalStyles = StyleSheet.create({
         fontFamily: 'inter-regular',
     },
     searchBar: {
-        width: '100%',
         height: 44,
         backgroundColor: globalColors.backgroundGray,
-        borderRadius: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 10,
+        //paddingHorizontal: 10,
+        borderBottomWidth: 2,
     },
     searchInput: {
         flex: 1,
