@@ -48,9 +48,9 @@ export default function HomeMain({ navigation }) {
         }
     }
 
-    const getDataLocal = async(key = 'userData') => {
+    const getDataLocal = async() => {
         try {
-            const value = await AsyncStorage.getItem(key);
+            const value = await AsyncStorage.getItem('userData');
             if (value !== null) {
                 // value previously stored
                 const userData = JSON.parse(value);
@@ -87,7 +87,7 @@ export default function HomeMain({ navigation }) {
 
         if (docSnap) {
             let userData = docSnap.data();
-            console.log("Document data:", userData);
+            console.log("Document from DB:", userData);
             let {tdee, carb, protein, fat} = getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
             setkcalTotal(tdee);
             setcarbTotal(carb);
@@ -123,8 +123,6 @@ export default function HomeMain({ navigation }) {
         });
     }
 
-    
-
     function CalenModal() {
         const [selected, setSelected] = React.useState(date);
 
@@ -144,7 +142,7 @@ export default function HomeMain({ navigation }) {
                 visible={calenVisible}
             >
                 <View style={calenStyles.centeredView}>
-                    <View>
+                    <View style={calenStyles.container}>
                         <Text style={calenStyles.title}>Select date</Text>
                         <Calendar
                             onDayPress={day => {
@@ -317,13 +315,17 @@ const calenStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 22,
+    },
+    container: {
+        borderRadius: 10,
+        overflow: 'hidden',
     },
     title: {
         fontFamily: 'inter-semibold',
         fontSize: 20,
-        height: 30,
+        height: 40,
         textAlign: 'center',
+        textAlignVertical: 'center',
         backgroundColor: '#00adf5',
         color: '#fff',
     },
