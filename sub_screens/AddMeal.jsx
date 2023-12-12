@@ -31,33 +31,9 @@ function SearchBar({}) {
     );
 }
 
-function AddMealItem( { serving = '100g', id, name, kcal, addFunc } ) {
-    const handleAdd = () => {
-        addFunc(old => [{
-            id: id,
-            name: name,
-            kcal: kcal,
-        }, ...old]);
-    }
-
-    return (
-        <View style={itemStyles.container}>
-            <TouchableOpacity style={itemStyles.infoWrapper}>
-                <Text style={itemStyles.foodName}>{name[0].toUpperCase() + name.slice(1)}</Text>
-                <Text style={itemStyles.foodKcal}>{serving} - {kcal} kcal</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={globalStyles.addButton} onPress={handleAdd}>
-                <AntDesign name='plus' size={28} color='#fff' />
-            </TouchableOpacity>
-        </View>
-    )
-}
-
-
-export default function AddMeal({ title, goBack }) {
+export default function AddMeal({ title, goBack, setMeal }) {
     const [foods, setFoods] = useState([]);
     const [IDs, setIDs] = useState([]);
-    const [meal, setMeal] = useState([]);
 
     const getFoods = async() => {
         // CAll API
@@ -69,7 +45,10 @@ export default function AddMeal({ title, goBack }) {
                         id: food.ID,
                         name: food.Name,
                         calorie: food.Calories,
-                        serving: food.Unit
+                        serving: food.Unit,
+                        carb: food.Carb,
+                        protein: food.Protein,
+                        fat: food.Fat
                     }, ...old]);
                     setIDs(old => [food.ID, ...old]);
                 }
@@ -79,7 +58,33 @@ export default function AddMeal({ title, goBack }) {
 
     useEffect(() => {
         getFoods();
-    }, [])
+    }, []);
+
+    function AddMealItem({ serving = '100g', id, name, kcal, carb, protein, fat }) {
+        const handleAdd = () => {
+            setMeal(old => [{
+                id: id,
+                name: name,
+                kcal: kcal,
+                serving: serving,
+                carb: carb,
+                protein: protein,
+                fat: fat
+            }, ...old]);
+        }
+    
+        return (
+            <View style={itemStyles.container}>
+                <TouchableOpacity style={itemStyles.infoWrapper}>
+                    <Text style={itemStyles.foodName}>{name[0].toUpperCase() + name.slice(1)}</Text>
+                    <Text style={itemStyles.foodKcal}>{serving} - {kcal} kcal</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={globalStyles.addButton} onPress={handleAdd}>
+                    <AntDesign name='plus' size={28} color='#fff' />
+                </TouchableOpacity>
+            </View>
+        )
+    }
 
     return (
         <View style={{flex: 1, backgroundColor: globalColors.backgroundGray}}>
@@ -96,6 +101,9 @@ export default function AddMeal({ title, goBack }) {
                         id={item.id} 
                         name={item.name} 
                         kcal={item.calorie}
+                        carb={item.carb}
+                        protein={item.protein} 
+                        fat={item.fat}
                         addFunc={setMeal}
                     />
                 )}
