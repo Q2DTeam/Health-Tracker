@@ -1,5 +1,5 @@
 export const fetchFoods = async() => {
-    const url = 'https://script.google.com/macros/s/AKfycbxs0hv0XjsblJB1Y9m-qlEB9UzISrWmbWiuztFBINC8-PRV_V9TCCvbxNqyNL4L_EIj/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbzwbCMVdi24VliCVinFJW_tf-nWkdIipLsEO2unHvZHyaZqjKtgSMHp4kZ49yIR9uTS/exec';
 
     try {
         const response = await fetch(url);
