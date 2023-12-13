@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, RefreshControl } from 'react-native';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { fetchFoods } from '../utils/fetchFoods';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
@@ -35,12 +36,50 @@ export default function AddMeal({ title, goBack, setMeal }) {
     const [foods, setFoods] = useState([]);
     const [IDs, setIDs] = useState([]);
 
+    const saveFoodsToLocal = async(list) => {
+        try {
+            const jsonValue = JSON.stringify(list);
+            await AsyncStorage.setItem('foodsAPI', jsonValue);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getFoodsLocal = async() => {
+        try {
+            const value = await AsyncStorage.getItem('foodsAPI');
+            if (value !== null) {
+                const foodData = JSON.parse(value);
+                foodData.map((food) => {
+                    if (IDs.indexOf(food.ID) == -1) {
+                        setFoods((old) => [{
+                            id: food.ID,
+                            name: food.Name,
+                            calorie: food.Calories,
+                            serving: food.Unit,
+                            carb: food.Carb,
+                            protein: food.Protein,
+                            fat: food.Fat
+                        }, ...old]);
+                        setIDs(old => [food.ID, ...old]);
+                    }
+                })
+                console.log("Food Data fetched from local successfully");
+            }
+            else {
+                await getFoods();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const getFoods = async() => {
         // CAll API
         const data = await fetchFoods();
         if (data != undefined) {
             data.map((food) => {
-                if (IDs.indexOf(food.ID) === -1) {
+                if (IDs.indexOf(food.ID) == -1) {
                     setFoods((old) => [{
                         id: food.ID,
                         name: food.Name,
@@ -53,11 +92,13 @@ export default function AddMeal({ title, goBack, setMeal }) {
                     setIDs(old => [food.ID, ...old]);
                 }
             })
+            saveFoodsToLocal(data);
+            console.log("Food list saved to local");
         }
     }
 
     useEffect(() => {
-        getFoods();
+        getFoodsLocal();
     }, []);
 
     function AddMealItem({ serving = '100g', id, name, kcal, carb, protein, fat }) {
