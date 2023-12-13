@@ -8,33 +8,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { globalColors, globalStyles } from '../global/styles';
 
 
-function Header({ title='breakfast', backFunc }) {
-    return (
-        <View style={globalStyles.header}>
-            <View style={styles.top}>
-                <TouchableOpacity style={globalStyles.backButton} onPress={backFunc}>
-                    <MaterialCommunityIcons name='chevron-left' size={30} />
-                </TouchableOpacity>
-                <Text style={[globalStyles.headerTitle, {marginLeft: 30}]}>Add food to your {title}</Text>
-            </View>
-        </View>
-    )
-}
-
-function SearchBar({}) {
-    return (
-        <View style={globalStyles.searchBar}>
-            <MaterialCommunityIcons name='magnify' size={26} />
-            <TextInput 
-                style={globalStyles.searchInput} 
-                placeholder='What did you eat ?' />
-        </View>
-    );
-}
-
-export default function AddMeal({ title, goBack, setMeal }) {
+export default function AddMeal({ title, closeModal, setMeal }) {
     const [foods, setFoods] = useState([]);
     const [IDs, setIDs] = useState([]);
+
+    const [temp, setTemp] = useState([]);
 
     const saveFoodsToLocal = async(list) => {
         try {
@@ -97,13 +75,42 @@ export default function AddMeal({ title, goBack, setMeal }) {
         }
     }
 
+    const handleGoBack = () => {
+        setMeal(old => [...temp, ...old]);
+        closeModal();
+    }
+
     useEffect(() => {
         getFoodsLocal();
     }, []);
 
+    function Header({ title='breakfast' }) {
+        return (
+            <View style={globalStyles.header}>
+                <View style={styles.top}>
+                    <TouchableOpacity style={globalStyles.backButton} onPress={handleGoBack}>
+                        <MaterialCommunityIcons name='chevron-left' size={30} />
+                    </TouchableOpacity>
+                    <Text style={[globalStyles.headerTitle, {marginLeft: 30}]}>Add food to your {title}</Text>
+                </View>
+            </View>
+        )
+    }
+
+    function SearchBar({}) {
+        return (
+            <View style={globalStyles.searchBar}>
+                <MaterialCommunityIcons name='magnify' size={26} />
+                <TextInput 
+                    style={globalStyles.searchInput} 
+                    placeholder='What did you eat ?' />
+            </View>
+        );
+    }
+
     function AddMealItem({ serving = '100g', id, name, kcal, carb, protein, fat }) {
         const handleAdd = () => {
-            setMeal(old => [{
+            setTemp(old => [{
                 id: id,
                 name: name,
                 kcal: kcal,
@@ -129,7 +136,7 @@ export default function AddMeal({ title, goBack, setMeal }) {
 
     return (
         <View style={{flex: 1, backgroundColor: globalColors.backgroundGray}}>
-            <Header title={title} backFunc={goBack} />
+            <Header title={title}/>
             <View style={styles.mid}>
                 <SearchBar />
             </View>
