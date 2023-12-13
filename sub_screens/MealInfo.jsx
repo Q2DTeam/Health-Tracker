@@ -1,15 +1,16 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AddMeal from './AddMeal';
 
 
 export default function MealInfo({ navigation, route }) {
     const { title } = route.params;
-    const [meals, setMeals] = React.useState([]);
-    const [addModal, setAddModal] = React.useState(false);
+    const [meal, setMeal] = useState([]);
+    const [addModal, setAddModal] = useState(false);
 
     function Header() {
         const handleGoBack = () => {
@@ -44,16 +45,18 @@ export default function MealInfo({ navigation, route }) {
                 animationType="slide"
                 visible={addModal}
             >
-                <View style={{
-                    flex: 1
-                }}>
-                    <AddMeal title={title} goBack={() => {setAddModal(false)}} />
+                <View style={{flex: 1}}>
+                    <AddMeal 
+                        title={title} 
+                        goBack={() => {setAddModal(false)}} 
+                        setMeal={setMeal}
+                    />
                 </View>
             </Modal>
         )
     }
 
-    function ItemCard({ title, info, type }) {
+    function ItemCard({ type, id, name, serving, kcal, carb, protein, fat }) {
         let color;
         switch (type) {
             case 'breakfast':
@@ -80,8 +83,8 @@ export default function MealInfo({ navigation, route }) {
                     height: '100%' 
                 }}/>
                 <View style={cardStyles.cardBody}>
-                    <Text style={cardStyles.cardTitle}>{title}</Text>
-                    <Text style={cardStyles.cardSubtext}>{info}</Text>
+                    <Text style={cardStyles.cardTitle}>{name}</Text>
+                    <Text style={cardStyles.cardSubtext}>{serving} - {kcal} kcal</Text>
                 </View>
                 <TouchableOpacity style={cardStyles.deleteBtn}>
                     <AntDesign name='close' size={18} color='#fff'/>
@@ -90,18 +93,31 @@ export default function MealInfo({ navigation, route }) {
         )
     }
 
+    useEffect(() => {
+        console.log(meal);
+    }, [meal]);
+
     return (
         <View style={[globalStyles.container, {alignItems: 'center'}]}>
             <Header />
             <AddButton />
             <AddModal />
-            <ScrollView>
-                {
-                    meals.map(item => (
-                        <ItemCard title='sample item' info='sample info' type='breakfast' />
-                    ))
-                }
-            </ScrollView>
+            <FlatList 
+                data={meal}
+                keyExtractor={(item) => item.id}
+                renderItem={({item}) => (
+                    <ItemCard
+                        type={title}
+                        id={item.id} 
+                        name={item.name} 
+                        serving={item.serving}
+                        kcal={item.kcal}
+                        carb={item.carb}
+                        protein={item.protein} 
+                        fat={item.fat}
+                    />
+                )}
+            />
         </View>
     )
 }
