@@ -31,10 +31,10 @@ export default function HomeMain({ navigation }) {
     const [proteinEaten, setProteinEaten] = React.useState(0);
     const [fatEaten, setFatEaten] = React.useState(0); 
     
-    const [breakfast, setBreakfast] = React.useState([]);
-    const [lunch, setLunch] = React.useState([]);
-    const [dinner, setDinner] = React.useState([]);
-    const [snack, setSnack] = React.useState([]);
+    const [breakfast, setBreakfast] = React.useState(0);
+    const [lunch, setLunch] = React.useState(0);
+    const [dinner, setDinner] = React.useState(0);
+    const [snack, setSnack] = React.useState(0);
 
     const [calenVisible, setCalenVisible] = React.useState(false);
     const [date, setDate] = React.useState(moment().format('YYYY-MM-DD'));

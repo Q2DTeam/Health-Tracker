@@ -48,7 +48,7 @@ export default function MealInfo({ navigation, route }) {
                 <View style={{flex: 1}}>
                     <AddMeal 
                         title={title} 
-                        goBack={() => {setAddModal(false)}} 
+                        closeModal={() => {setAddModal(false)}} 
                         setMeal={setMeal}
                     />
                 </View>
