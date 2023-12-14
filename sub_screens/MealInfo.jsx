@@ -2,18 +2,59 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { auth } from '../utils/firebase';
+import { db } from '../utils/firestore';
+import { doc, setDoc } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AddMeal from './AddMeal';
 
 
 export default function MealInfo({ navigation, route }) {
-    const { title } = route.params;
+    const { title, date } = route.params;
+    const uid = auth.currentUser.uid;
     const [meal, setMeal] = useState([]);
     const [addModal, setAddModal] = useState(false);
 
+    class Record {
+        constructor (userID, type, date, meal) {
+            this.userID = userID;
+            this.type = type;
+            this.date = date;
+            this.meal = meal;
+        }
+    }
+
+    const recordConverter = {
+        toFirestore: (data) => {
+            return {
+                userID: uid,
+                type: title,
+                date: date,
+                meal: meal
+            };
+        },
+        fromFirestore: (snapshot, options) => {
+            const data = snapshot.data(options);
+            return new Record(data.userID, data.type, data.date, data.meal);
+        }
+    }
+
+    const saveMealToDb = async() => {
+        const rec = new Record(uid, title, date, meal);
+        const docID = `${uid}-${date}-${title}`;
+        try {
+            await setDoc(doc(db, "user_records", docID).withConverter(recordConverter), rec);
+            console.log("Meal saved successfully");
+        }
+        catch(err) {
+            console.log("Error saving meal to firestore");
+        }
+    }
+
     function Header() {
         const handleGoBack = () => {
+            saveMealToDb();
             navigation.goBack();
         }
 
