@@ -52,9 +52,22 @@ export default function MealInfo({ navigation, route }) {
         }
     }
 
+    const saveMealToLocal = async() => {
+        const rec = new Record(uid, title, date, meal);
+        const recObj = recordConverter.toFirestore(rec);
+        try {
+            const jsonValue = JSON.stringify(recObj);
+            await AsyncStorage.setItem(title, jsonValue);
+            console.log(`${title} saved to local!`);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     function Header() {
         const handleGoBack = () => {
-            saveMealToDb();
+            //saveMealToDb();
+            saveMealToLocal();
             navigation.goBack();
         }
 
@@ -133,10 +146,6 @@ export default function MealInfo({ navigation, route }) {
             </View>
         )
     }
-
-    useEffect(() => {
-        console.log(meal);
-    }, [meal]);
 
     return (
         <View style={[globalStyles.container, {alignItems: 'center'}]}>
