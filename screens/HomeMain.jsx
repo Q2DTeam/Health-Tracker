@@ -109,14 +109,49 @@ export default function HomeMain({ navigation }) {
                 }
                 else {
                     console.log("ID or meal not matched");
-                    
+                    await getMeal();
                 }
             }
             else {
-                //await getData();
+                await getMeal();
             }
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    const getMeal = async(type) => {
+        let docRef, docSnap;
+        const mealID = `${user.uid}-${date}-${type}`;
+        try {
+            docRef = doc(db, "user_records", mealID);
+            docSnap = await getDoc(docRef);
+        }
+        catch (error) {
+            Alert.alert('Oops, we cannot retrieve your data', 'Due inconsistent internet connection, we cannot fetch the data you need. Please refresh the screen to try again.');
+        }
+
+        if (docSnap) {
+            let meal = docSnap.data();
+            console.log("Meal from database", meal);
+            switch (type) {
+                case 'breakfast':
+                    setBreakfast(meal);
+                    break;
+                case 'lunch':
+                    setLunch(meal);
+                    break;
+                case 'dinner':
+                    setDinner(meal);
+                    break;
+                case 'snack':
+                    setSnack(meal);
+                    break;
+            }
+            updateNutrition(meal.meal);
+        } 
+        else {
+            console.log("No such document!");
         }
     }
     
