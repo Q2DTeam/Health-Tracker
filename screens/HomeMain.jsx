@@ -31,10 +31,10 @@ export default function HomeMain({ navigation }) {
     const [proteinEaten, setProteinEaten] = React.useState(0);
     const [fatEaten, setFatEaten] = React.useState(0); 
     
-    const [breakfast, setBreakfast] = React.useState(0);
-    const [lunch, setLunch] = React.useState(0);
-    const [dinner, setDinner] = React.useState(0);
-    const [snack, setSnack] = React.useState(0);
+    const [breakfast, setBreakfast] = React.useState();
+    const [lunch, setLunch] = React.useState();
+    const [dinner, setDinner] = React.useState();
+    const [snack, setSnack] = React.useState();
 
     const [calenVisible, setCalenVisible] = React.useState(false);
     const [date, setDate] = React.useState(moment().format('YYYY-MM-DD'));
@@ -74,6 +74,51 @@ export default function HomeMain({ navigation }) {
             console.log(error);
         }
     }
+
+    const updateNutrition = (meal) => {
+        meal.map((item) => {
+            setkcalEaten(old => old + Math.round(item.kcal));
+            setcarbEaten(old => old + Math.round(item.carb));
+            setFatEaten(old => old + Math.round(item.fat));
+            setProteinEaten(old => old + Math.round(item.protein));
+        })
+    }
+
+    const getMealLocal = async(type) => {
+        try {
+            const value = await AsyncStorage.getItem(type);
+            if (value !== null) {
+                const meal = JSON.parse(value);
+                if (meal.date == date && meal.userID == user.uid) {
+                    console.log("Meal matched date and id");
+                    switch (type) {
+                        case 'breakfast':
+                            setBreakfast(meal);
+                            break;
+                        case 'lunch':
+                            setLunch(meal);
+                            break;
+                        case 'dinner':
+                            setDinner(meal);
+                            break;
+                        case 'snack':
+                            setSnack(meal);
+                            break;
+                    }
+                    updateNutrition(meal.meal);
+                }
+                else {
+                    console.log("ID or meal not matched");
+                    
+                }
+            }
+            else {
+                //await getData();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     
     const getData = async () => {
         let docRef, docSnap;
@@ -108,6 +153,10 @@ export default function HomeMain({ navigation }) {
 
     React.useEffect(() => {
         getDataLocal();
+        getMealLocal('breakfast');
+        getMealLocal('lunch');
+        getMealLocal('dinner');
+        getMealLocal('snack');
     }, [user]);
 
     const getNutriValue = (tdee, carbRatio, proteinRatio, fatRatio) => {
@@ -120,6 +169,7 @@ export default function HomeMain({ navigation }) {
     const handleNavigation = (name) => {
         navigation.navigate('MealInfo', {
             title: name,
+            date: date
         });
     }
 
