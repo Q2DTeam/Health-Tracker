@@ -15,6 +15,7 @@ export default function MealInfo({ navigation, route }) {
     const uid = auth.currentUser.uid;
     const [meal, setMeal] = useState([]);
     const [addModal, setAddModal] = useState(false);
+    const [modified, setModified] = useState(false);
 
     class Record {
         constructor (userID, type, date, meal) {
@@ -45,7 +46,6 @@ export default function MealInfo({ navigation, route }) {
         const docID = `${uid}-${date}-${title}`;
         try {
             await setDoc(doc(db, "user_records", docID).withConverter(recordConverter), rec);
-            console.log("Meal saved successfully");
         }
         catch(err) {
             console.log("Error saving meal to firestore");
@@ -64,10 +64,26 @@ export default function MealInfo({ navigation, route }) {
         }
     }
 
+    const getMealLocal = async(type) => {
+        try {
+            const value = await AsyncStorage.getItem(type);
+            if (value !== null) {
+                const meal = JSON.parse(value);
+                if (meal.date == date && meal.userID == uid) {
+                    setMeal(meal.meal);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     function Header() {
         const handleGoBack = () => {
-            //saveMealToDb();
-            saveMealToLocal();
+            if (modified == true) {
+                saveMealToDb();
+                saveMealToLocal();
+            }
             navigation.goBack();
         }
 
@@ -86,7 +102,13 @@ export default function MealInfo({ navigation, route }) {
 
     function AddButton() {
         return (
-            <TouchableOpacity style={styles.addBtn} onPress={() => {setAddModal(true)}}>
+            <TouchableOpacity 
+                style={styles.addBtn} 
+                onPress={() => {
+                    setModified(true); 
+                    setAddModal(true);
+                }}
+            >
                 <MaterialCommunityIcons name='plus' size={20} />
                 <Text style={styles.addText}>Add food to this meal</Text>
             </TouchableOpacity>
@@ -110,7 +132,7 @@ export default function MealInfo({ navigation, route }) {
         )
     }
 
-    function ItemCard({ type, id, name, serving, kcal, carb, protein, fat }) {
+    function ItemCard({ type, id, name, serving, kcal }) {
         let color;
         switch (type) {
             case 'breakfast':
@@ -147,6 +169,10 @@ export default function MealInfo({ navigation, route }) {
         )
     }
 
+    useEffect(() => {
+        getMealLocal(title);
+    }, [])
+
     return (
         <View style={[globalStyles.container, {alignItems: 'center'}]}>
             <Header />
@@ -162,9 +188,6 @@ export default function MealInfo({ navigation, route }) {
                         name={item.name} 
                         serving={item.serving}
                         kcal={item.kcal}
-                        carb={item.carb}
-                        protein={item.protein} 
-                        fat={item.fat}
                     />
                 )}
             />
