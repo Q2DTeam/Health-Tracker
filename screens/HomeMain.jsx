@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useReducer} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ScrollView, Alert, Modal, TouchableOpacity, Platform } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
@@ -8,6 +8,7 @@ import ProgressCircle from 'react-native-progress-circle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Calendar } from 'react-native-calendars';
 import moment from 'moment'; 
+import { useFocusEffect } from '@react-navigation/native';
 
 // Import components
 import KcalValue from '../components/KcalValue';
@@ -18,26 +19,28 @@ import DatePicker from '../components/DatePicker';
 
 
 export default function HomeMain({ navigation }) {
-    const [user, setUser] = React.useState();
+    const [user, setUser] = useState();
 
-    const [totalKcal, setkcalTotal] = React.useState(0);
-    const [totalCarb, setcarbTotal] = React.useState(0);
-    const [totalProtein, setproteinTotal] = React.useState(0);
-    const [totalFat, setfatTotal] = React.useState(0);
+    const [totalKcal, setkcalTotal] = useState(0);
+    const [totalCarb, setcarbTotal] = useState(0);
+    const [totalProtein, setproteinTotal] = useState(0);
+    const [totalFat, setfatTotal] = useState(0);
 
-    const [kcalEaten, setkcalEaten] = React.useState(0);
-    const [kcalBurned, setkcalBurned] = React.useState(0);
-    const [carbEaten, setcarbEaten] = React.useState(0);
-    const [proteinEaten, setProteinEaten] = React.useState(0);
-    const [fatEaten, setFatEaten] = React.useState(0); 
+    const [kcalEaten, setkcalEaten] = useState(0);
+    const [kcalBurned, setkcalBurned] = useState(0);
+    const [carbEaten, setcarbEaten] = useState(0);
+    const [proteinEaten, setProteinEaten] = useState(0);
+    const [fatEaten, setFatEaten] = useState(0); 
     
-    const [breakfast, setBreakfast] = React.useState();
-    const [lunch, setLunch] = React.useState();
-    const [dinner, setDinner] = React.useState();
-    const [snack, setSnack] = React.useState();
+    const [breakfast, setBreakfast] = useState();
+    const [lunch, setLunch] = useState();
+    const [dinner, setDinner] = useState();
+    const [snack, setSnack] = useState();
 
-    const [calenVisible, setCalenVisible] = React.useState(false);
-    const [date, setDate] = React.useState(moment().format('YYYY-MM-DD'));
+    const [calenVisible, setCalenVisible] = useState(false);
+    const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     const storeDataLocal = async(value) => {
         try {
@@ -82,6 +85,7 @@ export default function HomeMain({ navigation }) {
         setProteinEaten(0);
     }
 
+
     const updateNutrition = (meal) => {
         meal.map((item) => {
             setkcalEaten(old => old + Math.round(item.kcal));
@@ -112,7 +116,8 @@ export default function HomeMain({ navigation }) {
                             setSnack(meal);
                             break;
                     }
-                    updateNutrition(meal.meal);
+                    if (meal !== undefined) 
+                        updateNutrition(meal.meal);
                 }
                 else {
                     console.log("ID or meal not matched");
@@ -155,7 +160,8 @@ export default function HomeMain({ navigation }) {
                     setSnack(meal);
                     break;
             }
-            updateNutrition(meal.meal);
+            if (meal !== undefined) 
+                updateNutrition(meal.meal);
         } 
         else {
             console.log("No such document!");
@@ -188,24 +194,37 @@ export default function HomeMain({ navigation }) {
         }
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         const subscriber = auth.onAuthStateChanged((val) => {setUser(val)});
         return subscriber;
     }, []);
 
-    React.useEffect(() => {
+    useEffect(() => {
         // Reset all value
         resetNutrition();
-
-        // Get user data
-        getDataLocal();
-
-        //Get meal data
-        getMealLocal('breakfast');
-        getMealLocal('lunch');
-        getMealLocal('dinner');
-        getMealLocal('snack');
+        if (user !== undefined) {
+            // Get user data
+            getDataLocal();
+    
+            //Get meal data
+            getMealLocal('breakfast');
+            getMealLocal('lunch');
+            getMealLocal('dinner');
+            getMealLocal('snack');
+        }
     }, [user]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            resetNutrition();
+            getMealLocal('breakfast');
+            getMealLocal('lunch');
+            getMealLocal('dinner');
+            getMealLocal('snack');
+        });
+    
+        return unsubscribe;
+      }, [navigation, user]);
 
     const getNutriValue = (tdee, carbRatio, proteinRatio, fatRatio) => {
         let carb = Math.round(tdee * carbRatio / 400);
@@ -217,12 +236,12 @@ export default function HomeMain({ navigation }) {
     const handleNavigation = (name) => {
         navigation.navigate('MealInfo', {
             title: name,
-            date: date
+            date: date,
         });
     }
 
     function CalenModal() {
-        const [selected, setSelected] = React.useState(date);
+        const [selected, setSelected] = useState(date);
 
         const handleOK = () => {
             setDate(selected);
@@ -340,18 +359,22 @@ export default function HomeMain({ navigation }) {
                     <MealItem 
                         type='breakfast' 
                         handleNav={() => {handleNavigation('breakfast')}}
+                        meal={breakfast}
                     />
                     <MealItem 
                         type='lunch' 
                         handleNav={() => {handleNavigation('lunch')}}
+                        meal={lunch}
                     />
                     <MealItem 
                         type='dinner' 
-                        handleNav={() => {handleNavigation('dinner')}} 
+                        handleNav={() => {handleNavigation('dinner')}}
+                        meal={dinner}
                     />
                     <MealItem 
                         type='snack' 
                         handleNav={() => {handleNavigation('snack')}}
+                        meal={snack}
                     />
                 </View>
             </ScrollView>
