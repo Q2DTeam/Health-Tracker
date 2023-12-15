@@ -7,6 +7,7 @@ import * as yup from 'yup';
 
 // Import icons
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 
 
 const SignUpSchema = yup.object({
@@ -47,6 +48,7 @@ export default function Signup({navigation}) {
 
     return (
         <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover' style={globalStyles.container}>
+            <StatusBar style='light' />
             <ScrollView
                 contentContainerStyle={{ alignItems: 'center'}}
             >
@@ -146,7 +148,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 130,
         width: 240,
-        marginTop: 40,
+        marginTop: 60,
     },
     bottomText: {
         color: '#fff', 

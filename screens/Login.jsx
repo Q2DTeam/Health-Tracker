@@ -8,6 +8,7 @@ import * as yup from 'yup';
 
 // Import icons
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 
 
 const LoginSchema = yup.object({
@@ -33,8 +34,10 @@ export default function Login({navigation}) {
 
     return (
         <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover'  style={[globalStyles.container, styles.login]}>
+            <StatusBar style="light" />
             <ScrollView
-                contentContainerStyle={{ alignItems: 'center' }}
+                contentContainerStyle={{ alignItems: 'center', justifyContent: 'space-between' }}
+                style={{width: '100%'}}
             >
                 <View style={styles.logo}>
                     <Image source={require('../assets/images/Logo.png')}/>
@@ -86,7 +89,7 @@ export default function Login({navigation}) {
                     </Formik>
                 </View>
 
-                <View style={{marginTop: 140,}}>
+                <View style={{marginTop: 140}}>
                     <Text style={styles.bottomText}>Don't have an account?</Text>
                     <TouchableOpacity onPress={() => navigation.replace('Signup')}>
                         <Text style={styles.bottomTextBold}>Sign Up</Text>
@@ -99,14 +102,14 @@ export default function Login({navigation}) {
 
 const styles = StyleSheet.create({
     login: {
-        backgroundColor: globalColors.vibrantBlue,
+        backgroundColor: '#fff',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     logo: {
         height: 130,
         width: 240,
-        marginTop: 40,
+        marginTop: 80,
     },
     title: {
         fontSize: 30,

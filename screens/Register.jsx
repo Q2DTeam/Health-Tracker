@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground } from 'react-native';
 import { globalStyles } from '../global/styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 // Import icons
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function Register({navigation}) {
     return (
         <View style={globalStyles.container}>
+            <StatusBar style='light' />
             <ImageBackground source={require('../assets/images/register_BG.jpg')} alt='Background image' resizeMode='cover' style={styles.registerContainer}>
                 <View style={styles.logo}>
                     <Image source={require('../assets/images/Logo.png')}/>
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 130,
         width: 240,
-        marginTop: 40,
+        marginTop: 60,
     },
     registerContainer: {
         alignItems: 'center',

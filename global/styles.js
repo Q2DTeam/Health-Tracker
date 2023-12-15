@@ -19,7 +19,6 @@ export const globalColors = {
 export const globalStyles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 24,
         backgroundColor: globalColors.backgroundGray,
     },
     header: {
