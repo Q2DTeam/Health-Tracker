@@ -151,6 +151,13 @@ export default function MealInfo({ navigation, route }) {
                 color = globalColors.vibrantBlue;
                 break;
         }
+
+        const handleDelete = () => {
+            setModified(true);
+            const newMeal = meal.filter((item) => item.id != id);
+            setMeal(newMeal);
+        }
+
         return (
             <View style={cardStyles.card}>
                 <View style={{
@@ -162,7 +169,7 @@ export default function MealInfo({ navigation, route }) {
                     <Text style={cardStyles.cardTitle}>{name}</Text>
                     <Text style={cardStyles.cardSubtext}>{serving} - {kcal} kcal</Text>
                 </View>
-                <TouchableOpacity style={cardStyles.deleteBtn}>
+                <TouchableOpacity style={cardStyles.deleteBtn} onPress={handleDelete}>
                     <AntDesign name='close' size={18} color='#fff'/>
                 </TouchableOpacity>
             </View>
