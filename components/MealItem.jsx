@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
-export default function MealItem({ type, handleNav, kcal=0 }) {
+export default function MealItem({ type, handleNav, meal }) {
     let image;
     switch (type) {
         case 'breakfast':
@@ -22,12 +22,19 @@ export default function MealItem({ type, handleNav, kcal=0 }) {
             break;
     }
 
+    let sum = 0;
+    if (meal !== undefined) {
+        meal.meal.map((item) => {
+            sum += item.kcal;
+        })
+    }
+
     return (
         <ImageBackground style={styles.mealContainer} source={image} alt='Background image' resizeMode='cover'>
             <View style={styles.titleContainer}>
                 <View style={{marginLeft: 20}}>
                     <Text style={{ fontSize: 18, fontFamily: 'inter-semibold' }}>{type[0].toUpperCase() + type.slice(1)}</Text>
-                    <Text>{kcal} kcal</Text>
+                    <Text>{sum} kcal</Text>
                 </View>
                 <TouchableOpacity style={styles.detailBtn} onPress={handleNav}>
                     <MaterialCommunityIcons name='pencil-box' size={30} />
