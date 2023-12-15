@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, Alert, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert, Modal, TouchableOpacity, Platform } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
@@ -73,6 +73,13 @@ export default function HomeMain({ navigation }) {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const resetNutrition = () => {
+        setkcalEaten(0);
+        setcarbEaten(0);
+        setFatEaten(0);
+        setProteinEaten(0);
     }
 
     const updateNutrition = (meal) => {
@@ -187,7 +194,13 @@ export default function HomeMain({ navigation }) {
     }, []);
 
     React.useEffect(() => {
+        // Reset all value
+        resetNutrition();
+
+        // Get user data
         getDataLocal();
+
+        //Get meal data
         getMealLocal('breakfast');
         getMealLocal('lunch');
         getMealLocal('dinner');
@@ -305,7 +318,7 @@ export default function HomeMain({ navigation }) {
 
     return (
         <View style={globalStyles.container}>
-            <StatusBar barStyle="light-content" />
+            <StatusBar style='light' />
             <ScrollView 
                 style={{
                     backgroundColor: globalColors.backgroundGray, 
@@ -348,7 +361,7 @@ export default function HomeMain({ navigation }) {
 
 const styles = StyleSheet.create({
     topBar: {
-        height: 400,
+        height: 420,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'flex-end',
@@ -358,7 +371,7 @@ const styles = StyleSheet.create({
         width: 700,
         height: 700,
         borderRadius: 350,
-        paddingTop: 320,
+        paddingTop: 310,
         alignItems: 'center',
     },
     kcalWrapper: {
