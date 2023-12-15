@@ -56,27 +56,6 @@ function BMI({ bmi, height, weight }) {
     );
 }
 
-function Header({ signOutFunc, bmiFunc }) {
-    const user = auth.currentUser;
-
-    return (
-        <View style={[globalStyles.header, styles.profileHeader]}>
-            <View style={{alignItems: 'center'}}>
-                <TouchableOpacity onPress={bmiFunc}>
-                    <MaterialCommunityIcons name='account-circle' size={40} color='#fff' />
-                    {
-                        user !== null && <Text style={{color: '#fff'}}>{user.displayName}</Text>
-                    }
-                </TouchableOpacity>
-            </View>
-            <TouchableOpacity style={{alignItems: 'center'}} onPress={signOutFunc}>
-                <MaterialCommunityIcons name='exit-to-app' size={30} color='#fff' />
-                <Text style={{color: '#fff'}}>Sign Out</Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
-
 
 export default function Me({ navigation }) {
     const [user, setUser] = React.useState();
@@ -166,7 +145,7 @@ export default function Me({ navigation }) {
 
     const handleUpdateBMI = () => {
         navigation.navigate('RegisterStack', { 
-            screen: 'SignUpBMI',
+            screen: 'Register',
         });
     }
 
@@ -178,6 +157,26 @@ export default function Me({ navigation }) {
     React.useEffect(() => {
         getDataLocal();
     }, [user]);
+
+    
+    function Header() {
+        return (
+            <View style={[globalStyles.header, styles.profileHeader]}>
+                <View style={{alignItems: 'center'}}>
+                    <TouchableOpacity onPress={handleUpdateBMI}>
+                        <MaterialCommunityIcons name='account-circle' size={40} color='#fff' />
+                        {
+                            user !== null && <Text style={{color: '#fff'}}>{user.displayName}</Text>
+                        }
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={{alignItems: 'center'}} onPress={handleSignOut}>
+                    <MaterialCommunityIcons name='exit-to-app' size={30} color='#fff' />
+                    <Text style={{color: '#fff'}}>Sign Out</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
     
     return (
         <View style={globalStyles.container}>
