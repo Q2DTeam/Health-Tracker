@@ -7,7 +7,6 @@ import Register from './screens/Register';
 import Login from './screens/Login';
 import SignUp from './screens/SignUp';
 import Navigation from './Navigation';
-import SignUpBMI from './sub_screens/SignUpBMI';
 
 
 export default function RegisterStack() {
@@ -25,9 +24,6 @@ export default function RegisterStack() {
             <Stack.Screen 
                 name="Signup" 
                 component={SignUp} />
-            <Stack.Screen 
-                name="SignUpBMI" 
-                component={SignUpBMI} />
             <Stack.Screen 
                 name="Main" 
                 component={Navigation} />
