@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, RefreshControl } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { fetchFoods } from '../utils/fetchFoods';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,7 +10,9 @@ import { globalColors, globalStyles } from '../global/styles';
 
 export default function AddMeal({ title, closeModal, setMeal }) {
     const [foods, setFoods] = useState([]);
-    const [IDs, setIDs] = useState([]);
+    const [search, setSearch] = useState('');
+    const [refreshing, setRefreshing] = useState(false);
+    const [adding, setAdding] = useState(false);
 
     const [temp, setTemp] = useState([]);
 
@@ -28,20 +30,7 @@ export default function AddMeal({ title, closeModal, setMeal }) {
             const value = await AsyncStorage.getItem('foodsAPI');
             if (value !== null) {
                 const foodData = JSON.parse(value);
-                foodData.map((food) => {
-                    if (IDs.indexOf(food.ID) == -1) {
-                        setFoods((old) => [{
-                            id: food.ID,
-                            name: food.Name,
-                            calorie: food.Calories,
-                            serving: food.Unit,
-                            carb: food.Carb,
-                            protein: food.Protein,
-                            fat: food.Fat
-                        }, ...old]);
-                        setIDs(old => [food.ID, ...old]);
-                    }
-                })
+                setFoods(foodData);
                 console.log("Food Data fetched from local successfully");
             }
             else {
@@ -56,20 +45,7 @@ export default function AddMeal({ title, closeModal, setMeal }) {
         // CAll API
         const data = await fetchFoods();
         if (data != undefined) {
-            data.map((food) => {
-                if (IDs.indexOf(food.ID) == -1) {
-                    setFoods((old) => [{
-                        id: food.ID,
-                        name: food.Name,
-                        calorie: food.Calories,
-                        serving: food.Unit,
-                        carb: food.Carb,
-                        protein: food.Protein,
-                        fat: food.Fat
-                    }, ...old]);
-                    setIDs(old => [food.ID, ...old]);
-                }
-            })
+            setFoods(data);
             saveFoodsToLocal(data);
             console.log("Food list saved to local");
         }
@@ -79,6 +55,14 @@ export default function AddMeal({ title, closeModal, setMeal }) {
         setMeal(old => [...temp, ...old]);
         closeModal();
     }
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        getFoods();
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 1000);
+      }, []);
 
     useEffect(() => {
         getFoodsLocal();
@@ -108,8 +92,9 @@ export default function AddMeal({ title, closeModal, setMeal }) {
         );
     }
 
-    function AddMealItem({ serving = '100g', id, name, kcal, carb, protein, fat }) {
+    function AddMealItem({ serving, id, name, kcal, carb, protein, fat }) {
         const handleAdd = () => {
+            setAdding(true);
             setTemp(old => [{
                 id: id,
                 name: name,
@@ -119,6 +104,9 @@ export default function AddMeal({ title, closeModal, setMeal }) {
                 protein: protein,
                 fat: fat
             }, ...old]);
+            setTimeout(() => {
+                setAdding(false);
+            }, 1000);
         }
     
         return (
@@ -127,9 +115,15 @@ export default function AddMeal({ title, closeModal, setMeal }) {
                     <Text style={itemStyles.foodName}>{name[0].toUpperCase() + name.slice(1)}</Text>
                     <Text style={itemStyles.foodKcal}>{serving} - {kcal} kcal</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={globalStyles.addButton} onPress={handleAdd}>
-                    <AntDesign name='plus' size={28} color='#fff' />
-                </TouchableOpacity>
+                {
+                    adding ? (
+                        <ActivityIndicator size="large" color={globalColors.darkerCyan} />
+                    ) : (
+                        <TouchableOpacity style={globalStyles.addButton} onPress={handleAdd}>
+                            <AntDesign name='plus' size={28} color='#fff' />
+                        </TouchableOpacity>
+                    )
+                }
             </View>
         )
     }
@@ -155,6 +149,9 @@ export default function AddMeal({ title, closeModal, setMeal }) {
                         addFunc={setMeal}
                     />
                 )}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
             />
         </View>
     )
