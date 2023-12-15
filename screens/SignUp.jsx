@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard, Alert, ScrollView, ImageBackground, Image } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, ScrollView, ImageBackground, Image, Modal } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { Formik } from 'formik';
 import { auth, createUserWithEmailAndPassword, updateProfile } from '../utils/firebase';
@@ -8,6 +8,9 @@ import * as yup from 'yup';
 // Import icons
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+
+// Import components
+import UpdateBMI from '../sub_screens/UpdateBMI';
 
 
 const SignUpSchema = yup.object({
@@ -30,6 +33,7 @@ const SignUpSchema = yup.object({
 
 
 export default function Signup({navigation}) {
+    const [bmiModal, setBMIModal] = useState(false);
 
     const handleSignUp = (values) => {
         createUserWithEmailAndPassword(auth, values.email, values.password)
@@ -38,17 +42,49 @@ export default function Signup({navigation}) {
                 displayName: values.username,
             });
             Alert.alert('User registered successfully!');
-            navigation.navigate('SignUpBMI');
+            setBMIModal(true);
         })
         .catch(() => {
             Alert.alert("Registrations failed", "There's an error that's preventing you from creating the account. Please try again.");
         });
     }
 
+    function UpdateBMIHeader() {
+        const handleHideBMIModal = () => {
+            setBMIModal(false);
+        }
+
+        return (
+            <View style={[globalStyles.header, {height: 60, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20,}]}>
+                <TouchableOpacity style={globalStyles.backButton} onPress={handleHideBMIModal}>
+                    <MaterialCommunityIcons name='chevron-left' size={30} />
+                </TouchableOpacity>
+                <View style={{flex: 1, alignItems: 'center'}}>
+                    <Text style={globalStyles.headerTitle}>Update your BMI</Text>
+                </View>
+            </View>
+        )
+    }
+
+    function UpdateBMIModal() {
+        return (
+            <Modal
+                animationType="slide"
+                visible={bmiModal}
+            >
+                <View style={{flex: 1}}>
+                    <UpdateBMIHeader />
+                    <UpdateBMI />
+                </View>
+            </Modal>
+        )
+    }
+
 
     return (
         <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover' style={globalStyles.container}>
             <StatusBar style='light' />
+            <UpdateBMIModal />
             <ScrollView
                 contentContainerStyle={{ alignItems: 'center'}}
             >

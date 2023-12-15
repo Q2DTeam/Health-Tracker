@@ -15,95 +15,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
-function Header({ backFunc }) {
-    return (
-        <View style={[globalStyles.header, {height: 60, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20,}]}>
-            <TouchableOpacity style={globalStyles.backButton} onPress={backFunc}>
-                <MaterialCommunityIcons name='chevron-left' size={30} />
-            </TouchableOpacity>
-            <View style={{flex: 1, alignItems: 'center'}}>
-                <Text style={globalStyles.headerTitle}>Update your BMI</Text>
-            </View>
-        </View>
-    )
-}
-
-function GoalButton({value, setValue, desireVal, title, subtitle}) {
-    return (
-        <TouchableOpacity 
-            style={[goalStyles.btn, { borderColor: value == desireVal ? globalColors.breakfastGreen : '#fff' }]} 
-            onPress={() => {setValue(desireVal);}}
-        >
-            <Text style={[goalStyles.title, {color: value == desireVal ? globalColors.breakfastGreen : '#000'}]}>{title}</Text>
-            <Text style={goalStyles.subtitle}>{subtitle}</Text>
-        </TouchableOpacity>
-    )
-}
-
-function GenderButton({ value, setValue }) {
-    return (
-        <View style={styles.genderContainer}>
-            <TouchableOpacity 
-                style={[styles.genderBtn, {backgroundColor: value ? '#2ED12E' : '#E0E6F3'}]}
-                onPress={() => {setValue(true)}}>
-                <MaterialCommunityIcons 
-                    name='gender-male' 
-                    size={50}
-                    color={value ? '#FFF' : '#9EA9C3'}/>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={[styles.genderBtn, {backgroundColor: value ? '#E0E6F3' : '#2ED12E'}]}
-                onPress={() => {setValue(false)}}>
-                <MaterialCommunityIcons 
-                    name='gender-female' 
-                    size={50}
-                    color={value ? '#9EA9C3' : '#FFF'} />
-            </TouchableOpacity>
-        </View>
-    )
-}
-
-function HeightSlider({ value, setValue }) {
-    const setProps = (data) => {
-        setValue(data[0]);
-    }
-
-    return (
-        <View style={heightStyles.container}>
-            <View style={heightStyles.title}>
-                <Text style={{fontSize: 16, fontFamily: 'inter-bold', marginLeft: 10}}>Height</Text>
-                <Text style={{fontSize: 16, color: globalColors.textGray, marginRight: 10}}>{value} cm</Text>
-            </View>
-            <Slider 
-                min={100} max={250} 
-                values={[175]} 
-                onChange={setProps}
-                showLabel={false}
-                labelStyle={heightStyles.label}
-                labelTextStyle={heightStyles.labelText}
-                markerColor={globalColors.breakfastGreen} />
-        </View>
-    )
-}
-
-function WeightAgeButton({ title, value, setValue }) {
-    return (
-        <View style={weightAgeStyles.container}>
-            <Text style={weightAgeStyles.title}>{title}</Text>
-            <Text style={weightAgeStyles.value}>{value}</Text>
-            <View style={{width: 100, flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TouchableOpacity style={weightAgeStyles.button} onPress={() => {setValue(old => old-1)}}>
-                    <MaterialCommunityIcons name='minus' size={20} color='#fff' />
-                </TouchableOpacity>
-                <TouchableOpacity style={weightAgeStyles.button} onPress={() => {setValue(old => old+1)}}>
-                    <MaterialCommunityIcons name='plus' size={20} color='#fff' />
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
-}
-
-
 const bmiSchema = yup.object({
     minPerDay: yup.number()
     .label('Minutes per day')
@@ -117,10 +28,9 @@ const bmiSchema = yup.object({
 });
 
 
-export default function SignUpBMI({ navigation }) {
-    const userID = auth.currentUser.uid;
+export default function UpdateBMI() {
+    const [user, setUser] = React.useState();
 
-    // True = male, false = female
     const [gender, setGender] = React.useState(true);
     const [height, setHeight] = React.useState(175);
     const [weight, setWeight] = React.useState(70);
@@ -169,7 +79,7 @@ export default function SignUpBMI({ navigation }) {
             if (value !== null) {
                 // value previously stored
                 const userData = JSON.parse(value);
-                if (userID == userData.id) {
+                if (user.uid == userData.id) {
                     console.log("Data fetched, id matched: ", userData);
                     setAge(userData.age);
                     setWeight(userData.weight);
@@ -200,7 +110,7 @@ export default function SignUpBMI({ navigation }) {
 
         try {
             const newData = {
-                id: userID.toString(),
+                id: user.uid,
                 gender: gender,
                 age: age,
                 weight: weight,
@@ -212,7 +122,7 @@ export default function SignUpBMI({ navigation }) {
                 fatRatio: 30
             };
             // Save data to database
-            await setDoc(doc(db, "users", userID), newData, { merge: true });
+            await setDoc(doc(db, "users", user.uid), newData, { merge: true });
             // Save data to local
             storeDataLocal(newData);
             console.log("New data: ", newData);
@@ -226,14 +136,93 @@ export default function SignUpBMI({ navigation }) {
     }
 
     React.useEffect(() => {
-        if (userID !== null) {
-            getDataLocal();
-        }
+        const subscriber = auth.onAuthStateChanged((val) => {setUser(val)});
+        return subscriber;
     }, []);
 
+    React.useEffect(() => {
+        if (user !== undefined)
+            getDataLocal();
+    }, [user]);
+    
+    function GoalButton({desireVal, title, subtitle}) {
+        return (
+            <TouchableOpacity 
+                style={[goalStyles.btn, { borderColor: goal == desireVal ? globalColors.breakfastGreen : '#fff' }]} 
+                onPress={() => {setGoal(desireVal);}}
+            >
+                <Text style={[goalStyles.title, {color: goal == desireVal ? globalColors.breakfastGreen : '#000'}]}>{title}</Text>
+                <Text style={goalStyles.subtitle}>{subtitle}</Text>
+            </TouchableOpacity>
+        )
+    }
+    
+    function GenderButton({ value, setValue }) {
+        return (
+            <View style={styles.genderContainer}>
+                <TouchableOpacity 
+                    style={[styles.genderBtn, {backgroundColor: value ? '#2ED12E' : '#E0E6F3'}]}
+                    onPress={() => {setValue(true)}}>
+                    <MaterialCommunityIcons 
+                        name='gender-male' 
+                        size={50}
+                        color={value ? '#FFF' : '#9EA9C3'}/>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={[styles.genderBtn, {backgroundColor: value ? '#E0E6F3' : '#2ED12E'}]}
+                    onPress={() => {setValue(false)}}>
+                    <MaterialCommunityIcons 
+                        name='gender-female' 
+                        size={50}
+                        color={value ? '#9EA9C3' : '#FFF'} />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+    
+    function HeightSlider({ value, setValue }) {
+        const setProps = (data) => {
+            setValue(data[0]);
+        }
+    
+        return (
+            <View style={heightStyles.container}>
+                <View style={heightStyles.title}>
+                    <Text style={{fontSize: 16, fontFamily: 'inter-bold', marginLeft: 10}}>Height</Text>
+                    <Text style={{fontSize: 16, color: globalColors.textGray, marginRight: 10}}>{value} cm</Text>
+                </View>
+                <Slider 
+                    min={100} max={250} 
+                    values={[175]} 
+                    onChange={setProps}
+                    showLabel={false}
+                    labelStyle={heightStyles.label}
+                    labelTextStyle={heightStyles.labelText}
+                    markerColor={globalColors.breakfastGreen} />
+            </View>
+        )
+    }
+    
+    function WeightAgeButton({ title, value, setValue }) {
+        return (
+            <View style={weightAgeStyles.container}>
+                <Text style={weightAgeStyles.title}>{title}</Text>
+                <Text style={weightAgeStyles.value}>{value}</Text>
+                <View style={{width: 100, flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <TouchableOpacity style={weightAgeStyles.button} onPress={() => {setValue(old => old-1)}}>
+                        <MaterialCommunityIcons name='minus' size={20} color='#fff' />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={weightAgeStyles.button} onPress={() => {setValue(old => old+1)}}>
+                        <MaterialCommunityIcons name='plus' size={20} color='#fff' />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+
+    // Main return
     return (
         <View style={globalStyles.container}>
-            <Header backFunc={goBack} />
             <Formik
                 initialValues={{
                     minPerDay: '', 
@@ -242,11 +231,10 @@ export default function SignUpBMI({ navigation }) {
                 validationSchema={bmiSchema}
                 onSubmit={(values) => {
                     saveUserData(values);
-                    navigation.navigate('Main');
                 }}
             >
             {
-                ({handleChange, handleSubmit, values, errors}) => (
+                ({handleChange, handleSubmit, values}) => (
                 <ScrollView style={{padding: 20,}}
                     contentContainerStyle={{alignItems: 'center'}}>
                     <View style={goalStyles.container}>
@@ -259,22 +247,16 @@ export default function SignUpBMI({ navigation }) {
                         </Text>
                         <View>
                             <GoalButton
-                                value={goal}
-                                setValue={setGoal}
                                 desireVal={0}
                                 title='Lose Weight'
                                 subtitle='Manage your weight by eating smarter'
                             />
                             <GoalButton
-                                value={goal}
-                                setValue={setGoal}
                                 desireVal={1}
                                 title='Maintain Weight'
                                 subtitle='Optimizes your well-being'
                             />
                             <GoalButton
-                                value={goal}
-                                setValue={setGoal}
                                 desireVal={2}
                                 title='Gain Weight'
                                 subtitle='Build strength with high-protein food'

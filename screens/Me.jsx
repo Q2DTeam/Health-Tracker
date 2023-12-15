@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Modal } from 'react-native';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
@@ -12,59 +11,19 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 // Import components
 import NutritionWheel from '../components/NutritionWheel';
-
-
-function BMI({ bmi, height, weight }) {
-    let status = "";
-    let statusColor = "";
-    if (bmi < 18.6) {
-        status = "Under Weight";
-        statusColor = globalColors.lunchOrange;
-    }
-    else if (bmi >= 18.6 && bmi < 24.9) {
-        status = "Healthy";
-        statusColor = globalColors.breakfastGreen;
-    }
-    else {
-        status = "Over Weight";
-        statusColor = globalColors.snackPurple;
-    }
-
-    return (
-        <View style={styles.bmiContainer}>
-            <View style={styles.bmiHalf}>
-                <View>
-                    <Text style={{fontSize: 18, fontFamily: 'inter-regular'}}>BMI</Text>
-                    <Text style={{fontSize: 20, fontFamily: 'inter-bold', color: '#E61313'}}>{bmi}</Text>
-                </View>
-                <Text style={{fontSize: 20, color: statusColor, fontFamily: 'inter-semibold'}}>
-                    {status}
-                </Text>
-            </View>
-            <View style={{borderWidth: 1, width: '100%', borderColor: globalColors.textGray}} />
-            <View style={styles.bmiHalf}>
-                <View>
-                    <Text style={{fontSize: 16, textAlign: 'left'}}>{height} cm</Text> 
-                    <Text style={{fontSize: 16, color: globalColors.textGray}}>Height</Text>
-                </View>
-                <View>
-                    <Text style={{fontSize: 16, textAlign: 'right'}}>{weight} kg</Text> 
-                    <Text style={{fontSize: 16, color: globalColors.textGray}}>Weight</Text>
-                </View>
-            </View>
-        </View>
-    );
-}
+import UpdateBMI from '../sub_screens/UpdateBMI';
 
 
 export default function Me({ navigation }) {
-    const [user, setUser] = React.useState();
-    const [gender, setGender] = React.useState(true);
-    const [age, setAge] = React.useState(18);
-    const [weight, setWeight] = React.useState(70);
-    const [height, setHeight] = React.useState(175);
-    const [bmi, setBMI] = React.useState(0.0);
-    const [ratio, setRatio] = React.useState([40, 30, 30]);
+    const [user, setUser] = useState();
+    const [gender, setGender] = useState(true);
+    const [age, setAge] = useState(18);
+    const [weight, setWeight] = useState(70);
+    const [height, setHeight] = useState(175);
+    const [bmi, setBMI] = useState(0.0);
+    const [ratio, setRatio] = useState([40, 30, 30]);
+
+    const [bmiModal, setBMIModal] = useState(false);
 
     const getDataLocal = async(key = 'userData') => {
         try {
@@ -73,7 +32,7 @@ export default function Me({ navigation }) {
                 // value previously stored
                 const userData = JSON.parse(value);
                 if (user.uid == userData.id) {
-                    console.log("Data fetched, id matched: ", userData);
+                    //console.log("Data fetched, id matched: ", userData);
                     setAge(userData.age);
                     setWeight(userData.weight);
                     setHeight(userData.height);
@@ -107,7 +66,7 @@ export default function Me({ navigation }) {
 
         if (docSnap) {
             let userData = docSnap.data();
-            console.log("Document data:", userData);
+            //console.log("Document data:", userData);
             setAge(userData.age);
             setWeight(userData.weight);
             setHeight(userData.height);
@@ -144,20 +103,49 @@ export default function Me({ navigation }) {
     }
 
     const handleUpdateBMI = () => {
-        navigation.navigate('RegisterStack', { 
-            screen: 'Register',
-        });
+        setBMIModal(true);
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         const subscriber = auth.onAuthStateChanged((val) => {setUser(val)});
         return subscriber;
     }, []);
 
-    React.useEffect(() => {
-        getDataLocal();
+    useEffect(() => {
+        if (user !== undefined)
+            getDataLocal();
     }, [user]);
 
+    function UpdateBMIHeader() {
+        const handleHideBMIModal = () => {
+            setBMIModal(false);
+        }
+        
+        return (
+            <View style={[globalStyles.header, {flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20,}]}>
+                <TouchableOpacity style={globalStyles.backButton} onPress={handleHideBMIModal}>
+                    <MaterialCommunityIcons name='chevron-left' size={30} />
+                </TouchableOpacity>
+                <View style={{flex: 1, alignItems: 'center'}}>
+                    <Text style={globalStyles.headerTitle}>Update your BMI</Text>
+                </View>
+            </View>
+        )
+    }
+
+    function UpdateBMIModal() {
+        return (
+            <Modal
+                animationType="slide"
+                visible={bmiModal}
+            >
+                <View style={{flex: 1, backgroundColor: globalColors.backgroundGray}}>
+                    <UpdateBMIHeader />
+                    <UpdateBMI />
+                </View>
+            </Modal>
+        )
+    }
     
     function Header() {
         return (
@@ -166,7 +154,7 @@ export default function Me({ navigation }) {
                     <TouchableOpacity onPress={handleUpdateBMI}>
                         <MaterialCommunityIcons name='account-circle' size={40} color='#fff' />
                         {
-                            user !== null && <Text style={{color: '#fff'}}>{user.displayName}</Text>
+                            user !== undefined && <Text style={{color: '#fff'}}>{user.displayName}</Text>
                         }
                     </TouchableOpacity>
                 </View>
@@ -177,15 +165,59 @@ export default function Me({ navigation }) {
             </View>
         )
     }
+
+    function BMI() {
+        let status = "";
+        let statusColor = "";
+        if (bmi < 18.6) {
+            status = "Under Weight";
+            statusColor = globalColors.lunchOrange;
+        }
+        else if (bmi >= 18.6 && bmi < 24.9) {
+            status = "Healthy";
+            statusColor = globalColors.breakfastGreen;
+        }
+        else {
+            status = "Over Weight";
+            statusColor = globalColors.snackPurple;
+        }
+    
+        return (
+            <View style={styles.bmiContainer}>
+                <View style={styles.bmiHalf}>
+                    <View>
+                        <Text style={{fontSize: 18, fontFamily: 'inter-regular'}}>BMI</Text>
+                        <Text style={{fontSize: 20, fontFamily: 'inter-bold', color: '#E61313'}}>{bmi}</Text>
+                    </View>
+                    <Text style={{fontSize: 20, color: statusColor, fontFamily: 'inter-semibold'}}>
+                        {status}
+                    </Text>
+                </View>
+                <View style={{borderWidth: 1, width: '100%', borderColor: globalColors.textGray}} />
+                <View style={styles.bmiHalf}>
+                    <View>
+                        <Text style={{fontSize: 16, textAlign: 'left'}}>{height} cm</Text> 
+                        <Text style={{fontSize: 16, color: globalColors.textGray}}>Height</Text>
+                    </View>
+                    <View>
+                        <Text style={{fontSize: 16, textAlign: 'right'}}>{weight} kg</Text> 
+                        <Text style={{fontSize: 16, color: globalColors.textGray}}>Weight</Text>
+                    </View>
+                </View>
+            </View>
+        );
+    }
+    
     
     return (
         <View style={globalStyles.container}>
             <StatusBar barStyle="light-content" />
+            <UpdateBMIModal />
             <Header signOutFunc={handleSignOut} bmiFunc={handleUpdateBMI} />
             <View style={styles.profileBody}>
                 <View style={{marginVertical: 20,}}>
                     <Text style={styles.bmiTitle}>Your BMI</Text>
-                    <BMI bmi={bmi} age={age} height={height} weight={weight} />
+                    <BMI />
                 </View>
 
                 <View style={{marginVertical: 20,}}>
@@ -199,11 +231,12 @@ export default function Me({ navigation }) {
 
 const styles = StyleSheet.create({
     profileHeader: {
-        height: 100,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,
+        paddingTop: 20,
+        paddingBottom: 10,
     },
     profileBody: {
         flex: 1, 
