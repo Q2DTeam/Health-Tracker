@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, Activity
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { fetchFoods } from '../utils/fetchFoods';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
@@ -107,6 +108,10 @@ export default function AddMeal({ title, closeModal, setMeal }) {
             setTimeout(() => {
                 setAdding(false);
             }, 1000);
+            Toast.show({
+                type: 'success',
+                text1: 'Food was added successfully to your diary',
+            });
         }
     
         return (
@@ -153,6 +158,7 @@ export default function AddMeal({ title, closeModal, setMeal }) {
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
             />
+            <Toast />
         </View>
     )
 }
