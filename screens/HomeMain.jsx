@@ -8,13 +8,11 @@ import ProgressCircle from 'react-native-progress-circle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Calendar } from 'react-native-calendars';
 import moment from 'moment'; 
-import { useFocusEffect } from '@react-navigation/native';
 
 // Import components
 import KcalValue from '../components/KcalValue';
 import NutriValue from '../components/NutriValue';
 import MealItem from '../components/MealItem';
-import ActionButton from '../components/ActionButton';
 import DatePicker from '../components/DatePicker';
 
 
@@ -39,8 +37,6 @@ export default function HomeMain({ navigation }) {
 
     const [calenVisible, setCalenVisible] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
-
-    const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     const storeDataLocal = async(value) => {
         try {
@@ -85,14 +81,33 @@ export default function HomeMain({ navigation }) {
         setProteinEaten(0);
     }
 
+    const sumNutrition = (meal) => {
+        let [kcal, carb, fat, pro] = [0, 0, 0, 0];
+        meal.map((item) => {
+            kcal += item.kcal;
+            carb += item.carb;
+            fat += item.fat;
+            pro += item.protein;
+        })
+        return { kcal, carb, fat, pro };
+    }
 
     const updateNutrition = (meal) => {
-        meal.map((item) => {
-            setkcalEaten(old => old + Math.round(item.kcal));
-            setcarbEaten(old => old + Math.round(item.carb));
-            setFatEaten(old => old + Math.round(item.fat));
-            setProteinEaten(old => old + Math.round(item.protein));
-        })
+        const { kcal, carb, fat, pro } = sumNutrition(meal);
+        setkcalEaten(old => old + Math.round(kcal));
+        setcarbEaten(old => old + Math.round(carb));
+        setFatEaten(old => old + Math.round(fat));
+        setProteinEaten(old => old + Math.round(pro));
+    }
+
+    const saveMealToLocal = async(type, meal) => {
+        try {
+            const jsonValue = JSON.stringify(meal);
+            await AsyncStorage.setItem(type, jsonValue);
+            console.log(`${type} saved to local!`);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const getMealLocal = async(type) => {
@@ -101,7 +116,7 @@ export default function HomeMain({ navigation }) {
             if (value !== null) {
                 const meal = JSON.parse(value);
                 if (meal.date == date && meal.userID == user.uid) {
-                    console.log("Meal matched date and id");
+                    //console.log("Meal matched date and id");
                     switch (type) {
                         case 'breakfast':
                             setBreakfast(meal);
@@ -121,11 +136,11 @@ export default function HomeMain({ navigation }) {
                 }
                 else {
                     console.log("ID or meal not matched");
-                    await getMeal();
+                    await getMeal(type);
                 }
             }
             else {
-                await getMeal();
+                await getMeal(type);
             }
         } catch (error) {
             console.log(error);
@@ -160,8 +175,10 @@ export default function HomeMain({ navigation }) {
                     setSnack(meal);
                     break;
             }
-            if (meal !== undefined) 
+            if (meal !== undefined) {
                 updateNutrition(meal.meal);
+                saveMealToLocal(type, meal);
+            }
         } 
         else {
             console.log("No such document!");
@@ -212,19 +229,7 @@ export default function HomeMain({ navigation }) {
             getMealLocal('dinner');
             getMealLocal('snack');
         }
-    }, [user]);
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            resetNutrition();
-            getMealLocal('breakfast');
-            getMealLocal('lunch');
-            getMealLocal('dinner');
-            getMealLocal('snack');
-        });
-    
-        return unsubscribe;
-      }, [navigation, user]);
+    }, [user, date]);
 
     const getNutriValue = (tdee, carbRatio, proteinRatio, fatRatio) => {
         let carb = Math.round(tdee * carbRatio / 400);
@@ -410,7 +415,7 @@ const styles = StyleSheet.create({
         fontFamily: 'inter-bold',
     },
     remainKcalText: {
-        fontSize: 12,
+        fontSize: 14,
         color: "#fff",
         fontFamily: 'inter-regular',
     },
