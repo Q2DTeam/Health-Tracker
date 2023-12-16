@@ -25,9 +25,9 @@ export default function Me({ navigation }) {
 
     const [bmiModal, setBMIModal] = useState(false);
 
-    const getDataLocal = async(key = 'userData') => {
+    const getDataLocal = async() => {
         try {
-            const value = await AsyncStorage.getItem(key);
+            const value = await AsyncStorage.getItem('userData');
             if (value !== null) {
                 // value previously stored
                 const userData = JSON.parse(value);
@@ -85,6 +85,16 @@ export default function Me({ navigation }) {
         return bmi.toFixed(1);
     }
 
+    const removeDataLocal = async() => {
+        try {
+            await AsyncStorage.removeItem('userData');
+            console.log("REMOVED");
+        }
+        catch (err) {
+            console.log("ERROR removing user data");
+        }
+    }
+
     const handleSignOut = () => {
         Alert.alert('Log Out', 'Do you want to log out?', [
         {
@@ -92,6 +102,7 @@ export default function Me({ navigation }) {
             onPress: () => {
                 auth.signOut()
                 .then(() => {
+                    removeDataLocal();
                     navigation.navigate('RegisterStack');
                 })
             },
