@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, Alert, Modal, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert, Modal, TouchableOpacity, RefreshControl } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
@@ -37,6 +37,7 @@ export default function HomeMain({ navigation }) {
 
     const [calenVisible, setCalenVisible] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+    const [refreshing, setRefreshing] = useState(false);
 
     const storeDataLocal = async(value) => {
         try {
@@ -231,6 +232,18 @@ export default function HomeMain({ navigation }) {
         }
     }, [user, date]);
 
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        resetNutrition();
+        getMealLocal('breakfast');
+        getMealLocal('lunch');
+        getMealLocal('dinner');
+        getMealLocal('snack');
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 2000);
+      }, []);
+
     const getNutriValue = (tdee, carbRatio, proteinRatio, fatRatio) => {
         let carb = Math.round(tdee * carbRatio / 400);
         let protein = Math.round(tdee * proteinRatio / 400);
@@ -350,6 +363,9 @@ export default function HomeMain({ navigation }) {
                     marginBottom: 10,  
                 }}
                 contentContainerStyle={{ alignItems: 'center' }}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
             >
                 <CalenModal />
                 <TopBar />
