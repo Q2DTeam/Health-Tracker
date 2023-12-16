@@ -88,6 +88,11 @@ export default function Me({ navigation }) {
     const removeDataLocal = async() => {
         try {
             await AsyncStorage.removeItem('userData');
+            await AsyncStorage.removeItem('foodsAPI');
+            await AsyncStorage.removeItem('breakfast');
+            await AsyncStorage.removeItem('lunch');
+            await AsyncStorage.removeItem('dinner');
+            await AsyncStorage.removeItem('snack');
             console.log("REMOVED");
         }
         catch (err) {
