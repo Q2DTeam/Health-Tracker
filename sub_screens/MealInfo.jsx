@@ -125,6 +125,7 @@ export default function MealInfo({ navigation, route }) {
                     <AddMeal 
                         title={title} 
                         closeModal={() => {setAddModal(false)}} 
+                        meal={meal}
                         setMeal={setMeal}
                     />
                 </View>
@@ -132,7 +133,7 @@ export default function MealInfo({ navigation, route }) {
         )
     }
 
-    function ItemCard({ type, id, name, serving, kcal }) {
+    function ItemCard({ type, id, name, serving, unit, kcal }) {
         let color;
         switch (type) {
             case 'breakfast':
@@ -167,7 +168,7 @@ export default function MealInfo({ navigation, route }) {
                 }}/>
                 <View style={cardStyles.cardBody}>
                     <Text style={cardStyles.cardTitle}>{name}</Text>
-                    <Text style={cardStyles.cardSubtext}>{serving} - {kcal} kcal</Text>
+                    <Text style={cardStyles.cardSubtext}>{serving} {unit} - {kcal} kcal</Text>
                 </View>
                 <TouchableOpacity style={cardStyles.deleteBtn} onPress={handleDelete}>
                     <AntDesign name='close' size={18} color='#fff'/>
@@ -194,6 +195,7 @@ export default function MealInfo({ navigation, route }) {
                         id={item.id} 
                         name={item.name} 
                         serving={item.serving}
+                        unit={item.unit}
                         kcal={item.kcal}
                     />
                 )}

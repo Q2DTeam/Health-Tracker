@@ -9,13 +9,13 @@ import Toast from 'react-native-toast-message';
 import { globalColors, globalStyles } from '../global/styles';
 
 
-export default function AddMeal({ title, closeModal, setMeal }) {
+export default function AddMeal({ title, closeModal, meal, setMeal }) {
     const [foods, setFoods] = useState([]);
     const [search, setSearch] = useState('');
     const [refreshing, setRefreshing] = useState(false);
     const [adding, setAdding] = useState(false);
 
-    const [temp, setTemp] = useState([]);
+    const [temp, setTemp] = useState(meal);
 
     const saveFoodsToLocal = async(list) => {
         try {
@@ -53,13 +53,14 @@ export default function AddMeal({ title, closeModal, setMeal }) {
     }
 
     const handleGoBack = () => {
-        setMeal(old => [...temp, ...old]);
+        setMeal(temp);
         closeModal();
     }
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        getFoods();
+        //getFoods();
+        console.log(temp);
         setTimeout(() => {
           setRefreshing(false);
         }, 1000);
@@ -69,7 +70,7 @@ export default function AddMeal({ title, closeModal, setMeal }) {
         getFoodsLocal();
     }, []);
 
-    function Header({ title='breakfast' }) {
+    function Header({ title }) {
         return (
             <View style={globalStyles.header}>
                 <View style={styles.top}>
@@ -93,21 +94,37 @@ export default function AddMeal({ title, closeModal, setMeal }) {
         );
     }
 
-    function AddMealItem({ serving, id, name, kcal, carb, protein, fat }) {
+    function AddMealItem({ id, name, kcal, carb, protein, fat, serving, unit }) {
         const handleAdd = () => {
             setAdding(true);
-            setTemp(old => [{
+            const newFood = {
                 id: id,
                 name: name,
                 kcal: kcal,
                 serving: serving,
+                unit: unit,
                 carb: carb,
                 protein: protein,
                 fat: fat
-            }, ...old]);
+            }
+            let index = temp.findIndex(item => item.id === newFood.id);
+            if (index == -1) {
+                setTemp(old => [newFood, ...old]);
+            }
+            else {
+                const oldItem = temp[index];
+                const newTemp = temp.filter((item) => item.id != newFood.id);
+                newFood.serving += oldItem.serving;
+                newFood.kcal += oldItem.kcal;
+                newFood.carb += oldItem.carb;
+                newFood.fat += oldItem.fat;
+                newFood.protein += oldItem.protein;
+                setTemp([newFood, ...newTemp]);
+            }
             setTimeout(() => {
                 setAdding(false);
             }, 1000);
+
             Toast.show({
                 type: 'success',
                 text1: 'Food was added successfully to your diary',
@@ -118,7 +135,7 @@ export default function AddMeal({ title, closeModal, setMeal }) {
             <View style={itemStyles.container}>
                 <TouchableOpacity style={itemStyles.infoWrapper}>
                     <Text style={itemStyles.foodName}>{name[0].toUpperCase() + name.slice(1)}</Text>
-                    <Text style={itemStyles.foodKcal}>{serving} - {kcal} kcal</Text>
+                    <Text style={itemStyles.foodKcal}>{serving} {unit} - {kcal} kcal</Text>
                 </TouchableOpacity>
                 {
                     adding ? (
@@ -144,13 +161,14 @@ export default function AddMeal({ title, closeModal, setMeal }) {
                 keyExtractor={(item) => item.id}
                 renderItem={({item}) => (
                     <AddMealItem 
-                        serving={item.serving}
                         id={item.id} 
                         name={item.name} 
                         kcal={item.calorie}
                         carb={item.carb}
                         protein={item.protein} 
                         fat={item.fat}
+                        serving={item.serving}
+                        unit={item.unit}
                         addFunc={setMeal}
                     />
                 )}
