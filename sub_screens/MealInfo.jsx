@@ -105,7 +105,6 @@ export default function MealInfo({ navigation, route }) {
             <TouchableOpacity 
                 style={styles.addBtn} 
                 onPress={() => {
-                    setModified(true); 
                     setAddModal(true);
                 }}
             >
@@ -127,6 +126,7 @@ export default function MealInfo({ navigation, route }) {
                         closeModal={() => {setAddModal(false)}} 
                         meal={meal}
                         setMeal={setMeal}
+                        modified={() => {setModified(true)}}
                     />
                 </View>
             </Modal>

@@ -9,9 +9,9 @@ import Toast from 'react-native-toast-message';
 import { globalColors, globalStyles } from '../global/styles';
 
 
-export default function AddMeal({ title, closeModal, meal, setMeal }) {
+export default function AddMeal({ title, closeModal, meal, setMeal, modified }) {
     const [foods, setFoods] = useState([]);
-    const [search, setSearch] = useState('');
+    const [filteredFoods, setFilteredFoods] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [adding, setAdding] = useState(false);
 
@@ -32,7 +32,8 @@ export default function AddMeal({ title, closeModal, meal, setMeal }) {
             if (value !== null) {
                 const foodData = JSON.parse(value);
                 setFoods(foodData);
-                console.log("Food Data fetched from local successfully");
+                setFilteredFoods(foodData);
+                //console.log("Food Data fetched from local successfully");
             }
             else {
                 await getFoods();
@@ -47,6 +48,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal }) {
         const data = await fetchFoods();
         if (data != undefined) {
             setFoods(data);
+            setFilteredFoods(data);
             saveFoodsToLocal(data);
             console.log("Food list saved to local");
         }
@@ -59,8 +61,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal }) {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        //getFoods();
-        console.log(temp);
+        getFoods();
         setTimeout(() => {
           setRefreshing(false);
         }, 1000);
@@ -83,19 +84,43 @@ export default function AddMeal({ title, closeModal, meal, setMeal }) {
         )
     }
 
+
     function SearchBar({}) {
+        const [search, setSearch] = useState('');
+
+        const handleSearch = () => {
+            const formattedQuery = search.toLowerCase();
+            if (search.length > 0) {
+                const filtered = foods.filter((item) => item.name.toLowerCase().includes(formattedQuery));
+                setFilteredFoods(filtered);
+            }
+            else {
+                setFilteredFoods(foods);
+            }
+        }
+
         return (
             <View style={globalStyles.searchBar}>
                 <MaterialCommunityIcons name='magnify' size={26} />
                 <TextInput 
                     style={globalStyles.searchInput} 
-                    placeholder='What did you eat ?' />
+                    placeholder='What did you eat ?'
+                    clearButtonMode='always'
+                    returnKeyType='search'
+                    onChangeText={(query) => {
+                        setSearch(query);
+                    }}
+                    onSubmitEditing={(a) => {
+                        handleSearch();
+                    }}
+                />
             </View>
         );
     }
 
     function AddMealItem({ id, name, kcal, carb, protein, fat, serving, unit }) {
         const handleAdd = () => {
+            modified();
             setAdding(true);
             const newFood = {
                 id: id,
@@ -157,7 +182,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal }) {
                 <SearchBar />
             </View>
             <FlatList 
-                data={foods}
+                data={filteredFoods}
                 keyExtractor={(item) => item.id}
                 renderItem={({item}) => (
                     <AddMealItem 
