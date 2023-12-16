@@ -17,7 +17,7 @@ import DatePicker from '../components/DatePicker';
 
 
 export default function HomeMain({ navigation }) {
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(auth.currentUser);
 
     const [totalKcal, setkcalTotal] = useState(0);
     const [totalCarb, setcarbTotal] = useState(0);
