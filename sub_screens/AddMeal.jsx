@@ -13,7 +13,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
     const [foods, setFoods] = useState([]);
     const [filteredFoods, setFilteredFoods] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-    const [adding, setAdding] = useState(false);
+    
 
     const [temp, setTemp] = useState(meal);
 
@@ -84,8 +84,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
         )
     }
 
-
-    function SearchBar({}) {
+    function SearchBar() {
         const [search, setSearch] = useState('');
 
         const handleSearch = () => {
@@ -119,41 +118,43 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
     }
 
     function AddMealItem({ id, name, kcal, carb, protein, fat, serving, unit }) {
+        const [adding, setAdding] = useState(false);
+
         const handleAdd = () => {
             modified();
             setAdding(true);
-            const newFood = {
-                id: id,
-                name: name,
-                kcal: kcal,
-                serving: serving,
-                unit: unit,
-                carb: carb,
-                protein: protein,
-                fat: fat
-            }
-            let index = temp.findIndex(item => item.id === newFood.id);
-            if (index == -1) {
-                setTemp(old => [newFood, ...old]);
-            }
-            else {
-                const oldItem = temp[index];
-                const newTemp = temp.filter((item) => item.id != newFood.id);
-                newFood.serving += oldItem.serving;
-                newFood.kcal += oldItem.kcal;
-                newFood.carb += oldItem.carb;
-                newFood.fat += oldItem.fat;
-                newFood.protein += oldItem.protein;
-                setTemp([newFood, ...newTemp]);
-            }
+            
             setTimeout(() => {
+                const newFood = {
+                    id: id,
+                    name: name,
+                    kcal: kcal,
+                    serving: serving,
+                    unit: unit,
+                    carb: carb,
+                    protein: protein,
+                    fat: fat
+                }
+                let index = temp.findIndex(item => item.id === newFood.id);
+                if (index == -1) {
+                    setTemp(old => [newFood, ...old]);
+                }
+                else {
+                    const oldItem = temp[index];
+                    const newTemp = temp.filter((item) => item.id != newFood.id);
+                    newFood.serving += oldItem.serving;
+                    newFood.kcal += oldItem.kcal;
+                    newFood.carb += oldItem.carb;
+                    newFood.fat += oldItem.fat;
+                    newFood.protein += oldItem.protein;
+                    setTemp([newFood, ...newTemp]);
+                }
                 setAdding(false);
+                Toast.show({
+                    type: 'success',
+                    text1: 'Food was added successfully to your diary',
+                });
             }, 1000);
-
-            Toast.show({
-                type: 'success',
-                text1: 'Food was added successfully to your diary',
-            });
         }
     
         return (
