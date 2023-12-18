@@ -79,6 +79,16 @@ export default function MealInfo({ navigation, route }) {
     }
 
     function Header() {
+        const sumNutrition = (meal) => {
+            let kcal = 0;
+            meal.map((item) => {
+                kcal += item.kcal;
+            })
+            return kcal
+        }
+
+        const mealKcal = sumNutrition(meal);
+
         const handleGoBack = () => {
             if (modified == true) {
                 saveMealToDb();
@@ -94,7 +104,7 @@ export default function MealInfo({ navigation, route }) {
                         <MaterialCommunityIcons name='chevron-left' size={40} color='#fff' />
                     </TouchableOpacity>
                     <Text style={globalStyles.headerTitle}>{title[0].toUpperCase() + title.slice(1)}</Text>
-                    <Text style={styles.kcalText}>{0} kcal</Text>
+                    <Text style={styles.kcalText}>{mealKcal} kcal</Text>
                 </View>
             </View>
         )
@@ -123,7 +133,9 @@ export default function MealInfo({ navigation, route }) {
                 <View style={{flex: 1}}>
                     <AddMeal 
                         title={title} 
-                        closeModal={() => {setAddModal(false)}} 
+                        closeModal={() => {
+                            setAddModal(false)
+                        }} 
                         meal={meal}
                         setMeal={setMeal}
                         modified={() => {setModified(true)}}
