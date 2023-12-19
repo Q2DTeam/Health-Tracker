@@ -14,12 +14,31 @@ import CreateFood from '../sub_screens/CreateFood';
 export default function MyMeals() {
     const [user, setUser] = useState(auth.currentUser);
     const [foods, setFoods] = useState([]);
-    const [meals, setMeals] = useState([]);
-
+    const [filteredFoods, setFilteredFoods] = useState(foods);
     const [foodModal, setFoodModal] = useState(false);
-    const [mealModal, setMealModal] = useState(false);
 
     const [refreshing, setRefreshing] = useState(false);
+
+    const getFoodsDb = async() => {
+        let docRef, docSnap;
+        try {
+            docRef = doc(db, "custom_foods", user.uid);
+            docSnap = await getDoc(docRef);
+        }
+        catch (error) {
+            Alert.alert('Oops, we cannot retrieve your data', 'Due inconsistent internet connection, we cannot fetch the data you need. Please refresh the screen to try again.');
+        }
+
+        if (docSnap) {
+            let custom_foods = docSnap.data();
+            setFoods(custom_foods.foods);
+            setFilteredFoods(custom_foods.foods);
+            saveFoodToLocal(custom_foods.foods);
+        } 
+        else {
+            console.log("No such document!");
+        }
+    }
 
     const getFoodsLocal = async() => {
         try {
@@ -28,10 +47,15 @@ export default function MyMeals() {
                 const custom_foods = JSON.parse(value);
                 if (custom_foods.userID == user.uid) {
                     setFoods(custom_foods.foods);
+                    setFilteredFoods(custom_foods.foods);
+                }
+                else {
+                    getFoodsDb();
                 }
             }
         } catch (error) {
             console.log("Error fetching custom food from local: ", error);
+            getFoodsDb();
         }
     }
 
@@ -48,7 +72,7 @@ export default function MyMeals() {
         }
     }
 
-    const saveFoodToDb = async() => {
+    const saveFoodToDb = async(newFoods) => {
         const custom_food = {
             userID: user.uid,
             foods: newFoods
@@ -76,7 +100,7 @@ export default function MyMeals() {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        getFoodsLocal();
+        getFoodsDb();
         setTimeout(() => {
           setRefreshing(false);
         }, 1000);
@@ -105,13 +129,13 @@ export default function MyMeals() {
 
         const handleSearch = () => {
             const formattedQuery = search.toLowerCase();
-            // if (search.length > 0) {
-            //     const filtered = foods.filter((item) => item.name.toLowerCase().includes(formattedQuery));
-            //     setFilteredFoods(filtered);
-            // }
-            // else {
-            //     setFilteredFoods(foods);
-            // }
+            if (search.length > 0) {
+                const filtered = foods.filter((item) => item.name.toLowerCase().includes(formattedQuery));
+                setFilteredFoods(filtered);
+            }
+            else {
+                setFilteredFoods(foods);
+            }
         }
 
         return (
@@ -164,14 +188,6 @@ export default function MyMeals() {
         )
     }
 
-    function FoodView() {
-        return (
-            <View style={{flex: 1, width: '100%', backgroundColor: globalColors.backgroundGray}}>
-                
-            </View>
-        )
-    }
-
     function CreateFoodModal() {
         return (
         <Modal
@@ -197,7 +213,7 @@ export default function MyMeals() {
                 <Header />
                 <FlatList 
                     style={{flex: 1, width: '100%'}}
-                    data={foods}
+                    data={filteredFoods}
                     keyExtractor={(item) => item.id}
                     renderItem={({item}) => (
                         <FoodItem
