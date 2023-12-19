@@ -36,7 +36,7 @@ export default function NutritionWheel({ nutritions }) {
         </View>
     );
 }
-
+//Style
 const styles = StyleSheet.create({
     wheelContainer: {
         width: 334,
