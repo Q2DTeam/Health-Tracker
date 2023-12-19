@@ -38,7 +38,7 @@ export default function HomeMain({ navigation }) {
     const [calenVisible, setCalenVisible] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
     const [refreshing, setRefreshing] = useState(false);
-
+    //store data to local
     const storeDataLocal = async(value) => {
         try {
             const jsonValue = JSON.stringify(value);
