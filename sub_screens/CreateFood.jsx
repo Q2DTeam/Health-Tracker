@@ -91,7 +91,7 @@ export default function CreateFood({ cancelFunc, foods, setFoods }) {
             unit = measure;
         }
         const newFood = {
-            id: Math.floor(Math.random() * 1001),
+            id: Math.floor(Math.random() * 1001) + 21,
             name: values.name,
             serving: serving,
             unit: unit,
