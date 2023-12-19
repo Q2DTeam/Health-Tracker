@@ -93,6 +93,7 @@ export default function Me({ navigation }) {
             await AsyncStorage.removeItem('lunch');
             await AsyncStorage.removeItem('dinner');
             await AsyncStorage.removeItem('snack');
+            await AsyncStorage.removeItem('custom_foods');
             console.log("REMOVED");
         }
         catch (err) {
@@ -138,7 +139,7 @@ export default function Me({ navigation }) {
         }
         
         return (
-            <View style={[globalStyles.header, {flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20,}]}>
+            <View style={[globalStyles.header, {flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingBottom: 10}]}>
                 <TouchableOpacity style={globalStyles.backButton} onPress={handleHideBMIModal}>
                     <MaterialCommunityIcons name='chevron-left' size={30} />
                 </TouchableOpacity>
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,
-        paddingTop: 20,
+        paddingTop: 32,
         paddingBottom: 10,
     },
     profileBody: {

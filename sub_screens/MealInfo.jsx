@@ -129,6 +129,7 @@ export default function MealInfo({ navigation, route }) {
             <Modal
                 animationType="slide"
                 visible={addModal}
+                style={{margin: 0}}
             >
                 <View style={{flex: 1}}>
                     <AddMeal 
@@ -195,9 +196,9 @@ export default function MealInfo({ navigation, route }) {
 
     return (
         <View style={[globalStyles.container, {alignItems: 'center'}]}>
+            <AddModal />
             <Header />
             <AddButton />
-            <AddModal />
             <FlatList 
                 data={meal}
                 keyExtractor={(item) => item.id}
@@ -219,7 +220,8 @@ export default function MealInfo({ navigation, route }) {
 const styles = StyleSheet.create({
     top: {
         margin: 10,
-        padding: 10,
+        marginTop: 20,
+        padding: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

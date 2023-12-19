@@ -7,6 +7,7 @@ import Toast from 'react-native-toast-message';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function AddMeal({ title, closeModal, meal, setMeal, modified }) {
@@ -177,7 +178,8 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
     }
 
     return (
-        <View style={{flex: 1, backgroundColor: globalColors.backgroundGray}}>
+        <View style={[globalStyles.container, {}]}>
+            <StatusBar style='light' />
             <Header title={title}/>
             <View style={styles.mid}>
                 <SearchBar />
@@ -210,6 +212,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
 const styles = StyleSheet.create({
     top: {
         padding: 10,
+        paddingTop: 0,
         flexDirection: 'row',
         alignItems: 'center',
     },

@@ -46,7 +46,6 @@ export const globalStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        //paddingHorizontal: 10,
         borderBottomWidth: 2,
     },
     searchInput: {
@@ -80,7 +79,7 @@ export const globalStyles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 20,
-        paddingLeft: 5,
+        paddingHorizontal: 5,
         width: Platform.OS === 'android' ? 300 : 260,
         height: 40,
         borderRadius: 5,
