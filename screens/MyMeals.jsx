@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Modal, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Modal, TextInput, FlatList, RefreshControl } from 'react-native';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import CreateFood from '../sub_screens/CreateFood';
 
 
@@ -19,11 +19,68 @@ export default function MyMeals() {
     const [foodModal, setFoodModal] = useState(false);
     const [mealModal, setMealModal] = useState(false);
 
+    const [refreshing, setRefreshing] = useState(false);
+
+    const getFoodsLocal = async() => {
+        try {
+            const value = await AsyncStorage.getItem('custom_foods');
+            if (value !== null) {
+                const custom_foods = JSON.parse(value);
+                if (custom_foods.userID == user.uid) {
+                    setFoods(custom_foods.foods);
+                }
+            }
+        } catch (error) {
+            console.log("Error fetching custom food from local: ", error);
+        }
+    }
+
+    const saveFoodToLocal = async(newFoods) => {
+        const custom_food = {
+            userID: user.uid,
+            foods: newFoods
+        }
+        try {
+            const jsonValue = JSON.stringify(custom_food);
+            await AsyncStorage.setItem('custom_foods', jsonValue);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const saveFoodToDb = async() => {
+        const custom_food = {
+            userID: user.uid,
+            foods: newFoods
+        }
+        const docID = user.uid;
+        try {
+            await setDoc(doc(db, "custom_foods", docID), custom_food, { merge: true });
+        }
+        catch(err) {
+            console.log("Error saving custom food to firestore: ", err);
+        }
+    }
+
+
     useEffect(() => {
         const subscriber = auth.onAuthStateChanged((val) => {setUser(val)});
         return subscriber;
     }, []);
 
+    useEffect(() => {
+        if (user !== undefined && user !== null) {
+            getFoodsLocal();
+        }
+    }, [user]);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        getFoodsLocal();
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 1000);
+      }, []);
 
     function Header() {
         const handleAdd = () => {
@@ -76,6 +133,45 @@ export default function MyMeals() {
         );
     }
 
+    function FoodItem({ id, name, kcal, carb, protein, fat, serving, unit }) {
+        const handleDelete = () => {
+            Alert.alert('Confirm delete', 'Do you want to delete this food?', [
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        const newFoods = foods.filter((item) => item.id != id);
+                        setFoods(newFoods);
+                        saveFoodToDb(newFoods);
+                        saveFoodToLocal(newFoods);
+                    },
+                },
+                {
+                    text: 'Cancel',
+                },
+                ]);
+        }
+
+        return (
+            <View style={itemStyles.container}>
+                <TouchableOpacity style={itemStyles.infoWrapper}>
+                    <Text style={itemStyles.foodName}>{name[0].toUpperCase() + name.slice(1)}</Text>
+                    <Text style={itemStyles.foodKcal}>{serving} {unit} - {kcal} kcal</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={globalStyles.addButton} onPress={handleDelete}>
+                    <AntDesign name='delete' size={20} color='#fff' />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    function FoodView() {
+        return (
+            <View style={{flex: 1, width: '100%', backgroundColor: globalColors.backgroundGray}}>
+                
+            </View>
+        )
+    }
+
     function CreateFoodModal() {
         return (
         <Modal
@@ -85,23 +181,11 @@ export default function MyMeals() {
             <View style={{flex: 1}}>
                 <CreateFood
                     cancelFunc={() => {setFoodModal(false)}}
+                    foods={foods}
+                    setFoods={setFoods}
                 />
             </View>
         </Modal>
-        )
-    }
-
-    function FoodItem({ id, name, kcal, carb, protein, fat, serving, unit }) {
-        return (
-            <View style={itemStyles.container}>
-                <TouchableOpacity style={itemStyles.infoWrapper}>
-                    <Text style={itemStyles.foodName}>{name[0].toUpperCase() + name.slice(1)}</Text>
-                    <Text style={itemStyles.foodKcal}>{serving} {unit} - {kcal} kcal</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={globalStyles.addButton} onPress={handleAdd}>
-                    <AntDesign name='plus' size={28} color='#fff' />
-                </TouchableOpacity>
-            </View>
         )
     }
 
@@ -111,7 +195,26 @@ export default function MyMeals() {
             <CreateFoodModal />
             <View style={{alignItems: 'center', flex: 1}}>
                 <Header />
-                
+                <FlatList 
+                    style={{flex: 1, width: '100%'}}
+                    data={foods}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({item}) => (
+                        <FoodItem
+                            id={item.id} 
+                            name={item.name} 
+                            kcal={item.calorie}
+                            carb={item.carb}
+                            protein={item.protein} 
+                            fat={item.fat}
+                            serving={item.serving}
+                            unit={item.unit}
+                        />
+                    )}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
+                />
             </View>
         </View>
     )
@@ -130,4 +233,29 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     }
+});
+
+const itemStyles = StyleSheet.create({
+    container: {
+        marginVertical: 10,
+        marginHorizontal: 20,
+        minHeight: 80,
+        paddingHorizontal: 20,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    infoWrapper: {
+        flex: 1,
+        marginRight: 20,
+    },
+    foodName: {
+        fontSize: 18,
+        marginBottom: 5,
+    },
+    foodKcal: {
+        color: globalColors.textGray,
+    },
 });
