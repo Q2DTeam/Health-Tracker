@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { fetchFoods } from '../utils/fetchFoods';
+import { auth } from '../utils/firebase';
+import { db, doc, getDoc } from '../utils/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 
@@ -11,10 +13,12 @@ import { StatusBar } from 'expo-status-bar';
 
 
 export default function AddMeal({ title, closeModal, meal, setMeal, modified }) {
-    const [foods, setFoods] = useState([]);
+    const user = auth.currentUser;
+    const [foods, setFoods] = useState();
     const [filteredFoods, setFilteredFoods] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     
+    const [foodFetched, setFoodFetched] = useState(false);
 
     const [temp, setTemp] = useState(meal);
 
@@ -27,6 +31,50 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
         }
     }
 
+    const getCustomFoodsDb = async() => {
+        let docRef, docSnap;
+        try {
+            docRef = doc(db, "custom_foods", user.uid);
+            docSnap = await getDoc(docRef);
+        }
+        catch (error) {
+            console.log("Error getting custom food from db: ", error);
+        }
+
+        if (docSnap) {
+            let custom_foods = docSnap.data();
+
+            let newList = [...custom_foods.foods, ...foods];
+            setFoods(newList);
+            setFilteredFoods(newList);
+
+            saveFoodToLocal(custom_foods.foods);
+        } 
+        else {
+            console.log("No such document!");
+        }
+    }
+
+    const getCustomFoodsLocal = async() => {
+        try {
+            const value = await AsyncStorage.getItem('custom_foods');
+            if (value !== null) {
+                const custom_foods = JSON.parse(value);
+                if (custom_foods.userID == user.uid) {
+                    let newList = [...custom_foods.foods, ...foods];
+                    setFoods(newList);
+                    setFilteredFoods(newList);
+                }
+                else {
+                    getCustomFoodsDb();
+                }
+            }
+        } catch (error) {
+            console.log("Error fetching custom food from local: ", error);
+            getCustomFoodsDb();
+        }
+    }
+
     const getFoodsLocal = async() => {
         try {
             const value = await AsyncStorage.getItem('foodsAPI');
@@ -34,7 +82,8 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                 const foodData = JSON.parse(value);
                 setFoods(foodData);
                 setFilteredFoods(foodData);
-                //console.log("Food Data fetched from local successfully");
+                // Begin fetching custom foods
+                setFoodFetched(true);
             }
             else {
                 await getFoods();
@@ -50,8 +99,10 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
         if (data != undefined) {
             setFoods(data);
             setFilteredFoods(data);
+            // Begin fetching custom foods
+            setFoodFetched(true);
+            // Save API foods to local
             saveFoodsToLocal(data);
-            console.log("Food list saved to local");
         }
     }
 
@@ -71,6 +122,12 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
     useEffect(() => {
         getFoodsLocal();
     }, []);
+
+    useEffect(() => {
+        if (foods !== undefined) {
+            getCustomFoodsLocal();
+        }
+    }, [foodFetched]);
 
     function Header({ title }) {
         return (
