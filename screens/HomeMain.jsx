@@ -48,6 +48,31 @@ export default function HomeMain({ navigation }) {
         }
     }
 
+    const getData = async () => {
+        let docRef, docSnap;
+        try {
+            docRef = doc(db, "users", user.uid);
+            docSnap = await getDoc(docRef);
+        }
+        catch (error) {
+            Alert.alert('Oops, we cannot retrieve your data', 'Due inconsistent internet connection, we cannot fetch the data you need. Please refresh the screen to try again.');
+        }
+
+        if (docSnap) {
+            let userData = docSnap.data();
+            let {tdee, carb, protein, fat} = getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
+            setkcalTotal(tdee);
+            setcarbTotal(carb);
+            setproteinTotal(protein);
+            setfatTotal(fat);
+            // Save data to local
+            storeDataLocal(userData);
+        } 
+        else {
+            console.log("No such document!");
+        }
+    }
+
     const getDataLocal = async() => {
         try {
             const value = await AsyncStorage.getItem('userData');
@@ -161,7 +186,6 @@ export default function HomeMain({ navigation }) {
 
         if (docSnap) {
             let meal = docSnap.data();
-            console.log("Meal from database", meal);
             switch (type) {
                 case 'breakfast':
                     setBreakfast(meal);
@@ -180,32 +204,6 @@ export default function HomeMain({ navigation }) {
                 updateNutrition(meal.meal);
                 saveMealToLocal(type, meal);
             }
-        } 
-        else {
-            console.log("No such document!");
-        }
-    }
-    
-    const getData = async () => {
-        let docRef, docSnap;
-        try {
-            docRef = doc(db, "users", user.uid);
-            docSnap = await getDoc(docRef);
-        }
-        catch (error) {
-            Alert.alert('Oops, we cannot retrieve your data', 'Due inconsistent internet connection, we cannot fetch the data you need. Please refresh the screen to try again.');
-        }
-
-        if (docSnap) {
-            let userData = docSnap.data();
-            console.log("Document from DB:", userData);
-            let {tdee, carb, protein, fat} = getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
-            setkcalTotal(tdee);
-            setcarbTotal(carb);
-            setproteinTotal(protein);
-            setfatTotal(fat);
-            // Save data to local
-            storeDataLocal(userData);
         } 
         else {
             console.log("No such document!");

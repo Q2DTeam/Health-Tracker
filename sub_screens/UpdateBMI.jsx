@@ -28,7 +28,7 @@ const bmiSchema = yup.object({
 });
 
 
-export default function UpdateBMI() {
+export default function UpdateBMI({ hideModal }) {
     const [user, setUser] = React.useState(auth.currentUser);
 
     const [gender, setGender] = React.useState(true);
@@ -80,7 +80,6 @@ export default function UpdateBMI() {
                 // value previously stored
                 const userData = JSON.parse(value);
                 if (user.uid == userData.id) {
-                    console.log("Data fetched, id matched: ", userData);
                     setAge(userData.age);
                     setWeight(userData.weight);
                     setHeight(userData.height);
@@ -124,15 +123,11 @@ export default function UpdateBMI() {
             // Save data to database
             await setDoc(doc(db, "users", user.uid), newData, { merge: true });
             // Save data to local
-            storeDataLocal(newData);
-            console.log("New data: ", newData);
+            await storeDataLocal(newData);
+            hideModal();
         } catch (e) {
             console.error("Error adding document: ", e);
         }
-    }
-
-    const goBack = () => {
-        navigation.goBack();
     }
 
     React.useEffect(() => {
@@ -144,6 +139,20 @@ export default function UpdateBMI() {
         if (user !== undefined)
             getDataLocal();
     }, [user]);
+
+    function Header() {
+        
+        return (
+            <View style={[globalStyles.header, {flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingBottom: 15}]}>
+                <TouchableOpacity onPress={hideModal} style={{position: 'absolute', left: 10, top: 0}}>
+                    <MaterialCommunityIcons name='chevron-left' size={30} color='#fff' />
+                </TouchableOpacity>
+                <View style={{flex: 1, alignItems: 'center'}}>
+                    <Text style={globalStyles.headerTitle}>Update your BMI</Text>
+                </View>
+            </View>
+        )
+    }
     
     function GoalButton({desireVal, title, subtitle}) {
         return (
@@ -223,6 +232,7 @@ export default function UpdateBMI() {
     // Main return
     return (
         <View style={globalStyles.container}>
+            <Header />
             <Formik
                 initialValues={{
                     minPerDay: '', 

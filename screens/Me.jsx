@@ -123,6 +123,10 @@ export default function Me({ navigation }) {
         setBMIModal(true);
     }
 
+    const handleHideBMIModal = () => {
+        setBMIModal(false);
+    }
+
     useEffect(() => {
         const subscriber = auth.onAuthStateChanged((val) => {setUser(val)});
         return subscriber;
@@ -133,23 +137,6 @@ export default function Me({ navigation }) {
             getDataLocal();
     }, [user]);
 
-    function UpdateBMIHeader() {
-        const handleHideBMIModal = () => {
-            setBMIModal(false);
-        }
-        
-        return (
-            <View style={[globalStyles.header, {flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingBottom: 10}]}>
-                <TouchableOpacity style={globalStyles.backButton} onPress={handleHideBMIModal}>
-                    <MaterialCommunityIcons name='chevron-left' size={30} />
-                </TouchableOpacity>
-                <View style={{flex: 1, alignItems: 'center'}}>
-                    <Text style={globalStyles.headerTitle}>Update your BMI</Text>
-                </View>
-            </View>
-        )
-    }
-
     function UpdateBMIModal() {
         return (
             <Modal
@@ -157,8 +144,9 @@ export default function Me({ navigation }) {
                 visible={bmiModal}
             >
                 <View style={{flex: 1, backgroundColor: globalColors.backgroundGray}}>
-                    <UpdateBMIHeader />
-                    <UpdateBMI />
+                    <UpdateBMI 
+                        hideModal={handleHideBMIModal}
+                    />
                 </View>
             </Modal>
         )

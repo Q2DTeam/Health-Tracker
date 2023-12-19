@@ -41,7 +41,6 @@ export default function Signup({navigation}) {
             updateProfile(auth.currentUser, {
                 displayName: values.username,
             });
-            Alert.alert('User registered successfully!');
             setBMIModal(true);
         })
         .catch(() => {
@@ -49,21 +48,9 @@ export default function Signup({navigation}) {
         });
     }
 
-    function UpdateBMIHeader() {
-        const handleHideBMIModal = () => {
-            setBMIModal(false);
-        }
-
-        return (
-            <View style={[globalStyles.header, {height: 60, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20,}]}>
-                <TouchableOpacity style={globalStyles.backButton} onPress={handleHideBMIModal}>
-                    <MaterialCommunityIcons name='chevron-left' size={30} />
-                </TouchableOpacity>
-                <View style={{flex: 1, alignItems: 'center'}}>
-                    <Text style={globalStyles.headerTitle}>Update your BMI</Text>
-                </View>
-            </View>
-        )
+    const handleHideBMIModal = () => {
+        Alert.alert("Registration completed", "Your user profile has been created successfully.");
+        navigation.navigate('Main');
     }
 
     function UpdateBMIModal() {
@@ -73,8 +60,9 @@ export default function Signup({navigation}) {
                 visible={bmiModal}
             >
                 <View style={{flex: 1}}>
-                    <UpdateBMIHeader />
-                    <UpdateBMI />
+                    <UpdateBMI 
+                        hideModal={handleHideBMIModal}
+                    />
                 </View>
             </Modal>
         )

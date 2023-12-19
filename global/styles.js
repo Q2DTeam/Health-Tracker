@@ -28,17 +28,10 @@ export const globalStyles = StyleSheet.create({
         borderBottomRightRadius: 20,
         overflow: 'hidden',
     },
-    backButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     headerTitle: {
         color: '#fff',
         fontSize: 20,
-        fontFamily: 'inter-regular',
+        fontFamily: 'inter-bold',
     },
     searchBar: {
         height: 44,
