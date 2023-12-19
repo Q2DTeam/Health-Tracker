@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, Text, View, StyleSheet, TouchableOpacity, TextInput, RefreshControl, Alert } from 'react-native';
+import { ScrollView, Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { Formik } from 'formik';
 import { auth } from '../utils/firebase';
@@ -38,9 +38,37 @@ const foodSchema = yup.object({
 });
 
 
-export default function CreateFood({ cancelFunc }) {
-    const [user, setUser] = useState(auth.currentUser);
+export default function CreateFood({ cancelFunc, foods, setFoods }) {
+    const user = auth.currentUser;
     const [measure, setMeasure] = useState('g');
+
+    const saveFoodToLocal = async(newFood) => {
+        const custom_food = {
+            userID: user.uid,
+            foods: [newFood, ...foods]
+        }
+        try {
+            const jsonValue = JSON.stringify(custom_food);
+            await AsyncStorage.setItem('custom_foods', jsonValue);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const saveFoodToDb = async(newFood) => {
+        const custom_food = {
+            userID: user.uid,
+            foods: [newFood, ...foods]
+        }
+        const docID = user.uid;
+        try {
+            await setDoc(doc(db, "custom_foods", docID), custom_food, { merge: true });
+        }
+        catch(err) {
+            console.log("Error saving custom food to firestore: ", err);
+        }
+    }
+
 
     const saveFood = (values) => {
         if (values.unit.length == 0 && values.serving.length == 0) {
@@ -50,25 +78,37 @@ export default function CreateFood({ cancelFunc }) {
             );
             return;
         }
-        let serving = '';
+        let serving = 1;
+        let unit = '';
         if (values.unit.length > 0 && values.serving.length > 0) {
-            serving = `${values.unit} (${values.serving})`;
+            unit = `${values.unit} (${values.serving})`;
         }
         else if (values.unit.length > 0) {
-            serving = values.unit;
+            unit = values.unit;
         }
         else {
             serving = values.serving;
+            unit = measure;
         }
         const newFood = {
             id: Math.floor(Math.random() * 1001),
-            
+            name: values.name,
+            serving: serving,
+            unit: unit,
+            calorie: values.calorie,
+            fat: values.fat,
+            protein: values.protein,
+            carb: values.carb,
         }
+        saveFoodToLocal(newFood);
+        saveFoodToDb(newFood);
+        setFoods(old => [newFood, ...old]);
+        cancelFunc();
     }
 
     function Header() {
         return (
-            <View style={[globalStyles.header, {paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center'}]}>
+            <View style={[globalStyles.header, {paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center'}]}>
                 <TouchableOpacity onPress={cancelFunc}>
                     <FontAwesome name='remove' color='#fff' size={26} />
                 </TouchableOpacity>
@@ -78,7 +118,9 @@ export default function CreateFood({ cancelFunc }) {
     }
 
     return (
-        <View style={globalStyles.container}>
+        <KeyboardAvoidingView style={globalStyles.container}
+            behavior='padding'
+        >
             <StatusBar style='light' />
             <Header />
             <View style={{alignItems: 'center', flex: 1}}>
@@ -99,9 +141,9 @@ export default function CreateFood({ cancelFunc }) {
             >
             {
                 ({handleChange, handleSubmit, values}) => (
-                <View style={{padding: 20, width: '100%'}}>
+                <ScrollView style={{width: '100%', paddingTop: 20,}}>
                     <Text style={styles.sectionHeader}>Basic Information</Text>
-                    <View style={styles.basicContainer}>
+                    <View style={[styles.basicContainer, {padding: 20, paddingBottom: 20,}]}>
                         <TextInput
                             placeholder='Name of Food'
                             style={inputStyles.name}
@@ -115,7 +157,7 @@ export default function CreateFood({ cancelFunc }) {
                         <View style={styles.servingContainer}>
                             <Text style={styles.servingTitle}>Serving unit</Text>
                             <TextInput
-                                placeholder='e.g. bát, đĩa, hộp (optional)'
+                                placeholder='e.g. bát, đĩa, hộp'
                                 style={inputStyles.serving}
                                 value={values.unit}
                                 onChangeText={handleChange('unit')}
@@ -126,7 +168,7 @@ export default function CreateFood({ cancelFunc }) {
                                 <Text style={styles.servingTitle}>Serving size</Text>
                                 <TextInput
                                     placeholder='100'
-                                    style={inputStyles.serving}
+                                    style={[inputStyles.serving, {width: 40}]}
                                     value={values.serving}
                                     onChangeText={handleChange('serving')}
                                 />
@@ -200,12 +242,13 @@ export default function CreateFood({ cancelFunc }) {
                             <Text style={{color: '#fff', fontSize: 20,}}>Create</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                    <View style={{height: 40}} />
+                </ScrollView>
                 )
             }
             </Formik>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -225,12 +268,27 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     sectionHeader: {
+        marginHorizontal: 20,
         fontFamily: 'inter-semibold',
         fontSize: 24,
         color: '#fff',
+        marginBottom: 15,
     },
     basicContainer: {
+        marginHorizontal: 20,
         marginBottom: 20,
+        padding: 10,
+        paddingBottom: 0,
+        borderRadius: 10,
+        backgroundColor: '#fff',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     servingContainer: {
         flexDirection: 'row', 
@@ -261,6 +319,7 @@ const inputStyles = StyleSheet.create({
         fontSize: 16,
         borderBottomWidth: 1,
         padding: 5,
+        width: 130,
     },
     measureBtn: {
         padding: 10,
