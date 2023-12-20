@@ -6,7 +6,7 @@ export const globalColors = {
     'lunchOrange': '#FFA935',
     'dinnerCyan': '#12E5B0',
     'snackPurple': '#B575E7',
-    'backgroundGray': '#C2EDB5',
+    'backgroundGray': '#F2F5FC',
     'textGray': '#9EA9C3',
     'chillGreen': '#91C788',
     'chillCyan': '#2FC9EF',
