@@ -57,19 +57,16 @@ const actions = [
 
 export default function ActionButton({ handleNavigation }) {
 
-    return (
-        <TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
-            <FloatingAction
-                actions={actions}
-                onPressItem={name => {
-                    handleNavigation(name);
-                }}
-                color={globalColors.chillCyan}
-                distanceToEdge={15}
-                overlayColor='rgba(255, 255, 255, 0.75)'
-                showBackground={true}
-            />
-        </TouchableWithoutFeedback>
+    return (<TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
+        <FloatingAction
+          actions={actions}
+          onPressItem={handleActionPress}
+          color={globalColors.chillCyan}
+          distanceToEdge={15}
+          overlayColor='rgba(255, 255, 255, 0.75)'
+          showBackground={true}
+        />
+      </TouchableWithoutFeedback>
     );
 }
 
