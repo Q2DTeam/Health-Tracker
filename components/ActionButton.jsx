@@ -54,7 +54,7 @@ const actions = [
         position: 5
     },
 ];
-
+//Xu ly su kien
 export default function ActionButton({ handleNavigation }) {
 
     return (<TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
