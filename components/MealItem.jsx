@@ -30,17 +30,29 @@ export default function MealItem({ type, handleNav, meal }) {
     }
 
     return (
-        <ImageBackground style={styles.mealContainer} source={image} alt='Background image' resizeMode='cover'>
-            <View style={styles.titleContainer}>
-                <View style={{marginLeft: 20}}>
-                    <Text style={{ fontSize: 18, fontFamily: 'inter-semibold' }}>{type[0].toUpperCase() + type.slice(1)}</Text>
-                    <Text>{sum} kcal</Text>
+        <View style={{
+            shadowColor: "#000",
+            shadowOffset: {
+                width: 0,
+                height: 5,
+            },
+            shadowOpacity: 0.34,
+            shadowRadius: 6.27,
+            elevation: 10,
+        }}
+        >
+            <ImageBackground style={styles.mealContainer} source={image} alt='Background image' resizeMode='cover'>
+                <View style={styles.titleContainer}>
+                    <View style={{marginLeft: 20}}>
+                        <Text style={{ fontSize: 18, fontFamily: 'inter-semibold' }}>{type[0].toUpperCase() + type.slice(1)}</Text>
+                        <Text>{sum} kcal</Text>
+                    </View>
+                    <TouchableOpacity style={styles.detailBtn} onPress={handleNav}>
+                        <MaterialCommunityIcons name='pencil-box' size={30} />
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.detailBtn} onPress={handleNav}>
-                    <MaterialCommunityIcons name='pencil-box' size={30} />
-                </TouchableOpacity>
-            </View>
-        </ImageBackground>
+            </ImageBackground>
+        </View>
     )
 }
 
