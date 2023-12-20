@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 
+//Declare color
 export const globalColors = {
     'vibrantBlue': '#0099FF',
     'breakfastGreen': '#2ED12E',

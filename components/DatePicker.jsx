@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import moment from 'moment'; 
 
-
+//Fix calender
 export default function DatePicker({ currentDate, setShowCalendar }) {
     const weekDay = moment(currentDate, 'YYYY-MM-DD').format('dddd');
     const date = moment(currentDate, 'YYYY-MM-DD').format('MMM Do');

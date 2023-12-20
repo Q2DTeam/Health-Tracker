@@ -14,9 +14,9 @@ const Tab = createBottomTabNavigator();
 export default function Navigation() {
   return (
       <Tab.Navigator 
-        initialRouteName='Home'
+        initialRouteName='Home'  //Tab ban dau hien thi
         screenOptions={({ route, navigation }) => ({
-          tabBarIcon: ({ color, focused, size }) => {
+          tabBarIcon: ({ color, focused, size }) => {   //Xac dinh tab duong dan
             let iconName;
             if (route.name === 'Home') {
                 iconName = 'home';
