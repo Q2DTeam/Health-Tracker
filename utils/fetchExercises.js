@@ -1,5 +1,5 @@
 export const fetchExercises = async() => {
-    const url = 'https://script.google.com/a/macros/gm.uit.edu.vn/s/AKfycbwHLPLB1Ff-HZFHt0bfKBumQjflPPzIWbXdpjwM0Gp1PYUF8hx67yuWnFFUfzTI9Dw/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbyh9PCaqohd6VmZRMrk6RCfCw5zNzj0nOvHcRAdATgYZCVsv78D7VQ-Fi_59QbSOwA/exec';
 
     try {
         const response = await fetch(url);
