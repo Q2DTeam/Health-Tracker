@@ -235,7 +235,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
     }
 
     return (
-        <View style={[globalStyles.container, {}]}>
+        <View style={globalStyles.container}>
             <StatusBar style='light' />
             <Header title={title}/>
             <View style={styles.mid}>
