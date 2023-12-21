@@ -139,7 +139,7 @@ export default function MyMeals() {
         }
 
         return (
-            <View style={[globalStyles.searchBar, {backgroundColor: '#fff', borderRadius: 25, borderBottomWidth: 0, paddingHorizontal: 10, width: 340}]}>
+            <View style={[globalStyles.searchBar, {marginRight: 10, backgroundColor: '#fff', borderRadius: 25, borderBottomWidth: 0, paddingHorizontal: 10, flex: 1}]}>
                 <MaterialCommunityIcons name='magnify' size={26} />
                 <TextInput 
                     style={globalStyles.searchInput} 
