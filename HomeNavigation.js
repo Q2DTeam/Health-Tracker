@@ -7,6 +7,7 @@ const Stack = createNativeStackNavigator();
 // Import Stack screens
 import HomeMain from './screens/HomeMain';
 import MealInfo from './sub_screens/MealInfo';
+import ActivityInfo from './sub_screens/ActivityInfo';
 
 
 export default function HomeNavigation() {
@@ -20,7 +21,16 @@ export default function HomeNavigation() {
             <Stack.Screen 
                 name="MealInfo" 
                 component={MealInfo}
-                options={addMealOptions} 
+                options={{
+                    animation: 'simple_push'
+                }}
+            />
+            <Stack.Screen 
+                name="ActivityInfo" 
+                component={ActivityInfo}
+                options={{
+                    animation: 'simple_push'
+                }}
             />
         </Stack.Navigator>
     )
@@ -28,8 +38,4 @@ export default function HomeNavigation() {
 
 const homeOptions = {
     headerShown: false,
-};
-
-const addMealOptions = {
-    animation: 'slide_from_bottom',
 };
