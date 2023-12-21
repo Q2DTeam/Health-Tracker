@@ -317,13 +317,20 @@ export default function HomeMain({ navigation }) {
 
     function ActivityTracker() {
         const bg = require('../assets/images/activity_bg.png');
+
+        const handleActivityInfo = () => {
+            navigation.navigate('ActivityInfo', {
+                date: date
+            });
+        }
+
         return (
             <ImageBackground source={bg} alt='Background image' style={activityStyles.activity} resizeMode='cover'>
                 <View style={activityStyles.container}>
                     <Text style={activityStyles.exercises}>{3} Exercises</Text>
                     <Text style={activityStyles.duration}>{75} Minutes</Text>
                     <View>
-                        <TouchableOpacity style={activityStyles.button}>
+                        <TouchableOpacity style={activityStyles.button} onPress={handleActivityInfo}>
                             <Text style={{color: globalColors.calmRed}}>View all</Text>
                         </TouchableOpacity>
                     </View>
@@ -486,7 +493,6 @@ const activityStyles = StyleSheet.create({
         marginTop: 5,
         paddingTop: 40,
         paddingRight: 180,
-        paddingLeft: 20
     },
     container: {
         height: 130,
@@ -510,6 +516,14 @@ const activityStyles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#fff',
         borderRadius: 25,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.22,
+        shadowRadius: 2.22,
+        elevation: 3,
     }
 });
 
