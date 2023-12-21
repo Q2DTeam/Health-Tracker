@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useReducer} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, Alert, Modal, TouchableOpacity, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert, Modal, TouchableOpacity, RefreshControl, ImageBackground } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
@@ -34,6 +34,8 @@ export default function HomeMain({ navigation }) {
     const [lunch, setLunch] = useState();
     const [dinner, setDinner] = useState();
     const [snack, setSnack] = useState();
+
+    const [exercises, setExercises] = useState();
 
     const [calenVisible, setCalenVisible] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
@@ -312,6 +314,23 @@ export default function HomeMain({ navigation }) {
             </Modal>
         )
     }
+
+    function ActivityTracker() {
+        const bg = require('../assets/images/activity_bg.png');
+        return (
+            <ImageBackground source={bg} alt='Background image' style={activityStyles.activity} resizeMode='cover'>
+                <View style={activityStyles.container}>
+                    <Text style={activityStyles.exercises}>{3} Exercises</Text>
+                    <Text style={activityStyles.duration}>{75} Minutes</Text>
+                    <View>
+                        <TouchableOpacity style={activityStyles.button}>
+                            <Text style={{color: globalColors.calmRed}}>View all</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </ImageBackground>
+        )
+    }
     
     function handleSetCalen() {
         setCalenVisible(true);
@@ -396,6 +415,17 @@ export default function HomeMain({ navigation }) {
                         meal={snack}
                     />
                 </View>
+                <View>
+                    <Text style={{
+                        fontSize: 20,
+                        fontFamily: 'inter-bold',
+                        marginTop: 20
+                    }}>
+                        Activities
+                    </Text>
+                    <ActivityTracker />
+                </View>
+                <View style={{height: 20}} />
             </ScrollView>
         </View>
     )
@@ -449,6 +479,39 @@ const styles = StyleSheet.create({
     },
 });
 
+const activityStyles = StyleSheet.create({
+    activity: {
+        width: 334,
+        height: 193,
+        marginTop: 5,
+        paddingTop: 40,
+        paddingRight: 180,
+        paddingLeft: 20
+    },
+    container: {
+        height: 130,
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    exercises: {
+        fontFamily: 'inter-semibold',
+        fontSize: 18,
+        color: '#fff',
+    },
+    duration: {
+        fontFamily: 'inter-bold',
+        fontSize: 20,
+        color: '#fff',
+    },
+    button: {
+        height: 30,
+        width: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 25,
+    }
+});
 
 const calenStyles = StyleSheet.create({
     centeredView: {

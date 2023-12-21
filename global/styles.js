@@ -14,7 +14,7 @@ export const globalColors = {
     'darkerGreen': '#72B766',
     'darkerCyan': '#42cd8c',
     'backgroundCyan': '#60dda3',
-    'calmRed': '#FF8473',
+    'calmRed': '#FF5F79',
 }
 
 export const globalStyles = StyleSheet.create({
