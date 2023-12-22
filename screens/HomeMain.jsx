@@ -35,7 +35,10 @@ export default function HomeMain({ navigation }) {
     const [dinner, setDinner] = useState();
     const [snack, setSnack] = useState();
 
+    // Exercises
     const [exercises, setExercises] = useState();
+    const [exTime, setExTime] = useState(0);
+    const [exCount, setExCount] = useState(0);
 
     const [calenVisible, setCalenVisible] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
@@ -212,6 +215,66 @@ export default function HomeMain({ navigation }) {
         }
     }
 
+    const updateExercises = (exs) => {
+        let time = 0;
+        let count = exs.length;
+        let burned = 0;
+        exs.map((item) => {
+            time += item.duration;
+            burned += item.kcal;
+        })
+        setExCount(count);
+        setExTime(time);
+        setkcalBurned(burned);
+    }
+
+    const getExercisesLocal = async() => {
+        try {
+            const value = await AsyncStorage.getItem('activities');
+            if (value !== null) {
+                const activity = JSON.parse(value);
+                if (activity.date == date && activity.userID == user.uid) {
+                    setExercises(activity.exercises);
+                    if (activity.exercises !== null && activity.exercises !== undefined) {
+                        updateExercises(activity.exercises);
+                    }
+                }
+                else {
+                    console.log("ID or date not matched");
+                    await getExercises();
+                }
+            }
+            else {
+                await getExercises();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getExercises = async() => {
+        let docRef, docSnap;
+        const activityID = `${user.uid}-${date}`;
+        try {
+            docRef = doc(db, "user_activities", activityID);
+            docSnap = await getDoc(docRef);
+        }
+        catch (error) {
+            Alert.alert('Oops, we cannot retrieve your data', 'Due inconsistent internet connection, we cannot fetch the data you need. Please refresh the screen to try again.');
+        }
+
+        if (docSnap) {
+            let activity = docSnap.data();
+            setExercises(activity.exercises);
+            if (activity.exercises !== null && activity.exercises !== undefined) {
+                updateExercises(activity.exercises);
+            }
+        } 
+        else {
+            console.log("No such document!");
+        }
+    }
+
     useEffect(() => {
         const subscriber = auth.onAuthStateChanged((val) => {setUser(val)});
         return subscriber;
@@ -229,6 +292,7 @@ export default function HomeMain({ navigation }) {
             getMealLocal('lunch');
             getMealLocal('dinner');
             getMealLocal('snack');
+            getExercisesLocal();
         }
     }, [user, date]);
 
@@ -239,6 +303,7 @@ export default function HomeMain({ navigation }) {
         getMealLocal('lunch');
         getMealLocal('dinner');
         getMealLocal('snack');
+        getExercisesLocal();
         setTimeout(() => {
           setRefreshing(false);
         }, 2000);
@@ -327,8 +392,8 @@ export default function HomeMain({ navigation }) {
         return (
             <ImageBackground source={bg} alt='Background image' style={activityStyles.activity} resizeMode='cover'>
                 <View style={activityStyles.container}>
-                    <Text style={activityStyles.exercises}>{3} Exercises</Text>
-                    <Text style={activityStyles.duration}>{75} Minutes</Text>
+                    <Text style={activityStyles.exercises}>{exCount} Exercises</Text>
+                    <Text style={activityStyles.duration}>{exTime} Minutes</Text>
                     <View>
                         <TouchableOpacity style={activityStyles.button} onPress={handleActivityInfo}>
                             <Text style={{color: globalColors.calmRed}}>View all</Text>
