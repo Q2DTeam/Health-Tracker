@@ -53,6 +53,15 @@ const actions = [
         textColor: '#fff',
         position: 5
     },
+    {
+        text: "BimBim",
+        icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
+        name: "snack",
+        color: globalColors.snackPurple,
+        textBackground: globalColors.snackPurple,
+        textColor: '#fff',
+        position: 5
+    },
 ];
 //Xu ly su kien
 export default function ActionButton({ handleNavigation }) {
