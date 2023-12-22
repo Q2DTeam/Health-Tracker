@@ -134,9 +134,10 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
             <View style={globalStyles.header}>
                 <View style={styles.top}>
                     <TouchableOpacity style={globalStyles.backButton} onPress={handleGoBack}>
-                        <MaterialCommunityIcons name='chevron-left' size={30} />
+                        <MaterialCommunityIcons name='chevron-left' size={40} color='#fff' />
                     </TouchableOpacity>
-                    <Text style={[globalStyles.headerTitle, {marginLeft: 30}]}>Add food to your {title}</Text>
+                    <Text style={globalStyles.headerTitle}>Add food to your {title}</Text>
+                    <View style={{width: 30}} />
                 </View>
             </View>
         )
@@ -271,6 +272,7 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingTop: 0,
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
     },
     mid: {

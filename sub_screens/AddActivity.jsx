@@ -82,10 +82,11 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
         return (
             <View style={[globalStyles.header, {backgroundColor: globalColors.calmRed}]}>
                 <View style={styles.top}>
-                    <TouchableOpacity style={globalStyles.backButton} onPress={handleGoBack}>
-                        <MaterialCommunityIcons name='chevron-left' size={30} color='#fff' />
+                    <TouchableOpacity onPress={handleGoBack}>
+                        <MaterialCommunityIcons name='chevron-left' size={40} color='#fff' />
                     </TouchableOpacity>
-                    <Text style={[globalStyles.headerTitle, {marginLeft: 30}]}>Add a new Activity</Text>
+                    <Text style={globalStyles.headerTitle}>Add a new Activity</Text>
+                    <View style={{width: 30}} />
                 </View>
             </View>
         )
@@ -174,7 +175,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                     <View style={styles.titleContainer}>
                         <TouchableOpacity style={{marginLeft: 20}}>
                             <Text style={{ fontSize: 18, fontFamily: 'inter-semibold', color: '#fff' }}>{name}</Text>
-                            <Text style={{ color: '#fff' }}>{burn_rate} kcal / {default_duration} min</Text>
+                            <Text style={{ fontFamily: 'inter-regular', color: '#fff' }}>{burn_rate} kcal - {default_duration} min</Text>
                         </TouchableOpacity>
                         {
                             adding ? (
@@ -226,6 +227,7 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingTop: 0,
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
     },
     mid: {

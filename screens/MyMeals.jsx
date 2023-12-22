@@ -241,7 +241,8 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 24,
         fontFamily: 'inter-bold',
-        marginVertical: 10,
+        marginTop: 15,
+        marginBottom: 10,
         marginHorizontal: 10,
     },
     headerBottom: {

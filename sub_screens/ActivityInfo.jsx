@@ -101,7 +101,7 @@ export default function ActivityInfo({ navigation, route }) {
                         <MaterialCommunityIcons name='chevron-left' size={40} color='#fff' />
                     </TouchableOpacity>
                     <Text style={globalStyles.headerTitle}>Manage your activities</Text>
-                    <Text style={styles.kcalText}>{0} kcal</Text>
+                    <View style={{width: 30}} />
                 </View>
             </View>
         )
