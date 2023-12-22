@@ -45,6 +45,15 @@ const actions = [
         position: 4
     },
     {
+        text: "Brunch",
+        icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
+        name: "dinner",
+        color: globalColors.dinnerCyan,
+        textBackground: globalColors.dinnerCyan,
+        textColor: '#fff',
+        position: 4
+    },
+    {
         text: "Snack",
         icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
         name: "snack",
