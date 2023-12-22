@@ -8,27 +8,70 @@ import { globalColors } from '../global/styles';
 
 // Action buttons components
 const actions = [
-    createAction("Exercise", 'dumbbell', 'exercise', globalColors.vibrantBlue, 1),
-    createAction("Breakfast", 'coffee', 'breakfast', globalColors.breakfastGreen, 2),
-    createAction("Lunch", 'food-drumstick', 'lunch', globalColors.lunchOrange, 3),
-    createAction("Dinner", 'food-turkey', 'dinner', globalColors.dinnerCyan, 4),
-    createAction("Brunch", 'food-turkey', 'brunch', globalColors.dinnerCyan, 4),
-    createAction("Snack", 'food-apple', 'snack', globalColors.snackPurple, 5),
-    createAction("BimBim", 'food-apple', 'snack', globalColors.snackPurple, 5),
-];
-
-function createAction(text, iconName, name, color, position) {
-    return {
-        text: text,
-        icon: <MaterialCommunityIcons name={iconName} size={24} color='#fff' />,
-        name: name,
-        color: color,
-        textBackground: color,
+    {
+        text: "Exercise",
+        icon: <MaterialCommunityIcons name='dumbbell' size={24} color='#fff' />,
+        name: "exercise",
+        color: globalColors.vibrantBlue,
+        textBackground: globalColors.vibrantBlue,
         textColor: '#fff',
-        position: position
-    };
-}
-
+        position: 1
+    },
+    {
+        text: "Breakfast",
+        icon: <MaterialCommunityIcons name='coffee' size={24} color='#fff' />,
+        name: "breakfast",
+        color: globalColors.breakfastGreen,
+        textBackground: globalColors.breakfastGreen,
+        textColor: '#fff',
+        position: 2
+    },
+    {
+        text: "Lunch",
+        icon: <MaterialCommunityIcons name='food-drumstick' size={24} color='#fff' />,
+        name: "lunch",
+        color: globalColors.lunchOrange,
+        textBackground: globalColors.lunchOrange,
+        textColor: '#fff',
+        position: 3
+    },
+    {
+        text: "Dinner",
+        icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
+        name: "dinner",
+        color: globalColors.dinnerCyan,
+        textBackground: globalColors.dinnerCyan,
+        textColor: '#fff',
+        position: 4
+    },
+    {
+        text: "Brunch",
+        icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
+        name: "dinner",
+        color: globalColors.dinnerCyan,
+        textBackground: globalColors.dinnerCyan,
+        textColor: '#fff',
+        position: 4
+    },
+    {
+        text: "Snack",
+        icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
+        name: "snack",
+        color: globalColors.snackPurple,
+        textBackground: globalColors.snackPurple,
+        textColor: '#fff',
+        position: 5
+    },
+    {
+        text: "BimBim",
+        icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
+        name: "snack",
+        color: globalColors.snackPurple,
+        textBackground: globalColors.snackPurple,
+        textColor: '#fff',
+        position: 5
+    },
+];
 //Xu ly su kien
 export default function ActionButton({ handleNavigation }) {
 
