@@ -52,6 +52,19 @@ export default function ActionButton({ handleNavigation }) {
     );
 }
 
+export default function EventButton({ handleNavigation }) {
+
+    return (<TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
+        <FloatingAction
+          actions={actions}
+          color={globalColors.chillCyan}
+          distanceToEdge={15}
+          overlayColor='rgba(255, 255, 255, 0.75)'
+          showBackground={true}
+        />
+      </TouchableWithoutFeedback>
+    );
+}
 
 
 const styles = StyleSheet.create({
