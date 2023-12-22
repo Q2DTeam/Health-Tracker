@@ -83,7 +83,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
             <View style={[globalStyles.header, {backgroundColor: globalColors.calmRed}]}>
                 <View style={styles.top}>
                     <TouchableOpacity style={globalStyles.backButton} onPress={handleGoBack}>
-                        <MaterialCommunityIcons name='chevron-left' size={30} />
+                        <MaterialCommunityIcons name='chevron-left' size={30} color='#fff' />
                     </TouchableOpacity>
                     <Text style={[globalStyles.headerTitle, {marginLeft: 30}]}>Add a new Activity</Text>
                 </View>
@@ -128,6 +128,36 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                 break;
         }
 
+        const handleAdd = () => {
+            modified();
+            setAdding(true);
+
+            setTimeout(() => {
+                const newExercise = {
+                    id: id,
+                    name: name,
+                    kcal: burn_rate,
+                    duration: default_duration
+                }
+                let index = temp.findIndex(item => item.id === newExercise.id);
+                if (index == -1) {
+                    setTemp(old => [newExercise, ...old]);
+                }
+                else {
+                    const oldItem = temp[index];
+                    const newTemp = temp.filter((item) => item.id != newExercise.id);
+                    newExercise.kcal += oldItem.kcal;
+                    newExercise.duration += oldItem.duration;
+                    setTemp([newExercise, ...newTemp]);
+                }
+                setAdding(false);
+                Toast.show({
+                    type: 'success',
+                    text1: 'Exercise was added successfully to your diary',
+                });
+            }, 1000);
+        }
+
         return (
             <View style={{
                 shadowColor: "#000",
@@ -150,7 +180,8 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                             adding ? (
                                 <ActivityIndicator size="large" color={globalColors.calmRed} />
                             ) : (
-                                <TouchableOpacity style={[globalStyles.addButton, {backgroundColor: globalColors.calmRed, marginRight: 10}]}>
+                                <TouchableOpacity style={[globalStyles.addButton, {backgroundColor: globalColors.calmRed}]}
+                                onPress={handleAdd}>
                                     <AntDesign name='plus' size={24} color='#fff' />
                                 </TouchableOpacity>
                             )
@@ -185,6 +216,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                 paddingVertical: 10,
             }}
         />
+        <Toast />
     </View>
     )
 }
@@ -220,6 +252,7 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingRight: 10,
     },
 });

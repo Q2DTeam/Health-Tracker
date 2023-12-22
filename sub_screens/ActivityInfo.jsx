@@ -20,6 +20,28 @@ export default function ActivityInfo({ navigation, route }) {
     const [addModal, setAddModal] = useState(false);
     const [modified, setModified] = useState(false);
 
+    class Record {
+        constructor (userID, date, exercises) {
+            this.userID = userID;
+            this.date = date;
+            this.exercises = exercises;
+        }
+    }
+
+    const recordConverter = {
+        toFirestore: (data) => {
+            return {
+                userID: data.userID,
+                date: data.date,
+                exercises: data.exercises
+            };
+        },
+        fromFirestore: (snapshot, options) => {
+            const data = snapshot.data(options);
+            return new Record(data.userID, data.date, data.exercises);
+        }
+    }
+
     const getRecordLocal = async() => {
         try {
             const value = await AsyncStorage.getItem('activities');
@@ -35,12 +57,32 @@ export default function ActivityInfo({ navigation, route }) {
     }
 
     const saveRecordToDb = async() => {
-
+        const rec = new Record(uid, date, activities);
+        const docID = `${uid}-${date}`;
+        try {
+            await setDoc(doc(db, "user_activities", docID).withConverter(recordConverter), rec);
+            console.log('Act saved to db');
+        }
+        catch(err) {
+            console.log("Error saving activities to firestore");
+        }
     }
 
     const saveRecordToLocal = async() => {
-
+        const rec = new Record(uid, date, activities);
+        const recObj = recordConverter.toFirestore(rec);
+        try {
+            const jsonValue = JSON.stringify(recObj);
+            await AsyncStorage.setItem('activities', jsonValue);
+            console.log(`activities saved to local!`);
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+    useEffect(() => {
+        getRecordLocal();
+    }, [])
 
     function Header() {
 
@@ -131,6 +173,18 @@ export default function ActivityInfo({ navigation, route }) {
             <Header />
             <AddModal />
             <AddButton />
+            <FlatList 
+                data={activities}
+                keyExtractor={(item) => item.id}
+                renderItem={({item}) => (
+                    <ActivityCard
+                        id={item.id} 
+                        name={item.name} 
+                        kcal={item.kcal}
+                        duration={item.duration}
+                    />
+                )}
+            />
         </View>
     )
 }
