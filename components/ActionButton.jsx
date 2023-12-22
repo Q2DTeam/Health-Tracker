@@ -9,42 +9,6 @@ import { globalColors } from '../global/styles';
 // Action buttons components
 const actions = [
     {
-        text: "Exercise",
-        icon: <MaterialCommunityIcons name='dumbbell' size={24} color='#fff' />,
-        name: "exercise",
-        color: globalColors.vibrantBlue,
-        textBackground: globalColors.vibrantBlue,
-        textColor: '#fff',
-        position: 1
-    },
-    {
-        text: "Breakfast",
-        icon: <MaterialCommunityIcons name='coffee' size={24} color='#fff' />,
-        name: "breakfast",
-        color: globalColors.breakfastGreen,
-        textBackground: globalColors.breakfastGreen,
-        textColor: '#fff',
-        position: 2
-    },
-    {
-        text: "Lunch",
-        icon: <MaterialCommunityIcons name='food-drumstick' size={24} color='#fff' />,
-        name: "lunch",
-        color: globalColors.lunchOrange,
-        textBackground: globalColors.lunchOrange,
-        textColor: '#fff',
-        position: 3
-    },
-    {
-        text: "Dinner",
-        icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
-        name: "dinner",
-        color: globalColors.dinnerCyan,
-        textBackground: globalColors.dinnerCyan,
-        textColor: '#fff',
-        position: 4
-    },
-    {
         text: "Brunch",
         icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
         name: "dinner",
@@ -89,20 +53,7 @@ export default function ActionButton({ handleNavigation }) {
 }
 
 
-export default function ActionButton({ handleNavigation }) {
 
-    return (<TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
-        <FloatingAction
-          actions={actions}
-          onPressItem={handleActionPress}
-          color={globalColors.chillCyan}
-          distanceToEdge={15}
-          overlayColor='rgba(255, 255, 255, 0.75)'
-          showBackground={true}
-        />
-      </TouchableWithoutFeedback>
-    );
-}
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
