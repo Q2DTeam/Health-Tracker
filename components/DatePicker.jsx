@@ -12,7 +12,7 @@ export default function DatePicker({ currentDate, setShowCalendar }) {
         <View style={styles.container}>
             <Text style={styles.dateTitle}>{weekDay}</Text>
             <TouchableOpacity style={styles.dateBtn} onPress={setShowCalendar}>
-                <MaterialCommunityIcons name='calendar-blank' color='#000' size={20} />
+                <MaterialCommunityIcons name='calendar-blank' color='#fff' size={26} />
                 <Text style={styles.date}>{date}</Text>
             </TouchableOpacity>
         </View>
