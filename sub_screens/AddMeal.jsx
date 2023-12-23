@@ -19,6 +19,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
     const [foods, setFoods] = useState();
     const [filteredFoods, setFilteredFoods] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [changed, setChanged] = useState(false);
     
     const [foodFetched, setFoodFetched] = useState(false);
 
@@ -130,6 +131,9 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
         const handleGoBack = () => {
             setMeal(temp);
             closeModal();
+            if (changed) {
+                modified();
+            }
         }
 
         return (
@@ -183,7 +187,6 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
         const [customModal, setCustomModal] = useState(false);
 
         const handleAdd = () => {
-            modified();
             setAdding(true);
             
             setTimeout(() => {
@@ -216,6 +219,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                     type: 'success',
                     text1: 'Food was added successfully to your diary',
                 });
+                setChanged(true);
             }, 1000);
         }
 
@@ -246,7 +250,6 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
             }
 
             const handleAddCustom = () => {
-                modified();
                 setCustomAdding(true);
                 
                 setTimeout(() => {
@@ -260,7 +263,6 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                         protein: customPro,
                         fat: customFat
                     }
-                    console.log("newFood: ", newFood);
                     let index = temp.findIndex(item => item.id === newFood.id);
                     if (index == -1) {
                         setTemp(old => [newFood, ...old]);
@@ -281,6 +283,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                         type: 'success',
                         text1: 'Food was added successfully to your diary',
                     });
+                    setChanged(true);
                 }, 1000);
             }
     

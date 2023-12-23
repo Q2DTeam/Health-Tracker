@@ -13,10 +13,10 @@ import { globalColors, globalStyles } from '../global/styles';
 import { StatusBar } from 'expo-status-bar';
 
 export default function AddActivity({ closeModal, activities, setActivities, modified }) {
-    const user = auth.currentUser;
     // exercise from API
     const [exercises, setExercises] = useState();
     const [refreshing, setRefreshing] = useState(false);
+    const [changed, setChanged] = useState(false);
 
     const [temp, setTemp] = useState(activities);
     
@@ -72,6 +72,9 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
         const handleGoBack = () => {
             setActivities(temp);
             closeModal();
+            if (changed) {
+                modified();
+            }
         }
 
         return (
@@ -126,7 +129,6 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
         }
 
         const handleAdd = () => {
-            modified();
             setAdding(true);
 
             setTimeout(() => {
@@ -152,6 +154,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                     type: 'success',
                     text1: 'Exercise was added successfully to your diary',
                 });
+                setChanged(true);
             }, 1000);
         }
 
@@ -179,7 +182,6 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
             }
     
             const handleAddCustom = () => {
-                modified();
                 setCustomAdding(true);
     
                 setTimeout(() => {
@@ -206,6 +208,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                         type: 'success',
                         text1: 'Exercise was added successfully to your diary',
                     });
+                    setChanged(true);
                 }, 1000);
             }
     
