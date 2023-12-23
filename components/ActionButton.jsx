@@ -64,6 +64,36 @@ const actions = [
         icon: <MaterialCommunityIcons name="sleep" color={globalColors.chillCyan} size={20} />,
         name: "sleep",
         position: 8
+    },
+    {
+        style: addButton,
+        text: "Mood",
+        icon: <MaterialCommunityIcons name="emoticon-happy" color={globalColors.chillCyan} size={20} />,
+        name: "mood",
+        position: 9
+    },
+    {
+        styles: addButton,
+        text: "Notes",
+        icon: <MaterialCommunityIcons name="note-text" color={globalColors.chillCyan} size={20} />,
+        name: "notes",
+        position: 10
+
+    },
+    {
+        style: addButton,
+        text: "Medication",
+        icon: <MaterialCommunityIcons name="pill" color={globalColors.chillCyan} size={20} />,
+        name: "medication",
+        position: 11
+    },
+    {
+        style: addButton,
+        text: "Symptoms",
+        icon: <MaterialCommunityIcons name="emoticon-sad" color={globalColors.chillCyan} size={20} />,
+        name: "symptoms",
+        position: 12
+        
     }
 
 ];
