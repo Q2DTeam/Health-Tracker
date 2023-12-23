@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { Modal, StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, ActivityIndicator, RefreshControl, Platform } from 'react-native';
+import { MaterialCommunityIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { fetchFoods } from '../utils/fetchFoods';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import PieChart from 'react-native-pie-chart'
+import { BlurView } from 'expo-blur';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
@@ -106,11 +108,6 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
         }
     }
 
-    const handleGoBack = () => {
-        setMeal(temp);
-        closeModal();
-    }
-
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         getFoods();
@@ -125,11 +122,16 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
 
     useEffect(() => {
         if (foods !== undefined) {
-            getCustomFoodsLocal();
+            //getCustomFoodsLocal();
         }
     }, [foodFetched]);
 
     function Header({ title }) {
+        const handleGoBack = () => {
+            setMeal(temp);
+            closeModal();
+        }
+
         return (
             <View style={globalStyles.header}>
                 <View style={styles.top}>
@@ -178,6 +180,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
 
     function AddMealItem({ id, name, kcal, carb, protein, fat, serving, unit }) {
         const [adding, setAdding] = useState(false);
+        const [customModal, setCustomModal] = useState(false);
 
         const handleAdd = () => {
             modified();
@@ -209,16 +212,161 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                     setTemp([newFood, ...newTemp]);
                 }
                 setAdding(false);
+                setCustomModal(false);
                 Toast.show({
                     type: 'success',
                     text1: 'Food was added successfully to your diary',
                 });
             }, 1000);
         }
+
+        function AddMealCustom() {
+            const sliceColors = [globalColors.vibrantBlue, globalColors.lunchOrange, globalColors.snackPurple];
+            const [customServ, setCustomServ] = useState(serving.toString());
+            const [customKcal, setCustomKcal] = useState(kcal);
+            const [customCarb, setCustomCarb] = useState(carb);
+            const [customPro, setCustomPro] = useState(protein);
+            const [customFat, setCustomFat] = useState(fat);
     
+            const getRatio = () => {
+                carbEnergy = Math.round(customCarb * 400 / customKcal);
+                proEnergy = Math.round(customPro * 400 / customKcal);
+                fatEnergy = 100 - (carbEnergy + proEnergy);
+                return [carbEnergy, proEnergy, fatEnergy];
+            }
+    
+            const handleChange = (val) => {
+                let ratio = val / serving;
+                setCustomServ(val);
+                setCustomKcal(Math.round(kcal * ratio));
+                setCustomCarb(Math.round(carb * ratio));
+                setCustomPro(Math.round(protein * ratio));
+                setCustomFat(Math.round(fat * ratio));
+            }
+
+            const handleAddCustom = () => {
+                modified();
+                setAdding(true);
+                
+                setTimeout(() => {
+                    const newFood = {
+                        id: id,
+                        name: name,
+                        kcal: customKcal,
+                        serving: customServ,
+                        unit: unit,
+                        carb: customCarb,
+                        protein: customPro,
+                        fat: customFat
+                    }
+                    let index = temp.findIndex(item => item.id === newFood.id);
+                    if (index == -1) {
+                        setTemp(old => [newFood, ...old]);
+                    }
+                    else {
+                        const oldItem = temp[index];
+                        const newTemp = temp.filter((item) => item.id != newFood.id);
+                        newFood.serving += oldItem.serving;
+                        newFood.kcal += oldItem.kcal;
+                        newFood.carb += oldItem.carb;
+                        newFood.fat += oldItem.fat;
+                        newFood.protein += oldItem.protein;
+                        setTemp([newFood, ...newTemp]);
+                    }
+                    setAdding(false);
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Food was added successfully to your diary',
+                    });
+                }, 1000);
+            }
+    
+            let nutritions = getRatio();
+    
+            return (
+                <View style={customCard.container}>
+                    <View style={customCard.header}>
+                        <TouchableOpacity onPress={() => {setCustomModal(false)}}>
+                            <MaterialCommunityIcons name='close' color='#fff' size={24}/>
+                        </TouchableOpacity>
+                        <Text style={customCard.title}>{name}</Text>
+                        <View style={{width: 30}} />
+                    </View>
+                    <View style={customCard.mid}>
+                        <TextInput style={customCard.input}
+                            keyboardType='numeric'
+                            value={customServ}
+                            onChangeText={(val) => {
+                                handleChange(val);
+                            }}
+                        />
+                        <Text style={customCard.servingLabel}>{unit}</Text>
+                    </View>
+                    <View style={styles.wheelContainer}>
+                        <PieChart 
+                            widthAndHeight={150} 
+                            series={nutritions} 
+                            sliceColor={sliceColors}
+                            coverRadius={0.001} 
+                        />
+                        <View style={styles.details}>
+                            <Text style={styles.kcalTitle}>{customKcal} kcal</Text>
+                            <View style={styles.infoItem}>
+                                <FontAwesome name='circle' color={globalColors.vibrantBlue} size={18} />
+                                <Text style={styles.infoName}>Carbs: {customCarb} g</Text>
+                            </View>
+                            <View style={styles.infoItem}>
+                                <FontAwesome name='circle' color={globalColors.lunchOrange} size={18} />
+                                <Text style={styles.infoName}>Protein: {customPro} g</Text>
+                            </View>
+                            <View style={styles.infoItem}>
+                                <FontAwesome name='circle' color={globalColors.snackPurple} size={18} />
+                                <Text style={styles.infoName}>Fats: {customFat} g</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={{flex: 1, alignItems: 'center'}}>
+                        
+                        {
+                            adding ? (
+                                <View style={styles.addBtn}>
+                                   <ActivityIndicator size='small' color='#fff'/> 
+                                </View>
+                            ) : (
+                                <TouchableOpacity style={styles.addBtn} onPress={handleAddCustom}>
+                                    <Text style={{fontSize: 16, color:'#fff'}}>Add</Text>
+                                </TouchableOpacity>
+                            )
+                        }
+                    </View>
+                </View>
+            )
+        }
+
+        function CustomModal() {
+            return (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={customModal}
+                >
+                    <BlurView intensity={20}
+                     style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: 25,
+                    }}>
+                        <AddMealCustom />
+                    </BlurView>
+                </Modal>
+            )
+        }
+
         return (
             <View style={itemStyles.container}>
-                <TouchableOpacity style={itemStyles.infoWrapper}>
+                <CustomModal />
+                <TouchableOpacity style={itemStyles.infoWrapper} onPress={() => {setCustomModal(true)}}>
                     <Text style={itemStyles.foodName}>{name[0].toUpperCase() + name.slice(1)}</Text>
                     <Text style={itemStyles.foodKcal}>{serving} {unit} - {kcal} kcal</Text>
                 </TouchableOpacity>
@@ -234,6 +382,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
             </View>
         )
     }
+
 
     return (
         <View style={globalStyles.container}>
@@ -270,7 +419,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
 const styles = StyleSheet.create({
     top: {
         padding: 10,
-        paddingTop: 0,
+        paddingTop: Platform.OS === 'android' ? 0 : 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -279,7 +428,45 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginTop: 10,
         marginBottom: 20,
-    }
+    },
+    wheelContainer: {
+        width: '100%',
+        height: 180,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+    },
+    details: {
+        justifyContent: 'space-around',
+        height: 180,
+        padding: 10,
+    },
+    infoItem: {
+        minWidth: 100,
+        flexDirection: 'row',
+    },
+    infoName: {
+        marginLeft: 10,
+        fontSize: 16,
+    },
+    kcalTitle: {
+        fontFamily: 'inter-semibold',
+        fontSize: 18,
+        textAlign: 'center',
+        color: globalColors.calmRed
+    },
+    addBtn: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 25,
+        backgroundColor: globalColors.darkerCyan,
+        marginTop: 20, 
+        marginBottom: 10, 
+        width: 100,
+        padding: 10,
+    },
 });
 
 const itemStyles = StyleSheet.create({
@@ -304,5 +491,45 @@ const itemStyles = StyleSheet.create({
     },
     foodKcal: {
         color: globalColors.textGray,
+    },
+});
+
+const customCard = StyleSheet.create({
+    container: {
+        borderRadius: 10,
+        overflow: 'hidden',
+        backgroundColor: '#fff',
+        height: 380,
+    },
+    header: {
+        padding: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: globalColors.darkerCyan
+    },
+    title: {
+        fontFamily: 'inter-semibold',
+        fontSize: 18,
+        color: '#fff'
+    },  
+    mid: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+    },
+    input: {
+        fontFamily: 'inter-regular',
+        fontSize: 16,
+        backgroundColor: globalColors.backgroundGray,
+        width: 100,
+        borderRadius: 25,
+        marginRight: 15,
+        padding: 5,
+        paddingHorizontal: 15,
+    },
+    servingLabel: {
+        fontSize: 18,
     },
 });
