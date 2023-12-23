@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, ActivityIndicator, RefreshControl, ImageBackground } from 'react-native';
+import { Modal, StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, ActivityIndicator, RefreshControl, ImageBackground, Platform } from 'react-native';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { fetchExercises } from '../utils/fetchExercises';
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import { BlurView } from 'expo-blur';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
@@ -15,11 +16,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
     const user = auth.currentUser;
     // exercise from API
     const [exercises, setExercises] = useState();
-
-    const [filteredExercises, setFilteredExercises] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-    
-    const [foodFetched, setFoodFetched] = useState(false);
 
     const [temp, setTemp] = useState(activities);
     
@@ -38,7 +35,6 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
         const data = await fetchExercises();
         if (data != undefined) {
             setExercises(data);
-            setFilteredExercises(data);
 
             // Save API foods to local
             saveExercisesToLocal(data);
@@ -51,7 +47,6 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
             if (value !== null) {
                 const exercises = JSON.parse(value);
                 setExercises(exercises);
-                setFilteredExercises(exercises);
             }
             else {
                 await getExercises();
@@ -92,8 +87,9 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
         )
     }
 
-    function ExerciseItem({ id, type, name, burn_rate, default_duration }) {
+    function ExerciseItem({ id, type, name, kcal, duration }) {
         const [adding, setAdding] = useState(false);
+        const [customModal, setCustomModal] = useState(false);
 
         let image;
         switch (type) {
@@ -137,8 +133,8 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                 const newExercise = {
                     id: id,
                     name: name,
-                    kcal: burn_rate,
-                    duration: default_duration
+                    kcal: kcal,
+                    duration: duration
                 }
                 let index = temp.findIndex(item => item.id === newExercise.id);
                 if (index == -1) {
@@ -159,6 +155,123 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
             }, 1000);
         }
 
+        function AddActivityCustom() {
+            const [customAdding, setCustomAdding] = useState(false);
+            const [customKcal, setCustomKcal] = useState(kcal);
+            const [customDur, setCustomDur] = useState(duration.toString());
+    
+            const handleChange = (val) => {
+                let ratio = val / duration;
+                setCustomDur(val);
+                setCustomKcal(Math.round(kcal * ratio));
+            }
+    
+            const handlePlus = () => {
+                let dur = parseInt(customDur) + 1;
+                setCustomDur(dur.toString());
+                setCustomKcal(Math.round(kcal * dur / duration));
+            }
+    
+            const handleMinus = () => {
+                let dur = parseInt(customDur) - 1;
+                setCustomDur(dur.toString());
+                setCustomKcal(Math.round(kcal * dur / duration));
+            }
+    
+            const handleAddCustom = () => {
+                modified();
+                setCustomAdding(true);
+    
+                setTimeout(() => {
+                    const newExercise = {
+                        id: id,
+                        name: name,
+                        kcal: customKcal,
+                        duration: parseInt(customDur)
+                    }
+                    let index = temp.findIndex(item => item.id === newExercise.id);
+                    if (index == -1) {
+                        setTemp(old => [newExercise, ...old]);
+                    }
+                    else {
+                        const oldItem = temp[index];
+                        const newTemp = temp.filter((item) => item.id != newExercise.id);
+                        newExercise.kcal += oldItem.kcal;
+                        newExercise.duration += oldItem.duration;
+                        setTemp([newExercise, ...newTemp]);
+                    }
+                    setCustomAdding(false);
+                    setCustomModal(false);
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Exercise was added successfully to your diary',
+                    });
+                }, 1000);
+            }
+    
+            return (
+                <View style={customCard.container}>
+                    <View style={customCard.header}>
+                        <View>
+                            <Text style={customCard.title}>{name}</Text>
+                            <Text style={customCard.subTitle}>{customDur} minutes - {customKcal} kcal</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => {setCustomModal(false)}}>
+                            <MaterialCommunityIcons name='close' color='#fff' size={26} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{flex: 1}}>
+                        <View style={customCard.mid}>
+                            <TouchableOpacity style={customCard.btn} onPress={handleMinus}>
+                                <MaterialCommunityIcons name='minus' size={26} />
+                            </TouchableOpacity>
+                            <TextInput style={customCard.input}
+                                keyboardType='numeric'
+                                value={customDur.toString()}
+                                onChangeText={(val) => {
+                                    handleChange(val);
+                                }}
+                            />
+                            <TouchableOpacity style={customCard.btn} onPress={handlePlus}>
+                                <MaterialCommunityIcons name='plus' size={26} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{flex: 1, alignItems: 'center'}}>
+                            {customAdding ? (
+                                <View style={customCard.addBtn}>
+                                    <ActivityIndicator size='small' color='#fff'/> 
+                                </View>
+                            ) : (
+                                <TouchableOpacity style={customCard.addBtn} onPress={handleAddCustom}>
+                                    <Text style={{fontSize: 16, color:'#fff'}}>Add exercise</Text>
+                                </TouchableOpacity>
+                            )}
+                        </View>
+                    </View>
+                </View>
+            )
+        }
+    
+        function CustomModal() {
+            return (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={customModal}
+                >
+                    <View intensity={20}
+                     style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: 25,
+                    }}>
+                        <AddActivityCustom />
+                    </View>
+                </Modal>
+            )
+        }
+
         return (
             <View style={{
                 shadowColor: "#000",
@@ -171,11 +284,12 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                 elevation: 10,
             }}
             >
+                <CustomModal />
                 <ImageBackground style={styles.exerciseContainer} source={image} resizeMode='cover'>
                     <View style={styles.titleContainer}>
-                        <TouchableOpacity style={{marginLeft: 20}}>
+                        <TouchableOpacity style={{marginLeft: 20}} onPress={() => {setCustomModal(true)}}>
                             <Text style={{ fontSize: 18, fontFamily: 'inter-semibold', color: '#fff' }}>{name}</Text>
-                            <Text style={{ fontFamily: 'inter-regular', color: '#fff' }}>{burn_rate} kcal - {default_duration} min</Text>
+                            <Text style={{ fontFamily: 'inter-regular', color: '#fff' }}>{kcal} kcal - {duration} min</Text>
                         </TouchableOpacity>
                         {
                             adding ? (
@@ -193,6 +307,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
         )
     }
 
+
     return (
         <View style={globalStyles.container}>
         <StatusBar style='light' />
@@ -205,8 +320,8 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                     id={item.id}
                     type={item.type}
                     name={item.name}
-                    burn_rate={item.burn_rate}
-                    default_duration={item.default_duration}      
+                    kcal={item.kcal}
+                    duration={item.duration}      
                 />
             )}
             refreshControl={
@@ -225,7 +340,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
 const styles = StyleSheet.create({
     top: {
         padding: 10,
-        paddingTop: 0,
+        paddingTop: Platform.OS === 'android' ? 0 : 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -256,5 +371,65 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingRight: 10,
+    },
+});
+
+const customCard = StyleSheet.create({
+    container: {
+        borderRadius: 10,
+        overflow: 'hidden',
+        backgroundColor: '#fff',
+        width: 340,
+        height: 220,
+    },
+    header: {
+        padding: 10,
+        paddingHorizontal: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: globalColors.calmRed
+    },
+    title: {
+        fontFamily: 'inter-semibold',
+        fontSize: 18,
+        color: '#fff'
+    },  
+    subTitle: {
+        fontFamily: 'inter-regular',
+        fontSize: 18,
+        color: '#fff'
+    },
+    mid: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 20,
+    },
+    btn: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#dedede',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    input: {
+        fontFamily: 'inter-regular',
+        fontSize: 20,
+        width: 100,
+        borderBottomWidth: 1,
+        padding: 5,
+        textAlign: 'center',
+    },
+    addBtn: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 25,
+        backgroundColor: globalColors.calmRed,
+        marginTop: 10,
+        width: 140,
+        padding: 10,
     },
 });

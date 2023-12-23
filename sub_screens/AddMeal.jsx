@@ -122,7 +122,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
 
     useEffect(() => {
         if (foods !== undefined) {
-            //getCustomFoodsLocal();
+            getCustomFoodsLocal();
         }
     }, [foodFetched]);
 
@@ -212,7 +212,6 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                     setTemp([newFood, ...newTemp]);
                 }
                 setAdding(false);
-                setCustomModal(false);
                 Toast.show({
                     type: 'success',
                     text1: 'Food was added successfully to your diary',
@@ -227,6 +226,8 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
             const [customCarb, setCustomCarb] = useState(carb);
             const [customPro, setCustomPro] = useState(protein);
             const [customFat, setCustomFat] = useState(fat);
+
+            const [customAdding, setCustomAdding] = useState(false);
     
             const getRatio = () => {
                 carbEnergy = Math.round(customCarb * 400 / customKcal);
@@ -246,7 +247,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
 
             const handleAddCustom = () => {
                 modified();
-                setAdding(true);
+                setCustomAdding(true);
                 
                 setTimeout(() => {
                     const newFood = {
@@ -259,6 +260,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                         protein: customPro,
                         fat: customFat
                     }
+                    console.log("newFood: ", newFood);
                     let index = temp.findIndex(item => item.id === newFood.id);
                     if (index == -1) {
                         setTemp(old => [newFood, ...old]);
@@ -273,7 +275,8 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                         newFood.protein += oldItem.protein;
                         setTemp([newFood, ...newTemp]);
                     }
-                    setAdding(false);
+                    setCustomAdding(false);
+                    setCustomModal(false);
                     Toast.show({
                         type: 'success',
                         text1: 'Food was added successfully to your diary',
@@ -326,9 +329,8 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                         </View>
                     </View>
                     <View style={{flex: 1, alignItems: 'center'}}>
-                        
                         {
-                            adding ? (
+                            customAdding ? (
                                 <View style={styles.addBtn}>
                                    <ActivityIndicator size='small' color='#fff'/> 
                                 </View>
@@ -350,7 +352,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                     transparent={true}
                     visible={customModal}
                 >
-                    <BlurView intensity={20}
+                    <View intensity={20}
                      style={{
                         flex: 1,
                         justifyContent: 'center',
@@ -358,7 +360,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                         padding: 25,
                     }}>
                         <AddMealCustom />
-                    </BlurView>
+                    </View>
                 </Modal>
             )
         }
