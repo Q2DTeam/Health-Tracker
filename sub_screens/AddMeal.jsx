@@ -237,16 +237,26 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                 carbEnergy = Math.round(customCarb * 400 / customKcal);
                 proEnergy = Math.round(customPro * 400 / customKcal);
                 fatEnergy = 100 - (carbEnergy + proEnergy);
+                if (proEnergy < 0 || carbEnergy < 0 || fatEnergy < 0) {
+                    return [30, 30, 40];
+                }
                 return [carbEnergy, proEnergy, fatEnergy];
             }
+
+            let nutritions = getRatio();
     
             const handleChange = (val) => {
-                let ratio = val / serving;
-                setCustomServ(val);
-                setCustomKcal(Math.round(kcal * ratio));
-                setCustomCarb(Math.round(carb * ratio));
-                setCustomPro(Math.round(protein * ratio));
-                setCustomFat(Math.round(fat * ratio));
+                if (val <= 0 || val == undefined | val == null) {
+
+                }
+                else {
+                    let ratio = val / serving;
+                    setCustomServ(val);
+                    setCustomKcal(Math.round(kcal * ratio));
+                    setCustomCarb(Math.round(carb * ratio));
+                    setCustomPro(Math.round(protein * ratio));
+                    setCustomFat(Math.round(fat * ratio));
+                }
             }
 
             const handleAddCustom = () => {
@@ -287,7 +297,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                 }, 1000);
             }
     
-            let nutritions = getRatio();
+            
     
             return (
                 <View style={customCard.container}>
