@@ -391,7 +391,7 @@ export default function HomeMain({ navigation }) {
         }
 
         return (
-            <ImageBackground source={bg} alt='Background image' style={activityStyles.activity} resizeMode='cover'>
+            <ImageBackground source={bg} alt='Background image' style={activityStyles.activity} resizeMode='contain'>
                 <View style={activityStyles.container}>
                     <Text style={activityStyles.exercises}>{exCount} Exercises</Text>
                     <Text style={activityStyles.duration}>{exTime} Minutes</Text>
@@ -494,7 +494,7 @@ export default function HomeMain({ navigation }) {
                         fontFamily: 'inter-bold',
                         marginTop: 20
                     }}>
-                        Activities
+                        Your Activities
                     </Text>
                     <ActivityTracker />
                 </View>
@@ -555,10 +555,11 @@ const styles = StyleSheet.create({
 const activityStyles = StyleSheet.create({
     activity: {
         width: 334,
-        height: 193,
+        height: 196,
         marginTop: 5,
         paddingTop: 40,
         paddingRight: 180,
+        overflow: 'hidden'
     },
     container: {
         height: 130,

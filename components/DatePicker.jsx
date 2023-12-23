@@ -21,7 +21,6 @@ export default function DatePicker({ currentDate, setShowCalendar }) {
 
 const styles = StyleSheet.create({
     container: {
-        //borderWidth: 1,
         width: 350,
         flexDirection: 'row',
         justifyContent: 'space-between',
