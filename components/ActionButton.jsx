@@ -7,52 +7,64 @@ import { FloatingAction } from "react-native-floating-action";
 import { globalColors } from '../global/styles';
 
 // Action buttons components
-const actions = [
+const actions = [   
     {
+        style: addButton,
         text: "Exercise",
-        icon: <MaterialCommunityIcons name='dumbbell' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "exercise",
-        color: globalColors.vibrantBlue,
-        textBackground: globalColors.vibrantBlue,
-        textColor: '#fff',
         position: 1
     },
     {
+        style: addButton,
         text: "Breakfast",
-        icon: <MaterialCommunityIcons name='coffee' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "breakfast",
-        color: globalColors.breakfastGreen,
-        textBackground: globalColors.breakfastGreen,
-        textColor: '#fff',
         position: 2
     },
     {
+        style: addButton,
         text: "Lunch",
-        icon: <MaterialCommunityIcons name='food-drumstick' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "lunch",
-        color: globalColors.lunchOrange,
-        textBackground: globalColors.lunchOrange,
-        textColor: '#fff',
         position: 3
     },
     {
+        style: addButton,
         text: "Dinner",
-        icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "dinner",
-        color: globalColors.dinnerCyan,
-        textBackground: globalColors.dinnerCyan,
-        textColor: '#fff',
         position: 4
     },
     {
+        style: addButton,
         text: "Snack",
-        icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "snack",
-        color: globalColors.snackPurple,
-        textBackground: globalColors.snackPurple,
-        textColor: '#fff',
         position: 5
     },
+    {
+        style: addButton,
+        text: "Water",
+        icon: <MaterialCommunityIcons name="cup-water" color={globalColors.chillCyan} size={20} />,
+        name: "water",
+        position: 6
+    },
+    {
+        style: addButton,
+        text: "Weight",
+        icon: <MaterialCommunityIcons name="weight-kilogram" color={globalColors.chillCyan} size={20} />,
+        name: "weight",
+        position: 7
+
+    },
+    {
+        style: addButton,
+        text: "Sleep",
+        icon: <MaterialCommunityIcons name="sleep" color={globalColors.chillCyan} size={20} />,
+        name: "sleep",
+        position: 8
+    }
 
 ];
 //Xu ly su kien
