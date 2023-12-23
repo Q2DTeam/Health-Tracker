@@ -53,6 +53,7 @@ const actions = [
         textColor: '#fff',
         position: 5
     },
+
 ];
 //Xu ly su kien
 export default function ActionButton({ handleNavigation }) {
@@ -68,6 +69,7 @@ export default function ActionButton({ handleNavigation }) {
         />
       </TouchableWithoutFeedback>
     );
+
 }
 
 const styles = StyleSheet.create({
@@ -75,3 +77,46 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
+export const handleActionPress = (name) => {
+    switch (name) {
+        case "exercise":
+            console.log("Exercise");
+            break;
+        case "breakfast":
+            console.log("Breakfast");
+            break;
+        case "lunch":
+            console.log("Lunch");
+            break;
+        case "dinner":
+            console.log("Dinner");
+            break;
+        case "snack":
+            console.log("Snack");
+            break;
+        default:
+            console.log("Default");
+    }
+}
+const itemStyles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+    },
+});
+
+const addButton = [ 
+    styles.container,
+    {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 10 },
+        elevation: 5,
+    }
+];
