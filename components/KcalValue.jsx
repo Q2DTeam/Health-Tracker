@@ -9,8 +9,8 @@ export default function KcalValue({icon, title, value}) {
         <View style={styles.kcalWrapper}>
             <MaterialCommunityIcons 
                 name={icon} 
-                size={30}
-                color={icon === 'fire' ? '#FFA935' : '#B575E7'}
+                size={50}
+                color={icon === 'fire' ? '#FFH935' : '#B575E7'}
             />
             <Text style={styles.kcalValue}>{value}</Text>
             <Text style={styles.kcalText}>{title}</Text>
