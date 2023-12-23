@@ -8,6 +8,7 @@ import ProgressCircle from 'react-native-progress-circle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Calendar } from 'react-native-calendars';
 import moment from 'moment'; 
+import { BlurView } from 'expo-blur';
 
 // Import components
 import KcalValue from '../components/KcalValue';
@@ -85,7 +86,7 @@ export default function HomeMain({ navigation }) {
                 // value previously stored
                 const userData = JSON.parse(value);
                 if (user.uid == userData.id) {
-                    console.log("Data fetched, id matched: ", userData);
+                    //console.log("Data fetched, id matched: ", userData);
                     let {tdee, carb, protein, fat} = getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
                     setkcalTotal(tdee);
                     setcarbTotal(carb);
@@ -234,8 +235,8 @@ export default function HomeMain({ navigation }) {
             if (value !== null) {
                 const activity = JSON.parse(value);
                 if (activity.date == date && activity.userID == user.uid) {
-                    setExercises(activity.exercises);
                     if (activity.exercises !== null && activity.exercises !== undefined) {
+                        setExercises(activity.exercises);
                         updateExercises(activity.exercises);
                     }
                 }
@@ -265,8 +266,8 @@ export default function HomeMain({ navigation }) {
 
         if (docSnap) {
             let activity = docSnap.data();
-            setExercises(activity.exercises);
             if (activity.exercises !== null && activity.exercises !== undefined) {
+                setExercises(activity.exercises);
                 updateExercises(activity.exercises);
             }
         } 
@@ -341,7 +342,7 @@ export default function HomeMain({ navigation }) {
                 transparent={true}
                 visible={calenVisible}
             >
-                <View style={calenStyles.centeredView}>
+                <BlurView intensity={20} style={calenStyles.centeredView}>
                     <View style={calenStyles.container}>
                         <Text style={calenStyles.title}>Select date</Text>
                         <Calendar
@@ -375,7 +376,7 @@ export default function HomeMain({ navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </View>
+                </BlurView>
             </Modal>
         )
     }
