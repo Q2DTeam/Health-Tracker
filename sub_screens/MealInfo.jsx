@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList, Alert } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { auth } from '../utils/firebase';
@@ -167,9 +167,19 @@ export default function MealInfo({ navigation, route }) {
         }
 
         const handleDelete = () => {
-            setModified(true);
-            const newMeal = meal.filter((item) => item.id != id);
-            setMeal(newMeal);
+            Alert.alert('Confirm delete', 'Do you want to delete this food?', [
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        setModified(true);
+                        const newMeal = meal.filter((item) => item.id != id);
+                        setMeal(newMeal);
+                    },
+                },
+                {
+                    text: 'Cancel',
+                },
+            ]);
         }
 
         return (

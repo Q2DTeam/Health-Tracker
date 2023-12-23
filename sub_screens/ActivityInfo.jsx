@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList, Alert } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { auth } from '../utils/firebase';
@@ -61,7 +61,6 @@ export default function ActivityInfo({ navigation, route }) {
         const docID = `${uid}-${date}`;
         try {
             await setDoc(doc(db, "user_activities", docID).withConverter(recordConverter), rec);
-            console.log('Act saved to db');
         }
         catch(err) {
             console.log("Error saving activities to firestore");
@@ -74,7 +73,6 @@ export default function ActivityInfo({ navigation, route }) {
         try {
             const jsonValue = JSON.stringify(recObj);
             await AsyncStorage.setItem('activities', jsonValue);
-            console.log(`activities saved to local!`);
         } catch (error) {
             console.log(error);
         }
@@ -145,9 +143,19 @@ export default function ActivityInfo({ navigation, route }) {
     function ActivityCard({ id, name, kcal, duration }) {
 
         const handleDelete = () => {
-            setModified(true);
-            const newActs = activities.filter((item) => item.id != id);
-            setActivities(newActs);
+            Alert.alert('Confirm delete', 'Do you want to delete this activity?', [
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        setModified(true);
+                        const newActs = activities.filter((item) => item.id != id);
+                        setActivities(newActs);
+                    },
+                },
+                {
+                    text: 'Cancel',
+                },
+            ]);
         }
 
         return (
