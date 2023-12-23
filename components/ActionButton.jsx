@@ -75,37 +75,3 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
-export const handleActionPress = (name) => {
-    switch (name) {
-        case "exercise":
-            console.log("Exercise");
-            break;
-        case "breakfast":
-            console.log("Breakfast");
-            break;
-        case "lunch":
-            console.log("Lunch");
-            break;
-        case "dinner":
-            console.log("Dinner");
-            break;
-        case "snack":
-            console.log("Snack");
-            break;
-        default:
-            console.log("Unknown action");
-    }
-}
-
-export const handleIconPress = () => {
-    console.log(`Icon pressed`);
-}
-export const handleMainButtonPress = () => {
-    console.log(`Main button pressed`);
-}
-export const handleOverlayPress = () => {
-    console.log(`Overlay pressed`);
-}
-export const handleOnPress = () => {
-    console.log(`Pressed`);
-}
