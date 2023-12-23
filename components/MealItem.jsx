@@ -31,7 +31,7 @@ export default function MealItem({ type, handleNav, meal }) {
 
     return (
         <View style={{
-            shadowColor: "#000",
+            shadowColor: "#100",
             shadowOffset: {
                 width: 0,
                 height: 5,
@@ -43,8 +43,8 @@ export default function MealItem({ type, handleNav, meal }) {
         >
             <ImageBackground style={styles.mealContainer} source={image} alt='Background image' resizeMode='cover'>
                 <View style={styles.titleContainer}>
-                    <View style={{marginLeft: 20}}>
-                        <Text style={{ fontSize: 18, fontFamily: 'inter-semibold' }}>{type[0].toUpperCase() + type.slice(1)}</Text>
+                    <View style={{marginLeft: 40}}>
+                        <Text style={{ fontSize: 20, fontFamily: 'inter-semibold' }}>{type[0].toUpperCase() + type.slice(1)}</Text>
                         <Text>{sum} kcal</Text>
                     </View>
                     <TouchableOpacity style={styles.detailBtn} onPress={handleNav}>
