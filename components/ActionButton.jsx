@@ -92,9 +92,15 @@ const actions = [
         text: "Symptoms",
         icon: <MaterialCommunityIcons name="emoticon-sad" color={globalColors.chillCyan} size={20} />,
         name: "symptoms",
-        position: 12
-        
-    }
+        position: 12   
+    },
+    {
+        style: addButton,
+        text: "Period",
+        icon: <MaterialCommunityIcons name="calendar" color={globalColors.chillCyan} size={20} />,
+        name: "period",
+        position: 13
+    },
 
 ];
 //Xu ly su kien
@@ -113,7 +119,41 @@ export default function ActionButton({ handleNavigation }) {
     );
 
 }
-
+const Period = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Period</Text>
+        </View>
+    );
+}
+const Symptoms = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Symptoms</Text>
+        </View>
+    );
+}
+const Medication = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Medication</Text>
+        </View>
+    );
+}
+const Notes = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Notes</Text>
+        </View>
+    );
+}
+const Mood = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Mood</Text>
+        </View>
+    );
+}
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
