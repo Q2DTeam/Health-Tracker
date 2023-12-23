@@ -7,7 +7,7 @@ import { auth } from '../utils/firebase';
 import { db, setDoc, doc } from '../utils/firestore';
 import * as yup from 'yup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const foodSchema = yup.object({
@@ -108,11 +108,12 @@ export default function CreateFood({ cancelFunc, foods, setFoods }) {
 
     function Header() {
         return (
-            <View style={[globalStyles.header, {paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center'}]}>
+            <View style={[globalStyles.header, {paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}]}>
                 <TouchableOpacity onPress={cancelFunc}>
-                    <FontAwesome name='remove' color='#fff' size={26} />
+                    <MaterialCommunityIcons name='close' color='#fff' size={30} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Create new food</Text>
+                <View style={{width: 30}} />
             </View>
         )
     }
@@ -163,7 +164,7 @@ export default function CreateFood({ cancelFunc, foods, setFoods }) {
                                 onChangeText={handleChange('unit')}
                             />
                         </View>
-                        <View style={[styles.servingContainer, {justifyContent: 'space-between'}]}>
+                        <View style={[styles.servingContainer, {justifyContent: 'space-between', marginBottom: 20}]}>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={styles.servingTitle}>Serving size</Text>
                                 <TextInput
@@ -177,12 +178,12 @@ export default function CreateFood({ cancelFunc, foods, setFoods }) {
                                 <TouchableOpacity style={[inputStyles.measureBtn, {backgroundColor: measure == 'g' ? globalColors.breakfastGreen : '#dedede'}]}
                                     onPress={() => {setMeasure('g')}}
                                 >
-                                    <Text style={[inputStyles.measureText, {color: measure == 'g' ? '#fff' : '#000'}]}>g (gram)</Text>
+                                    <Text style={[inputStyles.measureText, {color: measure == 'g' ? '#fff' : '#000'}]}>g</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={[inputStyles.measureBtn, {backgroundColor: measure == 'ml' ? globalColors.breakfastGreen : '#dedede'}]}
                                     onPress={() => {setMeasure('ml')}}
                                 >
-                                    <Text style={[inputStyles.measureText, {color: measure == 'ml' ? '#fff' : '#000'}]}>ml (milliliter)</Text>
+                                    <Text style={[inputStyles.measureText, {color: measure == 'ml' ? '#fff' : '#000'}]}>ml</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -190,7 +191,7 @@ export default function CreateFood({ cancelFunc, foods, setFoods }) {
 
                     <Text style={styles.sectionHeader}>Nutritional values</Text>
                     <View style={[styles.basicContainer, {alignItems: 'center'}]}>
-                        <View style={{width: '75%'}}>
+                        <View style={{width: '100%'}}>
                             <View style={styles.nutriContainer}>
                                 <Text style={inputStyles.nutriText}>Calorie</Text>
                                 <TextInput
@@ -271,7 +272,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         fontFamily: 'inter-semibold',
         fontSize: 24,
-        color: '#fff',
         marginBottom: 15,
     },
     basicContainer: {
@@ -289,11 +289,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        paddingHorizontal: 20
     },
     servingContainer: {
         flexDirection: 'row', 
         alignItems: 'center',
-        marginBottom: 20,
+        marginVertical: 10,
     },
     servingTitle: {
         fontFamily: 'inter-regular', 
@@ -322,7 +323,10 @@ const inputStyles = StyleSheet.create({
         width: 130,
     },
     measureBtn: {
-        padding: 10,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
         borderRadius: 20,
         marginLeft: 10,
     },

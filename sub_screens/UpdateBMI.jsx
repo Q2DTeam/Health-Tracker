@@ -2,7 +2,7 @@
 
 
 import React from 'react';
-import { ScrollView, Text, View, StyleSheet, TouchableOpacity, TextInput, RefreshControl } from 'react-native';
+import { ScrollView, Text, View, StyleSheet, TouchableOpacity, TextInput, RefreshControl, Platform } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { Formik } from 'formik';
 import { auth } from '../utils/firebase';
@@ -143,13 +143,21 @@ export default function UpdateBMI({ hideModal }) {
     function Header() {
         
         return (
-            <View style={[globalStyles.header, {flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, paddingBottom: 15}]}>
-                <TouchableOpacity onPress={hideModal} style={{position: 'absolute', left: 10, top: 0}}>
-                    <MaterialCommunityIcons name='chevron-left' size={30} color='#fff' />
+            <View style={[globalStyles.header, {
+                flexDirection: 'row', 
+                alignItems: 'center', 
+                justifyContent: 'space-between',
+                paddingHorizontal: 20, 
+                paddingBottom: 15, 
+                paddingTop: Platform.OS === 'android' ? 0 : 20,
+            }]}>
+                <TouchableOpacity onPress={hideModal}>
+                    <MaterialCommunityIcons name='chevron-left' size={40} color='#fff' />
                 </TouchableOpacity>
                 <View style={{flex: 1, alignItems: 'center'}}>
                     <Text style={globalStyles.headerTitle}>Update your BMI</Text>
                 </View>
+                <View style={{width: 30}} />
             </View>
         )
     }
