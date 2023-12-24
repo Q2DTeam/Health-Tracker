@@ -23,15 +23,15 @@ export const globalStyles = StyleSheet.create({
         backgroundColor: globalColors.backgroundGray,
     },
     header: {
-        width: '80%',
+        width: '100%',
         backgroundColor: globalColors.darkerCyan,
         borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 10,
+        borderBottomRightRadius: 20,
         overflow: 'hidden',
     },
     headerTitle: {
         color: '#fff',
-        fontSize: 10,
+        fontSize: 20,
         fontFamily: 'inter-bold',
     },
     searchBar: {
