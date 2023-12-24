@@ -19,8 +19,6 @@ const actions = [
         icon: <MaterialCommunityIcons name='dumbbell' size={24} color='#fff' />,
         name: "exercise",
         color: globalColors.vibrantBlue,
-        textBackground: globalColors.vibrantBlue,
-        textColor: '#fff',
         position: 1
     },
     {
@@ -28,8 +26,6 @@ const actions = [
         icon: <MaterialCommunityIcons name='coffee' size={24} color='#fff' />,
         name: "breakfast",
         color: globalColors.breakfastGreen,
-        textBackground: globalColors.breakfastGreen,
-        textColor: '#fff',
         position: 2
     },
     {
@@ -37,8 +33,6 @@ const actions = [
         icon: <MaterialCommunityIcons name='food-drumstick' size={24} color='#fff' />,
         name: "lunch",
         color: globalColors.lunchOrange,
-        textBackground: globalColors.lunchOrange,
-        textColor: '#fff',
         position: 3
     },
     {
@@ -46,8 +40,6 @@ const actions = [
         icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
         name: "dinner",
         color: globalColors.dinnerCyan,
-        textBackground: globalColors.dinnerCyan,
-        textColor: '#fff',
         position: 4
     },
     {
@@ -55,11 +47,9 @@ const actions = [
         icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
         name: "snack",
         color: globalColors.snackPurple,
-        textBackground: globalColors.snackPurple,
-        textColor: '#fff',
         position: 5
     },
-    
+
 ];
 //Xu ly su kien
 export default function ActionButton({ handleNavigation }) {
@@ -95,7 +85,35 @@ export default function ActionButton({ handleNavigation }) {
       </TouchableWithoutFeedback>
     );
 }
-
+export default function ButtonFromAction () {
+    const navigation = useNavigation();
+    const handleActionPress = (name) => {
+        if (name === 'exercise') {
+            navigation.navigate('Exercise');
+        } else if (name === 'breakfast') {
+            navigation.navigate('Breakfast');
+        } else if (name === 'lunch') {
+            navigation.navigate('Lunch');
+        } else if (name === 'dinner') {
+            navigation.navigate('Dinner');
+        } else if (name === 'snack') {
+            navigation.navigate('Snack');
+        }
+    }
+    return (
+        <ActionButton buttonColor="rgba(231,76,60,1)">
+            <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
+                <Icon name="md-create" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => { }}>
+                <Icon name="md-notifications-off" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => { }}>
+                <Icon name="md-done-all" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+        </ActionButton>
+    );
+}
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -105,14 +123,5 @@ const styles = StyleSheet.create({
         height: 22,
         color: 'white',
     },
-    actionButtonIcon: {
-        fontSize: 20,
-        height: 22,
-        color: 'white',
-    },
-    actionButtonIcon: {
-        fontSize: 20,
-        height: 22,
-        color: 'white',
-    },
+
 });
