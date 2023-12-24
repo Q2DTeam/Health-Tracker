@@ -1,51 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FloatingAction } from "react-native-floating-action";
 import { useNavigation } from '@react-navigation/native';
-import { useIsFocused } from '@react-navigation/native';
-import { useRoute } from '@react-navigation/native';
-import { useTheme } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
-import { Appbar } from 'react-native-paper';
-// Import global styles
-
 import { globalColors } from '../global/styles';
+import { useNavigation } from '@react-navigation/native';
+// Import global styles
+import { globalStyles } from '../global/styles';
+import { useNavigation } from '@react-navigation/native';
+// Import global styles
+import { globalStyles } from '../global/styles';
 
-const ActionButton = ({ handleNavigation }) => {
-    const handleActionPress = (name) => {
-        handleNavigation(name);
-    }
-    const handleAddPress = () => {
-        handleNavigation('add');
-    }
-    const handleEditPress = () => {
-        handleNavigation('edit');
-    }
-
-    return (<TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
-        <FloatingAction
-          actions={actions}
-          onPressItem={handleActionPress}
-          color={globalColors.chillCyan}
-          distanceToEdge={15}
-          overlayColor='rgba(255, 255, 255, 0.75)'
-          showBackground={true}
-        />
-      </TouchableWithoutFeedback>
-    );
-    
-}
-const AddButton = ({ handleNavigation }) => {
-    return (
-        <TouchableOpacity style={styles.actionButton} onPress={handleNavigation}>
-            <AntDesign name="plus" style={styles.actionButtonIcon} />
-        </TouchableOpacity>
-    );
-}
 // Action buttons components
 const actions = [
+
     {
         text: "Exercise",
         icon: <MaterialCommunityIcons name='dumbbell' size={24} color='#fff' />,
@@ -91,19 +59,30 @@ const actions = [
         textColor: '#fff',
         position: 5
     },
+    
 ];
 //Xu ly su kien
 export default function ActionButton({ handleNavigation }) {
+    const navigation = useNavigation();
     const handleActionPress = (name) => {
-        handleNavigation(name);
+        if (name === 'exercise') {
+            navigation.navigate('Exercise');
+        } else if (name === 'breakfast') {
+            navigation.navigate('Breakfast');
+        } else if (name === 'lunch') {
+            navigation.navigate('Lunch');
+        } else if (name === 'dinner') {
+            navigation.navigate('Dinner');
+        } else if (name === 'snack') {
+            navigation.navigate('Snack');
+        }
     }
-    const handleAddPress = () => {
-        handleNavigation('add');
-    }
-    const handleEditPress = () => {
-        handleNavigation('edit');
-    }
+    useNavigation();
+    useEffect(() => {
 
+        handleNavigation();
+
+    }, []);
     return (<TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
         <FloatingAction
           actions={actions}
@@ -114,27 +93,6 @@ export default function ActionButton({ handleNavigation }) {
           showBackground={true}
         />
       </TouchableWithoutFeedback>
-    );
-    
-}
-
-export const AddButton = ({ handleNavigation }) => {
-    const navigation = useNavigation();
-    const route = useRoute();
-    const isFocused = useIsFocused();
-    const { colors } = useTheme();
-    const [loaded] = useFonts({
-        'Montserrat-Bold': require('../assets/fonts/Montserrat-Bold.ttf'),
-        'Montserrat-Regular': require('../assets/fonts/Montserrat-Regular.ttf'),
-    });
-    if (!loaded) {
-        return <AppLoading />;
-    }
-    
-    return (
-        <TouchableOpacity style={styles.actionButton} onPress={handleNavigation}>
-            <AntDesign name="plus" style={styles.actionButtonIcon} />
-        </TouchableOpacity>
     );
 }
 
@@ -147,20 +105,14 @@ const styles = StyleSheet.create({
         height: 22,
         color: 'white',
     },
-    actionButton: {
-        backgroundColor: globalColors.chillCyan,
-        borderRadius: 50,
-        width: 50,
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        bottom: 20,
-        right: 20,
-        elevation: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.5,
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
     },
-
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
+    },
 });
