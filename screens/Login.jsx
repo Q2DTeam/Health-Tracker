@@ -3,12 +3,13 @@ import { Text, View, StyleSheet, TouchableOpacity, TextInput, ImageBackground, A
 import { globalStyles, globalColors } from '../global/styles';
 import { Formik } from 'formik';
 import { auth, signInWithEmailAndPassword} from '../utils/firebase';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import * as yup from 'yup';
 
 // Import icons
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { BlurView } from 'expo-blur';
 
 
 const LoginSchema = yup.object({
@@ -33,17 +34,20 @@ export default function Login({navigation}) {
     }
 
     return (
-        <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover'  style={[globalStyles.container, styles.login]}>
+        <ImageBackground 
+            source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover'  
+            style={[globalStyles.container, styles.login]}
+            blurRadius={10}
+        >
             <StatusBar style="light" />
-            <ScrollView
-                contentContainerStyle={{ alignItems: 'center', justifyContent: 'space-between' }}
-                style={{width: '100%'}}
+            <SafeAreaView
+                style={{alignItems: 'center', justifyContent: 'space-between', flex: 1}}
             >
                 <View style={styles.logo}>
                     <Image source={require('../assets/images/Logo.png')}/>
                 </View>
 
-                <View style={[globalStyles.formContainer, {marginTop: 40}]}>
+                <View>
                     <Formik
                         initialValues={{email: '', password: ''}}
                         validationSchema={LoginSchema}
@@ -53,7 +57,7 @@ export default function Login({navigation}) {
                     >
                     {
                         ({handleChange, handleSubmit, values, errors}) => (
-                        <View style={{padding: 20, paddingBottom: 0, alignItems: 'center'}}>
+                        <View style={{padding: 20, paddingTop: 0, alignItems: 'center'}}>
                             <View>
                                 <View style={globalStyles.form_inputWrapper}>
                                     <MaterialCommunityIcons name='email' size={24}/>
@@ -89,13 +93,13 @@ export default function Login({navigation}) {
                     </Formik>
                 </View>
 
-                <View style={{marginTop: 140}}>
+                <View style={{marginBottom: 20,}}>
                     <Text style={styles.bottomText}>Don't have an account?</Text>
                     <TouchableOpacity onPress={() => navigation.replace('Signup')}>
                         <Text style={styles.bottomTextBold}>Sign Up</Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </SafeAreaView>
         </ImageBackground>
     )
 }
@@ -109,7 +113,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 130,
         width: 240,
-        marginTop: 80,
+        marginTop: 20,
     },
     title: {
         fontSize: 30,

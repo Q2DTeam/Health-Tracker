@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, ScrollView, ImageBackground, Image, Modal } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalColors, globalStyles } from '../global/styles';
 import { Formik } from 'formik';
 import { auth, createUserWithEmailAndPassword, updateProfile } from '../utils/firebase';
@@ -70,16 +71,21 @@ export default function Signup({navigation}) {
 
 
     return (
-        <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover' style={globalStyles.container}>
+        <ImageBackground 
+            source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover' 
+            style={globalStyles.container}
+            blurRadius={10}
+        >
             <StatusBar style='light' />
             <UpdateBMIModal />
-            <ScrollView
-                contentContainerStyle={{ alignItems: 'center'}}
+            <SafeAreaView
+                style={{ alignItems: 'center', justifyContent: 'space-between', flex: 1,}}
             >
                 <View style={styles.logo}>
                     <Image source={require('../assets/images/Logo.png')}/>
                 </View>
-                <View style={globalStyles.formContainer}>
+
+                <View>
                     <Formik
                         initialValues={{username: '', email: '', password: '', confirmPass: ''}}
                         validationSchema={SignUpSchema}
@@ -151,13 +157,14 @@ export default function Signup({navigation}) {
                     }
                     </Formik>
                 </View>
-                <View style={{marginTop: 50}}>
+
+                <View style={{marginBottom: 20,}}>
                     <Text style={styles.bottomText}>Already have an account?</Text>
                     <TouchableOpacity onPress={() => navigation.replace('Login')}>
                         <Text style={styles.bottomTextBold}>Log In</Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </SafeAreaView>
         </ImageBackground>
     )
 }
@@ -172,7 +179,7 @@ const styles = StyleSheet.create({
     logo: {
         height: 130,
         width: 240,
-        marginTop: 60,
+        marginTop: 20,
     },
     bottomText: {
         color: '#fff', 

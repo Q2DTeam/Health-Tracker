@@ -56,7 +56,7 @@ export const globalStyles = StyleSheet.create({
         alignItems: 'center',
     },
     submitBtn: {
-        marginTop: 40,
+        marginTop: 30,
         padding: 10,
         width: Platform.OS === 'android' ? 300 : 260,
         justifyContent: 'center',

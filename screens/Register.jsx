@@ -12,7 +12,7 @@ export default function Register({navigation}) {
     return (
         <View style={globalStyles.container}>
             <StatusBar style='light' />
-            <ImageBackground source={require('../assets/images/register_BG.jpg')} alt='Background image' resizeMode='cover' style={styles.registerContainer}>
+            <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover' style={styles.registerContainer}>
                 <View style={styles.logo}>
                     <Image source={require('../assets/images/Logo.png')}/>
                 </View>
