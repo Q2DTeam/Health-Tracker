@@ -13,14 +13,15 @@ export default function Register({navigation}) {
         <View style={globalStyles.container}>
             <StatusBar style='light' />
             <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover' style={styles.registerContainer}>
-                <View style={styles.logo}>
-                    <Image source={require('../assets/images/Logo.png')}/>
-                </View>
+            
+                <Image source={require('../assets/images/Logo_alt.png')} style={styles.logo} />
+                
                 <View>
                     <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.replace('Login')}>
                         <MaterialCommunityIcons name='email' size={24} />
                         <Text style={styles.btnText}>Sign in with emails</Text>
                     </TouchableOpacity>
+                
                 </View>
                 <View style={{margin: 20,}}>
                     <Text style={styles.bottomText}>Don't have an account?</Text>
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     logo: {
-        height: 130,
+        height: 132,
         width: 240,
         marginTop: 60,
     },

@@ -81,9 +81,7 @@ export default function Signup({navigation}) {
             <SafeAreaView
                 style={{ alignItems: 'center', justifyContent: 'space-between', flex: 1,}}
             >
-                <View style={styles.logo}>
-                    <Image source={require('../assets/images/Logo.png')}/>
-                </View>
+                <Image source={require('../assets/images/Logo_alt.png')} style={styles.logo} />
 
                 <View>
                     <Formik
@@ -177,7 +175,7 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
     logo: {
-        height: 130,
+        height: 132,
         width: 240,
         marginTop: 20,
     },
