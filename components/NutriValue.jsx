@@ -3,16 +3,14 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-function NutriValue({ title, consumed, total }) {
+export default function NutriValue({title, consumed, total}) {
     return (
-        <div className="kcalWrapper">
-            <span className="kcalValue">{title}</span>
-            <span className="kcalText">{consumed} / {total}</span>
-        </div>
-    );
+        <View style={styles.kcalWrapper}>
+            <Text style={styles.kcalValue}>{title}</Text>
+            <Text style={styles.kcalText}>{consumed} / {total}</Text>
+        </View>
+    )
 }
-
-export default NutriValue;
 
 const styles = StyleSheet.create({
     kcalWrapper: {
