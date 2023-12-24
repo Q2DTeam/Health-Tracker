@@ -7,9 +7,43 @@ import { useIsFocused } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { useTheme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import { Appbar } from 'react-native-paper';
 // Import global styles
+
 import { globalColors } from '../global/styles';
 
+const ActionButton = ({ handleNavigation }) => {
+    const handleActionPress = (name) => {
+        handleNavigation(name);
+    }
+    const handleAddPress = () => {
+        handleNavigation('add');
+    }
+    const handleEditPress = () => {
+        handleNavigation('edit');
+    }
+
+    return (<TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
+        <FloatingAction
+          actions={actions}
+          onPressItem={handleActionPress}
+          color={globalColors.chillCyan}
+          distanceToEdge={15}
+          overlayColor='rgba(255, 255, 255, 0.75)'
+          showBackground={true}
+        />
+      </TouchableWithoutFeedback>
+    );
+    
+}
+const AddButton = ({ handleNavigation }) => {
+    return (
+        <TouchableOpacity style={styles.actionButton} onPress={handleNavigation}>
+            <AntDesign name="plus" style={styles.actionButtonIcon} />
+        </TouchableOpacity>
+    );
+}
 // Action buttons components
 const actions = [
     {
@@ -83,7 +117,20 @@ export default function ActionButton({ handleNavigation }) {
     );
     
 }
+
 export const AddButton = ({ handleNavigation }) => {
+    const navigation = useNavigation();
+    const route = useRoute();
+    const isFocused = useIsFocused();
+    const { colors } = useTheme();
+    const [loaded] = useFonts({
+        'Montserrat-Bold': require('../assets/fonts/Montserrat-Bold.ttf'),
+        'Montserrat-Regular': require('../assets/fonts/Montserrat-Regular.ttf'),
+    });
+    if (!loaded) {
+        return <AppLoading />;
+    }
+    
     return (
         <TouchableOpacity style={styles.actionButton} onPress={handleNavigation}>
             <AntDesign name="plus" style={styles.actionButtonIcon} />
@@ -115,4 +162,5 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.5,
     },
+
 });
