@@ -235,7 +235,7 @@ export default function HomeMain({ navigation }) {
             if (value !== null) {
                 const activity = JSON.parse(value);
                 if (activity.date == date && activity.userID == user.uid) {
-                    if (activity.exercises !== null && activity.exercises !== undefined) {
+                    if (activity !== null && activity !== undefined) {
                         setExercises(activity.exercises);
                         updateExercises(activity.exercises);
                     }
@@ -266,7 +266,7 @@ export default function HomeMain({ navigation }) {
 
         if (docSnap) {
             let activity = docSnap.data();
-            if (activity.exercises !== null && activity.exercises !== undefined) {
+            if (activity !== null && activity !== undefined) {
                 setExercises(activity.exercises);
                 updateExercises(activity.exercises);
             }

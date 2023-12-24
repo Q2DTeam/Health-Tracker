@@ -46,12 +46,13 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
 
         if (docSnap) {
             let custom_foods = docSnap.data();
-
-            let newList = [...custom_foods.foods, ...foods];
-            setFoods(newList);
-            setFilteredFoods(newList);
-
-            saveFoodToLocal(custom_foods.foods);
+            if (custom_foods !== undefined && custom_foods !== null) {
+                let newList = [...custom_foods.foods, ...foods];
+                setFoods(newList);
+                setFilteredFoods(newList);
+    
+                saveFoodToLocal(custom_foods.foods);
+            }
         } 
         else {
             console.log("No such document!");
@@ -61,7 +62,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
     const getCustomFoodsLocal = async() => {
         try {
             const value = await AsyncStorage.getItem('custom_foods');
-            if (value !== null) {
+            if (value !== null && value !== undefined) {
                 const custom_foods = JSON.parse(value);
                 if (custom_foods.userID == user.uid) {
                     let newList = [...custom_foods.foods, ...foods];
@@ -298,7 +299,6 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
             }
     
             
-    
             return (
                 <View style={customCard.container}>
                     <View style={customCard.header}>
@@ -495,6 +495,16 @@ const itemStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
+
     },
     infoWrapper: {
         flex: 1,
