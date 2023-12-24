@@ -7,52 +7,101 @@ import { FloatingAction } from "react-native-floating-action";
 import { globalColors } from '../global/styles';
 
 // Action buttons components
-const actions = [
+const actions = [   
     {
+        style: addButton,
         text: "Exercise",
-        icon: <MaterialCommunityIcons name='dumbbell' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "exercise",
-        color: globalColors.vibrantBlue,
-        textBackground: globalColors.vibrantBlue,
-        textColor: '#fff',
         position: 1
     },
     {
+        style: addButton,
         text: "Breakfast",
-        icon: <MaterialCommunityIcons name='coffee' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "breakfast",
-        color: globalColors.breakfastGreen,
-        textBackground: globalColors.breakfastGreen,
-        textColor: '#fff',
         position: 2
     },
     {
+        style: addButton,
         text: "Lunch",
-        icon: <MaterialCommunityIcons name='food-drumstick' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "lunch",
-        color: globalColors.lunchOrange,
-        textBackground: globalColors.lunchOrange,
-        textColor: '#fff',
         position: 3
     },
     {
+        style: addButton,
         text: "Dinner",
-        icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "dinner",
-        color: globalColors.dinnerCyan,
-        textBackground: globalColors.dinnerCyan,
-        textColor: '#fff',
         position: 4
     },
     {
+        style: addButton,
         text: "Snack",
-        icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
+        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
         name: "snack",
-        color: globalColors.snackPurple,
-        textBackground: globalColors.snackPurple,
-        textColor: '#fff',
         position: 5
     },
+    {
+        style: addButton,
+        text: "Water",
+        icon: <MaterialCommunityIcons name="cup-water" color={globalColors.chillCyan} size={20} />,
+        name: "water",
+        position: 6
+    },
+    {
+        style: addButton,
+        text: "Weight",
+        icon: <MaterialCommunityIcons name="weight-kilogram" color={globalColors.chillCyan} size={20} />,
+        name: "weight",
+        position: 7
+
+    },
+    {
+        style: addButton,
+        text: "Sleep",
+        icon: <MaterialCommunityIcons name="sleep" color={globalColors.chillCyan} size={20} />,
+        name: "sleep",
+        position: 8
+    },
+    {
+        style: addButton,
+        text: "Mood",
+        icon: <MaterialCommunityIcons name="emoticon-happy" color={globalColors.chillCyan} size={20} />,
+        name: "mood",
+        position: 9
+    },
+    {
+        styles: addButton,
+        text: "Notes",
+        icon: <MaterialCommunityIcons name="note-text" color={globalColors.chillCyan} size={20} />,
+        name: "notes",
+        position: 10
+
+    },
+    {
+        style: addButton,
+        text: "Medication",
+        icon: <MaterialCommunityIcons name="pill" color={globalColors.chillCyan} size={20} />,
+        name: "medication",
+        position: 11
+    },
+    {
+        style: addButton,
+        text: "Symptoms",
+        icon: <MaterialCommunityIcons name="emoticon-sad" color={globalColors.chillCyan} size={20} />,
+        name: "symptoms",
+        position: 12   
+    },
+    {
+        style: addButton,
+        text: "Period",
+        icon: <MaterialCommunityIcons name="calendar" color={globalColors.chillCyan} size={20} />,
+        name: "period",
+        position: 13
+    },
+
 ];
 //Xu ly su kien
 export default function ActionButton({ handleNavigation }) {
@@ -68,8 +117,43 @@ export default function ActionButton({ handleNavigation }) {
         />
       </TouchableWithoutFeedback>
     );
-}
 
+}
+const Period = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Period</Text>
+        </View>
+    );
+}
+const Symptoms = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Symptoms</Text>
+        </View>
+    );
+}
+const Medication = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Medication</Text>
+        </View>
+    );
+}
+const Notes = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Notes</Text>
+        </View>
+    );
+}
+const Mood = () => {
+    return (
+        <View style={itemStyles.container}>
+            <Text>Mood</Text>
+        </View>
+    );
+}
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
@@ -93,19 +177,28 @@ export const handleActionPress = (name) => {
             console.log("Snack");
             break;
         default:
-            console.log("Unknown action");
+            console.log("Default");
     }
 }
+const itemStyles = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+    },
+});
 
-export const handleIconPress = () => {
-    console.log(`Icon pressed`);
-}
-export const handleMainButtonPress = () => {
-    console.log(`Main button pressed`);
-}
-export const handleOverlayPress = () => {
-    console.log(`Overlay pressed`);
-}
-export const handleOnPress = () => {
-    console.log(`Pressed`);
-}
+const addButton = [ 
+    styles.container,
+    {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 10 },
+        elevation: 5,
+    }
+];
