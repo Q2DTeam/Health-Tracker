@@ -95,15 +95,16 @@ export default function Signup({navigation}) {
                         ({handleChange, handleSubmit, values, errors}) => (
                         <View style={{alignItems: 'center'}}>
                             <View>
-                                <View style={globalStyles.form_inputWrapper}>
-                                    <MaterialCommunityIcons name='account-circle' size={24} />
-                                    <TextInput
-                                        placeholder='Username' 
-                                        style={globalStyles.form_input}
-                                        value={values.username}
-                                        onChangeText={handleChange('username')}
-                                    />
-                                </View>
+
+                            <View style={globalStyles.form_inputWrapper}>
+                                <MaterialCommunityIcons name='account-circle' size={24} />
+                                <TextInput
+                                    placeholder='Username' 
+                                    style={globalStyles.form_input}
+                                    value={values.username}
+                                    onChangeText={handleChange('username')}
+                                />
+                            </View>
                                 <Text style={globalStyles.errorText}>{errors.username}</Text>
                             </View>
 
