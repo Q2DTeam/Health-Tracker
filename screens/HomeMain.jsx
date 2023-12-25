@@ -132,12 +132,12 @@ export default function HomeMain({ navigation }) {
         setFatEaten(old => old + Math.round(fat));
         setProteinEaten(old => old + Math.round(pro));
     }
-
+    
     const saveMealToLocal = async(type, meal) => {
         try {
             const jsonValue = JSON.stringify(meal);
             await AsyncStorage.setItem(type, jsonValue);
-            console.log(`${type} saved to local!`);
+            console.log(`${type} đã được lưu vào thiết bị!`);
         } catch (error) {
             console.log(error);
         }
