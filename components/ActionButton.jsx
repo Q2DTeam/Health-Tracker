@@ -1,111 +1,78 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FloatingAction } from "react-native-floating-action";
-
-// Import global styles
+import { useNavigation } from '@react-navigation/native';
 import { globalColors } from '../global/styles';
+import { useNavigation } from '@react-navigation/native';
+// Import global styles
+import { globalStyles } from '../global/styles';
+import { useNavigation } from '@react-navigation/native';
+// Import global styles
+import { globalStyles } from '../global/styles';
 
 // Action buttons components
-const actions = [   
+const actions = [
+
     {
-        style: addButton,
         text: "Exercise",
-        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
+        icon: <MaterialCommunityIcons name='dumbbell' size={24} color='#fff' />,
         name: "exercise",
+        color: globalColors.vibrantBlue,
         position: 1
     },
     {
-        style: addButton,
         text: "Breakfast",
-        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
+        icon: <MaterialCommunityIcons name='coffee' size={24} color='#fff' />,
         name: "breakfast",
+        color: globalColors.breakfastGreen,
         position: 2
     },
     {
-        style: addButton,
         text: "Lunch",
-        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
+        icon: <MaterialCommunityIcons name='food-drumstick' size={24} color='#fff' />,
         name: "lunch",
+        color: globalColors.lunchOrange,
         position: 3
     },
     {
-        style: addButton,
         text: "Dinner",
-        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
+        icon: <MaterialCommunityIcons name='food-turkey' size={24} color='#fff' />,
         name: "dinner",
+        color: globalColors.dinnerCyan,
         position: 4
     },
     {
-        style: addButton,
         text: "Snack",
-        icon: <AntDesign name="plus" color={globalColors.chillCyan} size={20} />,
+        icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
         name: "snack",
+        color: globalColors.snackPurple,
         position: 5
-    },
-    {
-        style: addButton,
-        text: "Water",
-        icon: <MaterialCommunityIcons name="cup-water" color={globalColors.chillCyan} size={20} />,
-        name: "water",
-        position: 6
-    },
-    {
-        style: addButton,
-        text: "Weight",
-        icon: <MaterialCommunityIcons name="weight-kilogram" color={globalColors.chillCyan} size={20} />,
-        name: "weight",
-        position: 7
-
-    },
-    {
-        style: addButton,
-        text: "Sleep",
-        icon: <MaterialCommunityIcons name="sleep" color={globalColors.chillCyan} size={20} />,
-        name: "sleep",
-        position: 8
-    },
-    {
-        style: addButton,
-        text: "Mood",
-        icon: <MaterialCommunityIcons name="emoticon-happy" color={globalColors.chillCyan} size={20} />,
-        name: "mood",
-        position: 9
-    },
-    {
-        styles: addButton,
-        text: "Notes",
-        icon: <MaterialCommunityIcons name="note-text" color={globalColors.chillCyan} size={20} />,
-        name: "notes",
-        position: 10
-
-    },
-    {
-        style: addButton,
-        text: "Medication",
-        icon: <MaterialCommunityIcons name="pill" color={globalColors.chillCyan} size={20} />,
-        name: "medication",
-        position: 11
-    },
-    {
-        style: addButton,
-        text: "Symptoms",
-        icon: <MaterialCommunityIcons name="emoticon-sad" color={globalColors.chillCyan} size={20} />,
-        name: "symptoms",
-        position: 12   
-    },
-    {
-        style: addButton,
-        text: "Period",
-        icon: <MaterialCommunityIcons name="calendar" color={globalColors.chillCyan} size={20} />,
-        name: "period",
-        position: 13
     },
 
 ];
 //Xu ly su kien
 export default function ActionButton({ handleNavigation }) {
+    const navigation = useNavigation();
+    const handleActionPress = (name) => {
+        if (name === 'exercise') {
+            navigation.navigate('Exercise');
+        } else if (name === 'breakfast') {
+            navigation.navigate('Breakfast');
+        } else if (name === 'lunch') {
+            navigation.navigate('Lunch');
+        } else if (name === 'dinner') {
+            navigation.navigate('Dinner');
+        } else if (name === 'snack') {
+            navigation.navigate('Snack');
+        }
+    }
+    useNavigation();
+    useEffect(() => {
 
+        handleNavigation();
+
+    }, []);
     return (<TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
         <FloatingAction
           actions={actions}
@@ -117,88 +84,44 @@ export default function ActionButton({ handleNavigation }) {
         />
       </TouchableWithoutFeedback>
     );
-
 }
-const Period = () => {
+export default function ButtonFromAction () {
+    const navigation = useNavigation();
+    const handleActionPress = (name) => {
+        if (name === 'exercise') {
+            navigation.navigate('Exercise');
+        } else if (name === 'breakfast') {
+            navigation.navigate('Breakfast');
+        } else if (name === 'lunch') {
+            navigation.navigate('Lunch');
+        } else if (name === 'dinner') {
+            navigation.navigate('Dinner');
+        } else if (name === 'snack') {
+            navigation.navigate('Snack');
+        }
+    }
     return (
-        <View style={itemStyles.container}>
-            <Text>Period</Text>
-        </View>
-    );
-}
-const Symptoms = () => {
-    return (
-        <View style={itemStyles.container}>
-            <Text>Symptoms</Text>
-        </View>
-    );
-}
-const Medication = () => {
-    return (
-        <View style={itemStyles.container}>
-            <Text>Medication</Text>
-        </View>
-    );
-}
-const Notes = () => {
-    return (
-        <View style={itemStyles.container}>
-            <Text>Notes</Text>
-        </View>
-    );
-}
-const Mood = () => {
-    return (
-        <View style={itemStyles.container}>
-            <Text>Mood</Text>
-        </View>
+        <ActionButton buttonColor="rgba(231,76,60,1)">
+            <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
+                <Icon name="md-create" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => { }}>
+                <Icon name="md-notifications-off" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => { }}>
+                <Icon name="md-done-all" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+        </ActionButton>
     );
 }
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
     },
-});
-export const handleActionPress = (name) => {
-    switch (name) {
-        case "exercise":
-            console.log("Exercise");
-            break;
-        case "breakfast":
-            console.log("Breakfast");
-            break;
-        case "lunch":
-            console.log("Lunch");
-            break;
-        case "dinner":
-            console.log("Dinner");
-            break;
-        case "snack":
-            console.log("Snack");
-            break;
-        default:
-            console.log("Default");
-    }
-}
-const itemStyles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
     },
-});
 
-const addButton = [ 
-    styles.container,
-    {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 10 },
-        elevation: 5,
-    }
-];
+});
