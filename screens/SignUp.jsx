@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, ScrollView, ImageBackground, Image, Modal } from 'react-native';
+import React, {useState} from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Alert, ImageBackground, Image, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalColors, globalStyles } from '../global/styles';
 import { Formik } from 'formik';
