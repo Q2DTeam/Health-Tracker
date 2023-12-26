@@ -94,6 +94,8 @@ export default function Me({ navigation }) {
             await AsyncStorage.removeItem('dinner');
             await AsyncStorage.removeItem('snack');
             await AsyncStorage.removeItem('custom_foods');
+            await AsyncStorage.removeItem('exercisesAPI');
+            await AsyncStorage.removeItem('activities');
             console.log("REMOVED");
         }
         catch (err) {
