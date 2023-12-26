@@ -9,7 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Calendar } from 'react-native-calendars';
 import moment from 'moment'; 
 import { BlurView } from 'expo-blur';
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 // Import components
 import KcalValue from '../components/KcalValue';
@@ -418,26 +417,19 @@ export default function HomeMain({ navigation }) {
                     <View style={styles.infoContainer}>
                         <View style={styles.kcalWrapper}>
                             <KcalValue icon='fire' title='burned' value={kcalBurned} />
-                            
-                            <AnimatedCircularProgress
-                                size={180}
-                                width={10}
-                                rotation={0}
-                                fill={Math.round(kcalEaten / (totalKcal + kcalBurned) * 100)}
-                                tintColor="#fff"
-                                backgroundColor={globalColors.backgroundCyan}
+                            <ProgressCircle 
+                                percent={Math.round(kcalEaten / (totalKcal + kcalBurned) * 100)}
+                                radius={90}
+                                borderWidth={8}
+                                color="#fff"
+                                shadowColor={globalColors.backgroundCyan}
+                                bgColor={globalColors.darkerCyan}
                             >
-                                
-                                {
-                                    (fill) => (
-                                    <View style={{alignItems: 'center'}}>
-                                        <Text style={styles.remainKcalValue}>{totalKcal + kcalBurned - kcalEaten}</Text>
-                                        <Text style={styles.remainKcalText}>Kcal remaining</Text>
-                                    </View>
-                                    )
-                                }
-                            </AnimatedCircularProgress>
-
+                                <View style={{alignItems: 'center'}}>
+                                    <Text style={styles.remainKcalValue}>{totalKcal + kcalBurned - kcalEaten}</Text>
+                                    <Text style={styles.remainKcalText}>Kcal remaining</Text>
+                                </View>
+                            </ProgressCircle>
                             <KcalValue icon='silverware-variant' title='eaten' value={kcalEaten} />
                         </View>
                         <View style={styles.nutriWrapper}>
