@@ -4,26 +4,36 @@ import { StyleSheet, Text, View, TouchableOpacity, Alert, Modal } from 'react-na
 import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PieChart from 'react-native-pie-chart';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 
 // Import components
-import NutritionWheel from '../components/NutritionWheel';
 import UpdateBMI from '../sub_screens/UpdateBMI';
 
 
 export default function Me({ navigation }) {
     const [user, setUser] = useState();
-    const [gender, setGender] = useState(true);
-    const [age, setAge] = useState(18);
     const [weight, setWeight] = useState(70);
     const [height, setHeight] = useState(175);
     const [bmi, setBMI] = useState(0.0);
-    const [ratio, setRatio] = useState([40, 30, 30]);
+    let ratio = [40, 30, 30];
+
+    const [totalKcal, setkcalTotal] = useState(0);
+    const [totalCarb, setcarbTotal] = useState(0);
+    const [totalProtein, setproteinTotal] = useState(0);
+    const [totalFat, setfatTotal] = useState(0);
 
     const [bmiModal, setBMIModal] = useState(false);
+
+    const getNutriValue = (tdee, carbRatio, proteinRatio, fatRatio) => {
+        let carb = Math.round(tdee * carbRatio / 400);
+        let protein = Math.round(tdee * proteinRatio / 400);
+        let fat = Math.round(tdee * fatRatio / 900);
+        return { tdee, carb, protein, fat};
+    }
 
     const getDataLocal = async() => {
         try {
@@ -32,14 +42,12 @@ export default function Me({ navigation }) {
                 // value previously stored
                 const userData = JSON.parse(value);
                 if (user.uid == userData.id) {
-                    //console.log("Data fetched, id matched: ", userData);
-                    setAge(userData.age);
                     setWeight(userData.weight);
                     setHeight(userData.height);
-                    setGender(userData.gender);
                     let bmiValue = bmiCalculation(weight, height);
                     setBMI(bmiValue);
-                    setRatio([userData.carbRatio, userData.proteinRatio, userData.fatRatio]);
+                    ratio = [userData.carbRatio, userData.proteinRatio, userData.fatRatio];
+                    tdee = userData.tdee;
                 }
                 else {
                     console.log("ID not matched");
@@ -67,13 +75,13 @@ export default function Me({ navigation }) {
         if (docSnap) {
             let userData = docSnap.data();
             //console.log("Document data:", userData);
-            setAge(userData.age);
             setWeight(userData.weight);
             setHeight(userData.height);
-            setGender(userData.gender);
             let bmiValue = bmiCalculation(weight, height);
             setBMI(bmiValue);
-            setRatio([userData.carbRatio, userData.proteinRatio, userData.fatRatio]);
+            ratio = [userData.carbRatio, userData.proteinRatio, userData.fatRatio];
+            tdee = userData.tdee;
+            //getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
         } 
         else {
             console.log("No such document!");
@@ -216,6 +224,32 @@ export default function Me({ navigation }) {
         );
     }
     
+    function NutritionWheel() {
+        return (
+            <View style={nutriRatioStyles.wheelContainer}>
+                <PieChart 
+                    widthAndHeight={150} 
+                    series={ratio} 
+                    sliceColor={[globalColors.vibrantBlue, globalColors.lunchOrange, globalColors.snackPurple]}
+                    coverRadius={0.001} 
+                />
+                <View style={nutriRatioStyles.details}>
+                    <View style={nutriRatioStyles.infoItem}>
+                        <FontAwesome name='circle' color={globalColors.vibrantBlue} size={18} />
+                        <Text style={nutriRatioStyles.infoName}>Carbs </Text>
+                    </View>
+                    <View style={nutriRatioStyles.infoItem}>
+                        <FontAwesome name='circle' color={globalColors.lunchOrange} size={18} />
+                        <Text style={nutriRatioStyles.infoName}>Protein </Text>
+                    </View>
+                    <View style={nutriRatioStyles.infoItem}>
+                        <FontAwesome name='circle' color={globalColors.snackPurple} size={18} />
+                        <Text style={nutriRatioStyles.infoName}>Fats </Text>
+                    </View>
+                </View>
+            </View>
+        );
+    }
     
     return (
         <View style={globalStyles.container}>
@@ -230,7 +264,7 @@ export default function Me({ navigation }) {
 
                 <View style={{marginVertical: 20,}}>
                     <Text style={styles.bmiTitle}>Nutritional Ratio</Text>
-                    <NutritionWheel nutritions={ratio} />
+                    <NutritionWheel />
                 </View>
             </View>
         </View>
@@ -283,5 +317,39 @@ const styles = StyleSheet.create({
     },
     bmiText: {
         fontSize: 18,
+    },
+});
+
+const nutriRatioStyles = StyleSheet.create({
+    wheelContainer: {
+        width: 334,
+        height: 180,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    details: {
+        justifyContent: 'space-around',
+        height: 120,
+    },
+    infoItem: {
+        minWidth: 100,
+        flexDirection: 'row',
+    },
+    infoName: {
+        marginLeft: 10,
+        fontSize: 16,
     },
 });
