@@ -54,6 +54,47 @@ const actions = [
         position: 5
     },
 ];
+export default function NewActionButton({ navigation }) {
+    const [open, setOpen] = React.useState(false);
+    const [active, setActive] = React.useState(false);
+    useEffect(() => {
+        console.log("ActionButton mounted");
+        return () => console.log("ActionButton unmounted");
+    }
+    );
+    const handlePress = async () => {
+        try {
+            const result = await AsyncStorage.getItem('userToken');
+            console.log(result);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    return (
+        <View style={styles.container}>
+            <FloatingAction
+                actions={actions}
+                onPressItem={name => {
+                    if (name === 'exercise') {
+                        navigation.navigate('Exercise');
+                    } else if (name === 'breakfast') {
+                        navigation.navigate('Breakfast');
+                    } else if (name === 'lunch') {
+                        navigation.navigate('Lunch');
+                    } else if (name === 'dinner') {
+                        navigation.navigate('Dinner');
+                    } else if (name === 'snack') {
+                        navigation.navigate('Snack');
+                    }
+                }}
+                color={globalColors.vibrantBlue}
+                floatingIcon={<AntDesign name="plus" size={24} color="white" />}
+                onPressMain={() => {
+                    console.log("Pressed main action button");
+                }}
+            />
+        </View>
+    );
 export default function ActionButton({ navigation }) {
     const [open, setOpen] = React.useState(false);
     const [active, setActive] = React.useState(false);
@@ -70,7 +111,15 @@ export default function ActionButton({ navigation }) {
             console.log(e);
         }
     }
-
+    constructor(params) {
+        console.log("ActionButton mounted");
+        super(params);
+        this.state = {
+            open: false,
+            active: false
+        };
+        
+    }
 
     return (
         <View style={styles.container}>
@@ -115,4 +164,6 @@ const styles = StyleSheet.create({
         bottom: 20,
         right: 20,
     },
-});
+})
+
+```
