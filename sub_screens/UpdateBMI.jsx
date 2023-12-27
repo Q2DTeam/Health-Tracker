@@ -1,14 +1,11 @@
-// Second screen of SignUp screen, navigated to after clicking the Sign up button
-
-
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, Text, View, StyleSheet, TouchableOpacity, TextInput, RefreshControl, Platform } from 'react-native';
 import { globalColors, globalStyles } from '../global/styles';
 import { Formik } from 'formik';
 import { auth } from '../utils/firebase';
 import { db, setDoc, doc } from '../utils/firestore';
 import * as yup from 'yup';
-import Slider from "react-native-a11y-slider";
+import Slider from '@react-native-community/slider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import icons
@@ -197,25 +194,26 @@ export default function UpdateBMI({ hideModal }) {
         )
     }
     
-    function HeightSlider({ value, setValue }) {
-        const setProps = (data) => {
-            setValue(data[0]);
-        }
+    function HeightSlider() {
+        const [temp, setTemp] = useState(height);
     
         return (
             <View style={heightStyles.container}>
                 <View style={heightStyles.title}>
                     <Text style={{fontSize: 16, fontFamily: 'inter-bold', marginLeft: 10}}>Height</Text>
-                    <Text style={{fontSize: 16, color: globalColors.textGray, marginRight: 10}}>{value} cm</Text>
+                    <Text style={{fontSize: 16, color: globalColors.textGray, marginRight: 10}}>{temp} cm</Text>
                 </View>
-                <Slider 
-                    min={100} max={250} 
-                    values={[175]} 
-                    onChange={setProps}
-                    showLabel={false}
-                    labelStyle={heightStyles.label}
-                    labelTextStyle={heightStyles.labelText}
-                    markerColor={globalColors.breakfastGreen} />
+                <Slider
+                    style={{height: 40}}
+                    minimumValue={100}
+                    maximumValue={250}
+                    value={temp}
+                    onValueChange={(value) => setTemp(value)}
+                    onSlidingComplete={(value) => setHeight(value)}
+                    step={1}
+                    minimumTrackTintColor={globalColors.breakfastGreen}
+                    thumbTintColor={globalColors.breakfastGreen}
+                />
             </View>
         )
     }
@@ -304,7 +302,7 @@ export default function UpdateBMI({ hideModal }) {
                     </View>
                     <View style={styles.bodyScaleContainer}>
                         <GenderButton value={gender} setValue={setGender} />
-                        <HeightSlider value={height} setValue={setHeight} />
+                        <HeightSlider />
                         <View style={{flexDirection: 'row', width: 250, justifyContent: 'space-between'}}>
                             <WeightAgeButton title='Weight' value={weight} setValue={setWeight} />
                             <WeightAgeButton title='Age' value={age} setValue={setAge} />
