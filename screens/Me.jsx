@@ -127,6 +127,7 @@ export default function Me({ navigation }) {
 
     const handleHideBMIModal = () => {
         setBMIModal(false);
+        getDataLocal();
     }
 
     useEffect(() => {

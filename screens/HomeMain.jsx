@@ -299,11 +299,15 @@ export default function HomeMain({ navigation }) {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
+        // Get user data
+        getDataLocal();
+        // Get Nutrition
         resetNutrition();
         getMealLocal('breakfast');
         getMealLocal('lunch');
         getMealLocal('dinner');
         getMealLocal('snack');
+        // Fetch exercise
         getExercisesLocal();
         setTimeout(() => {
           setRefreshing(false);
