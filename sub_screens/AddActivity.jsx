@@ -151,7 +151,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                 }
                 setAdding(false);
                 Toast.show({
-                    type: 'success',
+                    type: 'error',
                     text1: 'Exercise was added successfully to your diary',
                 });
                 setChanged(true);
@@ -205,7 +205,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                     setCustomAdding(false);
                     setCustomModal(false);
                     Toast.show({
-                        type: 'success',
+                        type: 'error',
                         text1: 'Exercise was added successfully to your diary',
                     });
                     setChanged(true);
@@ -313,30 +313,30 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
 
     return (
         <View style={globalStyles.container}>
-        <StatusBar style='light' />
-        <Header />
-        <FlatList 
-            data={exercises}
-            keyExtractor={(item) => item.id}
-            renderItem={({item}) => (
-                <ExerciseItem 
-                    id={item.id}
-                    type={item.type}
-                    name={item.name}
-                    kcal={item.kcal}
-                    duration={item.duration}      
-                />
-            )}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            contentContainerStyle={{
-                alignItems: 'center',
-                paddingVertical: 10,
-            }}
-        />
-        <Toast />
-    </View>
+            <StatusBar style='light' />
+            <Header />
+            <FlatList 
+                data={exercises}
+                keyExtractor={(item) => item.id}
+                renderItem={({item}) => (
+                    <ExerciseItem 
+                        id={item.id}
+                        type={item.type}
+                        name={item.name}
+                        kcal={item.kcal}
+                        duration={item.duration}      
+                    />
+                )}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+                contentContainerStyle={{
+                    alignItems: 'center',
+                    paddingVertical: 10,
+                }}
+            />
+            <Toast />
+        </View>
     )
 }
 
