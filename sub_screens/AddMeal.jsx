@@ -6,8 +6,7 @@ import { auth } from '../utils/firebase';
 import { db, doc, getDoc } from '../utils/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import PieChart from 'react-native-pie-chart'
-import { BlurView } from 'expo-blur';
+import PieChart from 'react-native-pie-chart';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';

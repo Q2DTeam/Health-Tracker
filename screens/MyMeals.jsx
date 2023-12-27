@@ -172,7 +172,7 @@ export default function MyMeals() {
                 {
                     text: 'Cancel',
                 },
-                ]);
+            ]);
         }
 
         return (
@@ -263,6 +263,15 @@ const itemStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
     },
     infoWrapper: {
         flex: 1,
