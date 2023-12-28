@@ -44,6 +44,7 @@ export default function HomeMain({ navigation }) {
     const [calenVisible, setCalenVisible] = useState(false);
     const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
     const [refreshing, setRefreshing] = useState(false);
+    
     //store data to local
     const storeDataLocal = async(value) => {
         try {
@@ -229,6 +230,15 @@ export default function HomeMain({ navigation }) {
         setkcalBurned(burned);
     }
 
+    const saveExerciseToLocal = async(value) => {
+        try {
+            const jsonValue = JSON.stringify(value);
+            await AsyncStorage.setItem('activities', jsonValue);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const getExercisesLocal = async() => {
         try {
             const value = await AsyncStorage.getItem('activities');
@@ -241,7 +251,7 @@ export default function HomeMain({ navigation }) {
                     }
                 }
                 else {
-                    console.log("ID or date not matched");
+                    console.log("Activities not matched: ", activity.date);
                     await getExercises();
                 }
             }
@@ -269,6 +279,7 @@ export default function HomeMain({ navigation }) {
             if (activity !== null && activity !== undefined) {
                 setExercises(activity.exercises);
                 updateExercises(activity.exercises);
+                saveExerciseToLocal(activity);
             }
         } 
         else {
