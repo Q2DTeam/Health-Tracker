@@ -6,6 +6,7 @@ import { auth } from '../utils/firebase';
 import { db } from '../utils/firestore';
 import { doc, setDoc } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 import AddActivity from './AddActivity';
 
@@ -150,6 +151,10 @@ export default function ActivityInfo({ navigation, route }) {
                         setModified(true);
                         const newActs = activities.filter((item) => item.id != id);
                         setActivities(newActs);
+                        Toast.show({
+                            type: 'error',
+                            text1: 'Exercise was deleted from your diary',
+                        });
                     },
                 },
                 {
@@ -193,6 +198,7 @@ export default function ActivityInfo({ navigation, route }) {
                     />
                 )}
             />
+            <Toast />
         </View>
     )
 }

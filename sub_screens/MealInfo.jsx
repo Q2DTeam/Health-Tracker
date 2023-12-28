@@ -6,6 +6,7 @@ import { auth } from '../utils/firebase';
 import { db } from '../utils/firestore';
 import { doc, setDoc } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 import AddMeal from './AddMeal';
 
@@ -174,6 +175,10 @@ export default function MealInfo({ navigation, route }) {
                         setModified(true);
                         const newMeal = meal.filter((item) => item.id != id);
                         setMeal(newMeal);
+                        Toast.show({
+                            type: 'success',
+                            text1: 'Food was deleted from your diary',
+                        });
                     },
                 },
                 {
@@ -223,6 +228,7 @@ export default function MealInfo({ navigation, route }) {
                     />
                 )}
             />
+            <Toast />
         </View>
     )
 }
