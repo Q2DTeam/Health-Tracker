@@ -364,12 +364,13 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                     transparent={true}
                     visible={customModal}
                 >
-                    <View intensity={20}
+                    <View
                      style={{
                         flex: 1,
                         justifyContent: 'center',
                         alignItems: 'center',
                         padding: 25,
+                        margin: 10,
                     }}>
                         <AddMealCustom />
                     </View>
@@ -524,6 +525,15 @@ const customCard = StyleSheet.create({
         overflow: 'hidden',
         backgroundColor: '#fff',
         height: 380,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.34,
+        shadowRadius: 6.27,
+
+        elevation: 10,
     },
     header: {
         padding: 10,

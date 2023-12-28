@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal, StyleSheet, Text, View, TouchableOpacity, TextInput, FlatList, ActivityIndicator, RefreshControl, ImageBackground, Platform } from 'react-native';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { fetchExercises } from '../utils/fetchExercises';
-import { auth } from '../utils/firebase';
-import { db, doc, getDoc } from '../utils/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { BlurView } from 'expo-blur';
 
 // Import styles
 import { globalColors, globalStyles } from '../global/styles';
@@ -384,6 +381,15 @@ const customCard = StyleSheet.create({
         backgroundColor: '#fff',
         width: 340,
         height: 220,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.34,
+        shadowRadius: 6.27,
+
+        elevation: 10,
     },
     header: {
         padding: 10,
