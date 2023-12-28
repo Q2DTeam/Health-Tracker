@@ -39,23 +39,25 @@ export default function MyMeals() {
             console.log("No such document!");
         }
     }
-    const getFoodsLocal = async () => {
+
+    const getFoodsLocal = async() => {
         try {
-          const value = await AsyncStorage.getItem('custom_foods');
-          if (value !== null) {
-            const custom_foods = JSON.parse(value);
-            if (custom_foods.userID === user.uid) {
-              setFoods(custom_foods.foods);
-              setFilteredFoods(custom_foods.foods);
-            } else {
-              getFoodsDb();
+            const value = await AsyncStorage.getItem('custom_foods');
+            if (value !== null) {
+                const custom_foods = JSON.parse(value);
+                if (custom_foods.userID == user.uid) {
+                    setFoods(custom_foods.foods);
+                    setFilteredFoods(custom_foods.foods);
+                }
+                else {
+                    getFoodsDb();
+                }
             }
-          }
         } catch (error) {
-          console.log("Error fetching custom food from local: ", error);
-          getFoodsDb();
+            console.log("Error fetching custom food from local: ", error);
+            getFoodsDb();
         }
-      };
+    }
 
     const saveFoodToLocal = async(newFoods) => {
         const custom_food = {
