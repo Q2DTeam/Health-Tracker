@@ -82,7 +82,15 @@ export default function Login({navigation}) {
                                 <Text style={globalStyles.errorText}>{errors.password}</Text>
                             </View>
 
-                            <TouchableOpacity style={globalStyles.submitBtn} onPress={handleSubmit}>
+                            <TouchableOpacity style={{
+                                marginTop: 30,
+                                padding: 10,
+                                paddingHorizontal: 40,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 25,
+                                backgroundColor: globalColors.darkerGreen,
+                            }} onPress={handleSubmit}>
                                 <Text style={{color: '#fff', fontSize: 20,}}>Login</Text>
                             </TouchableOpacity>
                         </View>)

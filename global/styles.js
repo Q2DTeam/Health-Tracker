@@ -62,7 +62,7 @@ export const globalStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 25,
-        backgroundColor: globalColors.darkerGreen,
+        backgroundColor: globalColors.breakfastGreen,
     },
     errorText: {
         color: '#fff',
