@@ -38,33 +38,30 @@ export default function Me({ navigation }) {
         setproteinTotal(protein);
     }
 
-    const getDataLocal = async() => {
+    const getDataLocal = async () => {
         try {
-            const value = await AsyncStorage.getItem('userData');
-            if (value !== null) {
-                // value previously stored
-                const userData = JSON.parse(value);
-                if (user.uid == userData.id) {
-                    setWeight(userData.weight);
-                    setHeight(userData.height);
-                    let bmiValue = bmiCalculation(weight, height);
-                    setBMI(bmiValue);
-                    ratio = [userData.carbRatio, userData.proteinRatio, userData.fatRatio];
-                    getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
-                }
-                else {
-                    console.log("ID not matched");
-                    await getUserData();
-                }
+          const value = await AsyncStorage.getItem('userData');
+          if (value !== null) {
+            // value previously stored
+            const userData = JSON.parse(value);
+            if (user.uid === userData.id) {
+              setWeight(userData.weight);
+              setHeight(userData.height);
+              let bmiValue = bmiCalculation(weight, height);
+              setBMI(bmiValue);
+              let ratio = [userData.carbRatio, userData.proteinRatio, userData.fatRatio];
+              getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
+            } else {
+              console.log("ID not matched");
+              await getUserData();
             }
-            else {
-                await getUserData();
-            }
+          } else {
+            await getUserData();
+          }
         } catch (error) {
-            console.log(error);
+          console.log(error);
         }
-    }
-
+      };
     const getUserData = async() => {
         let docRef, docSnap;
         try {
