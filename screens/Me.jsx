@@ -32,7 +32,10 @@ export default function Me({ navigation }) {
         let carb = Math.round(tdee * carbRatio / 400);
         let protein = Math.round(tdee * proteinRatio / 400);
         let fat = Math.round(tdee * fatRatio / 900);
-        return { tdee, carb, protein, fat};
+        setkcalTotal(tdee);
+        setfatTotal(fat);
+        setcarbTotal(carb);
+        setproteinTotal(protein);
     }
 
     const getDataLocal = async() => {
@@ -47,7 +50,7 @@ export default function Me({ navigation }) {
                     let bmiValue = bmiCalculation(weight, height);
                     setBMI(bmiValue);
                     ratio = [userData.carbRatio, userData.proteinRatio, userData.fatRatio];
-                    tdee = userData.tdee;
+                    getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
                 }
                 else {
                     console.log("ID not matched");
@@ -80,8 +83,7 @@ export default function Me({ navigation }) {
             let bmiValue = bmiCalculation(weight, height);
             setBMI(bmiValue);
             ratio = [userData.carbRatio, userData.proteinRatio, userData.fatRatio];
-            tdee = userData.tdee;
-            //getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
+            getNutriValue(userData.tdee, userData.carbRatio, userData.proteinRatio, userData.fatRatio);
         } 
         else {
             console.log("No such document!");
@@ -234,17 +236,18 @@ export default function Me({ navigation }) {
                     coverRadius={0.001} 
                 />
                 <View style={nutriRatioStyles.details}>
+                    <Text style={nutriRatioStyles.kcalTitle}>{totalKcal} kcal</Text>
                     <View style={nutriRatioStyles.infoItem}>
                         <FontAwesome name='circle' color={globalColors.vibrantBlue} size={18} />
-                        <Text style={nutriRatioStyles.infoName}>Carbs </Text>
+                        <Text style={nutriRatioStyles.infoName}>Carbs: {totalCarb} g</Text>
                     </View>
                     <View style={nutriRatioStyles.infoItem}>
                         <FontAwesome name='circle' color={globalColors.lunchOrange} size={18} />
-                        <Text style={nutriRatioStyles.infoName}>Protein </Text>
+                        <Text style={nutriRatioStyles.infoName}>Protein: {totalProtein} g</Text>
                     </View>
                     <View style={nutriRatioStyles.infoItem}>
                         <FontAwesome name='circle' color={globalColors.snackPurple} size={18} />
-                        <Text style={nutriRatioStyles.infoName}>Fats </Text>
+                        <Text style={nutriRatioStyles.infoName}>Fats: {totalFat} g</Text>
                     </View>
                 </View>
             </View>
@@ -263,7 +266,7 @@ export default function Me({ navigation }) {
                 </View>
 
                 <View style={{marginVertical: 20,}}>
-                    <Text style={styles.bmiTitle}>Nutritional Ratio</Text>
+                    <Text style={styles.bmiTitle}>Macro Information</Text>
                     <NutritionWheel />
                 </View>
             </View>
@@ -342,7 +345,7 @@ const nutriRatioStyles = StyleSheet.create({
     },
     details: {
         justifyContent: 'space-around',
-        height: 120,
+        height: 170,
     },
     infoItem: {
         minWidth: 100,
@@ -351,5 +354,11 @@ const nutriRatioStyles = StyleSheet.create({
     infoName: {
         marginLeft: 10,
         fontSize: 16,
+    },
+    kcalTitle: {
+        fontFamily: 'inter-semibold',
+        fontSize: 18,
+        textAlign: 'center',
+        color: globalColors.calmRed
     },
 });
