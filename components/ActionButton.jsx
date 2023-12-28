@@ -5,6 +5,13 @@ import { FloatingAction } from "react-native-floating-action";
 // Import global styles
 import { globalColors } from '../global/styles';
 const { vibrantBlue, breakfastGreen, lunchOrange, dinnerCyan, snackPurple } = globalColors;
+import { globalStyles } from '../global/styles';
+const { container } = globalStyles;
+import { LoginButton } from 'react-native-fbsdk';
+import { LoginManager } from 'react-native-fbsdk';
+import { AccessToken } from 'react-native-fbsdk';
+import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
+
 
 // Action buttons components
 const actions = [
@@ -62,14 +69,7 @@ export default function NewActionButton({ navigation }) {
         return () => console.log("ActionButton unmounted");
     }
     );
-    const handlePress = async () => {
-        try {
-            const result = await AsyncStorage.getItem('userToken');
-            console.log(result);
-        } catch (e) {
-            console.log(e);
-        }
-    }
+
     return (
         <View style={styles.container}>
             <FloatingAction
@@ -103,14 +103,7 @@ export default function ActionButton({ navigation }) {
         return () => console.log("ActionButton unmounted");
     }
     );
-    const handlePress = async () => {
-        try {
-            const result = await AsyncStorage.getItem('userToken');
-            console.log(result);
-        } catch (e) {
-            console.log(e);
-        }
-    }
+
     constructor(params) {
         console.log("ActionButton mounted");
         super(params);
@@ -120,6 +113,14 @@ export default function ActionButton({ navigation }) {
         };
         
     }
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            active: false
+        };
+    }
+
 
     return (
         <View style={styles.container}>
@@ -144,9 +145,16 @@ export default function ActionButton({ navigation }) {
                     console.log("Pressed main action button");
                 }}
             />
+            <View style={styles.button}>
+                <TouchableOpacity onPress={() => setOpen(!open)}>
+                    <AntDesign name="plus" size={24} color="white" />
+                </TouchableOpacity>
+                <LoginButton></LoginButton>
+            </View>
         </View>
     );
 }
+
 
 
 const styles = StyleSheet.create({
@@ -164,6 +172,4 @@ const styles = StyleSheet.create({
         bottom: 20,
         right: 20,
     },
-})
-
-```
+});
