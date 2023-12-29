@@ -249,9 +249,12 @@ export default function HomeMain({ navigation }) {
                         setExercises(activity.exercises);
                         updateExercises(activity.exercises);
                     }
+                    else {
+                        setExercises([]);
+                        updateExercises([]);
+                    }
                 }
                 else {
-                    console.log("Activities not matched: ", activity.date);
                     await getExercises();
                 }
             }
@@ -280,6 +283,10 @@ export default function HomeMain({ navigation }) {
                 setExercises(activity.exercises);
                 updateExercises(activity.exercises);
                 saveExerciseToLocal(activity);
+            }
+            else {
+                setExercises([]);
+                updateExercises([]);
             }
         } 
         else {
