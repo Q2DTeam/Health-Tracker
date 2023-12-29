@@ -11,7 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 
 // Import components
-import UpdateBMI from '../sub_screens/UpdateBMI';
+import UpdateBMR from '../sub_screens/UpdateBMR';
 
 
 const SignUpSchema = yup.object({
@@ -34,7 +34,7 @@ const SignUpSchema = yup.object({
 
 
 export default function Signup({navigation}) {
-    const [bmiModal, setBMIModal] = useState(false);
+    const [bmrModal, setBMRModal] = useState(false);
 
     const handleSignUp = (values) => {
         createUserWithEmailAndPassword(auth, values.email, values.password)
@@ -42,7 +42,7 @@ export default function Signup({navigation}) {
             updateProfile(auth.currentUser, {
                 displayName: values.username,
             });
-            setBMIModal(true);
+            setBMRModal(true);
         })
         .catch(() => {
             Alert.alert("Registrations failed", "There's an error that's preventing you from creating the account. Please try again.");
@@ -51,6 +51,7 @@ export default function Signup({navigation}) {
 
     const handleHideBMIModal = () => {
         Alert.alert("Registration completed", "Your user profile has been created successfully.");
+        setBMRModal(false);
         navigation.navigate('Main');
     }
 
@@ -58,10 +59,10 @@ export default function Signup({navigation}) {
         return (
             <Modal
                 animationType="slide"
-                visible={bmiModal}
+                visible={bmrModal}
             >
                 <View style={{flex: 1}}>
-                    <UpdateBMI 
+                    <UpdateBMR 
                         hideModal={handleHideBMIModal}
                     />
                 </View>

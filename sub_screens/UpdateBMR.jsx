@@ -25,7 +25,7 @@ const bmiSchema = yup.object({
 });
 
 
-export default function UpdateBMI({ hideModal }) {
+export default function UpdateBMR({ hideModal }) {
     const [user, setUser] = React.useState(auth.currentUser);
 
     const [gender, setGender] = React.useState(true);

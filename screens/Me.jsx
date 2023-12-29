@@ -11,7 +11,7 @@ import { globalColors, globalStyles } from '../global/styles';
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 
 // Import components
-import UpdateBMI from '../sub_screens/UpdateBMI';
+import UpdateBMR from '../sub_screens/UpdateBMR';
 
 
 export default function Me({ navigation }) {
@@ -26,7 +26,7 @@ export default function Me({ navigation }) {
     const [totalProtein, setproteinTotal] = useState(0);
     const [totalFat, setfatTotal] = useState(0);
 
-    const [bmiModal, setBMIModal] = useState(false);
+    const [bmrModal, setBMRModal] = useState(false);
 
     const getNutriValue = (tdee, carbRatio, proteinRatio, fatRatio) => {
         let carb = Math.round(tdee * carbRatio / 400);
@@ -132,11 +132,11 @@ export default function Me({ navigation }) {
     }
 
     const handleUpdateBMI = () => {
-        setBMIModal(true);
+        setBMRModal(true);
     }
 
     const handleHideBMIModal = () => {
-        setBMIModal(false);
+        setBMRModal(false);
         getDataLocal();
     }
 
@@ -154,10 +154,10 @@ export default function Me({ navigation }) {
         return (
             <Modal
                 animationType="slide"
-                visible={bmiModal}
+                visible={bmrModal}
             >
                 <View style={{flex: 1, backgroundColor: globalColors.backgroundGray}}>
-                    <UpdateBMI 
+                    <UpdateBMR 
                         hideModal={handleHideBMIModal}
                     />
                 </View>
