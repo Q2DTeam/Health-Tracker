@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, TextInput, Image, ImageBackground } from 'react-native';
+import React from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import { globalStyles } from '../global/styles';
 
 
@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 
 
-export default function Register({navigation}) {
+export default function Welcome({navigation}) {
     return (
         <View style={globalStyles.container}>
             <StatusBar style='light' />

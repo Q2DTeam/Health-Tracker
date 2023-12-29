@@ -53,9 +53,7 @@ export default function App() {
               name="RegisterStack" 
               component={RegisterStack}
             />
-          )
-          :
-          (
+          ) : (
             <Stack.Screen 
               name="MainNavigation" 
               component={Navigation}

@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 
 // Import screens
-import Register from './screens/Register';
+import Welcome from './screens/Welcome';
 import Login from './screens/Login';
 import SignUp from './screens/SignUp';
 import Navigation from './Navigation';
@@ -13,11 +13,11 @@ export default function RegisterStack() {
     return (
         <Stack.Navigator 
             screenOptions={{headerShown: false}}
-            initialRouteName='Register'
+            initialRouteName='Welcome'
         >
             <Stack.Screen 
-                name="Register" 
-                component={Register} />
+                name="Welcome" 
+                component={Welcome} />
             <Stack.Screen 
                 name="Login" 
                 component={Login} />
