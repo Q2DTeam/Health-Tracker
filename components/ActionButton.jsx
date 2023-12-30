@@ -2,18 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FloatingAction } from "react-native-floating-action";
-// Import global styles
 import { globalColors } from '../global/styles';
 const { vibrantBlue, breakfastGreen, lunchOrange, dinnerCyan, snackPurple } = globalColors;
 import { globalStyles } from '../global/styles';
 const { container } = globalStyles;
 import { LoginButton } from 'react-native-fbsdk';
-import { LoginManager } from 'react-native-fbsdk';
-import { AccessToken } from 'react-native-fbsdk';
-import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
-
-
-// Action buttons components
 const actions = [
     {
         text: "Exercise",
@@ -51,7 +44,15 @@ const actions = [
         textColor: '#fff',
         position: 4
     },
-
+    {
+        text: "Snack",
+        icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
+        name: "snack",
+        color: globalColors.snackPurple,
+        textBackground: globalColors.snackPurple,
+        textColor: '#fff',
+        position: 5
+    },
 ];
 export default function NewActionButton({ navigation }) {
     const [open, setOpen] = React.useState(false);
@@ -82,29 +83,38 @@ export default function NewActionButton({ navigation }) {
             active: false
         };
     }
-    
+
     return (
         <View style={styles.container}>
             <FloatingAction
                 actions={actions}
                 onPressItem={name => {
-                    if (name === 'exercise') {
-                        navigation.navigate('Exercise');
-                    } else if (name === 'breakfast') {
-                        navigation.navigate('Breakfast');
-                    } else if (name === 'lunch') {
-                        navigation.navigate('Lunch');
-                    } else if (name === 'dinner') {
-                        navigation.navigate('Dinner');
-                    } else if (name === 'snack') {
-                        navigation.navigate('Snack');
+                    switch (name) {
+                        case 'exercise':
+                            navigation.navigate('Exercise');
+                            break;
+                        case 'breakfast':
+                            navigation.navigate('Breakfast');
+                            break;
+                        case 'lunch':
+                            navigation.navigate('Lunch');
+                            break;
+                        case 'dinner':
+                            navigation.navigate('Dinner');
+                            break;
+                        case 'snack':
+                            navigation.navigate('Snack');
+                            break;
                     }
+
+
                 }}
                 color={globalColors.vibrantBlue}
                 floatingIcon={<AntDesign name="plus" size={24} color="white" />}
                 onPressMain={() => {
                     console.log("Pressed main action button");
                 }}
+
             />
         </View>
     );
@@ -116,7 +126,6 @@ export default function ActionButton({ navigation }) {
         return () => console.log("ActionButton unmounted");
     }
     );
-
     constructor(params) {
         console.log("ActionButton mounted");
         super(params);
