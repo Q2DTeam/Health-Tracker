@@ -149,16 +149,22 @@ export default function ActionButton({ navigation }) {
             <FloatingAction
                 actions={actions}
                 onPressItem={name => {
-                    if (name === 'exercise') {
-                        navigation.navigate('Exercise');
-                    } else if (name === 'breakfast') {
-                        navigation.navigate('Breakfast');
-                    } else if (name === 'lunch') {
-                        navigation.navigate('Lunch');
-                    } else if (name === 'dinner') {
-                        navigation.navigate('Dinner');
-                    } else if (name === 'snack') {
-                        navigation.navigate('Snack');
+                    switch (name) {
+                        case 'exercise':
+                            navigation.navigate('Exercise');
+                            break;
+                        case 'breakfast':
+                            navigation.navigate('Breakfast');
+                            break;
+                        case 'lunch':
+                            navigation.navigate('Lunch');
+                            break;
+                        case 'dinner':
+                            navigation.navigate('Dinner');
+                            break;
+                        case 'snack':
+                            navigation.navigate('Snack');
+                            break;
                     }
                 }}
                 color={globalColors.vibrantBlue}
@@ -176,6 +182,37 @@ export default function ActionButton({ navigation }) {
         </View>
     );
 }
+
+//add new action button to the bottom right of the screen
+//when clicked, a menu of options will appear
+//each option will have a different color and icon
+
+function ActionButton({ navigation }) {
+    const [open, setOpen] = React.useState(false);
+    const [active, setActive] = React.useState(false);
+    useEffect(() => {
+        console.log("ActionButton mounted");
+        return () => console.log("ActionButton unmounted");
+    }
+    );
+    constructor(params) {
+        console.log("ActionButton mounted");
+        super(params);
+        this.state = {
+            open: false,
+            active: false
+        };
+        
+    }
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            active: false
+        };
+    }
+}
+
 
 
 
