@@ -207,7 +207,7 @@ export default function MealInfo({ navigation, route }) {
 
     useEffect(() => {
         getMealLocal(title);
-    }, [])
+    }, []);
 
     return (
         <View style={[globalStyles.container, {alignItems: 'center'}]}>

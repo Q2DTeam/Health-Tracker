@@ -97,7 +97,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
     }
 
     const getFoods = async() => {
-        // CAll API
+        // Call API
         const data = await fetchFoods();
         if (data != undefined) {
             setFoods(data);

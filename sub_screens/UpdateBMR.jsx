@@ -152,7 +152,7 @@ export default function UpdateBMR({ hideModal }) {
                     <MaterialCommunityIcons name='chevron-left' size={40} color='#fff' />
                 </TouchableOpacity>
                 <View style={{flex: 1, alignItems: 'center'}}>
-                    <Text style={globalStyles.headerTitle}>Update your BMI</Text>
+                    <Text style={globalStyles.headerTitle}>Update your BMR</Text>
                 </View>
                 <View style={{width: 30}} />
             </View>

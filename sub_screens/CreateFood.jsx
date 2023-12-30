@@ -69,7 +69,6 @@ export default function CreateFood({ cancelFunc, foods, setFoods }) {
         }
     }
 
-
     const saveFood = (values) => {
         if (values.unit.length == 0 && values.serving.length == 0) {
             Alert.alert(
