@@ -7,72 +7,32 @@ import { globalStyles } from '../global/styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 
-import React from 'react';
-import { View, ImageBackground, Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default function Welcome({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <StatusBar style='light' />
-      <ImageBackground source={require('../assets/images/login_BG.jpg')} resizeMode='cover' style={styles.backgroundImage}>
-
-        <Image source={require('../assets/images/Logo_alt.png')} style={styles.logo} />
-
-        <View>
-          <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.replace('Login')}>
-            <MaterialCommunityIcons name='email' size={24} />
-            <Text style={styles.btnText}>Sign in with emails</Text>
-          </TouchableOpacity>
+export default function Welcome({navigation}) {
+    return (
+        <View style={globalStyles.container}>
+            <StatusBar style='light' />
+            <ImageBackground source={require('../assets/images/login_BG.jpg')} alt='Background image' resizeMode='cover' style={styles.registerContainer}>
+            
+                <Image source={require('../assets/images/Logo_alt.png')} style={styles.logo} />
+                
+                <View>
+                    <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.replace('Login')}>
+                        <MaterialCommunityIcons name='email' size={24} />
+                        <Text style={styles.btnText}>Sign in with emails</Text>
+                    </TouchableOpacity>
+                
+                </View>
+                <View style={{margin: 20,}}>
+                    <Text style={styles.bottomText}>Don't have an account?</Text>
+                    <TouchableOpacity onPress={() => navigation.replace('Signup')}>
+                        <Text style={styles.bottomTextBold}>Sign Up</Text>
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
         </View>
-
-        <View style={styles.bottomContainer}>
-          <Text style={styles.bottomText}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.replace('Signup')}>
-            <Text style={styles.bottomTextBold}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
-
-      </ImageBackground>
-    </View>
-  );
+    )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  backgroundImage: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    width: 200,
-    height: 200,
-  },
-  signInBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  btnText: {
-    marginLeft: 10,
-    fontSize: 18,
-  },
-  bottomContainer: {
-    margin: 20,
-  },
-  bottomText: {
-    fontSize: 16,
-  },
-  bottomTextBold: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
 const styles = StyleSheet.create({
     title: {
