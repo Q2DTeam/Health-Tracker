@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FloatingAction } from "react-native-floating-action";
@@ -51,15 +51,7 @@ const actions = [
         textColor: '#fff',
         position: 4
     },
-    {
-        text: "Snack",
-        icon: <MaterialCommunityIcons name='food-apple' size={24} color='#fff' />,
-        name: "snack",
-        color: globalColors.snackPurple,
-        textBackground: globalColors.snackPurple,
-        textColor: '#fff',
-        position: 5
-    },
+
 ];
 export default function NewActionButton({ navigation }) {
     const [open, setOpen] = React.useState(false);
@@ -69,7 +61,28 @@ export default function NewActionButton({ navigation }) {
         return () => console.log("ActionButton unmounted");
     }
     );
-
+    useState(() => {
+        console.log("ActionButton mounted");
+        return () => console.log("ActionButton unmounted");
+    }
+    );
+    constructor(params) {
+        console.log("ActionButton mounted");
+        super(params);
+        this.state = {
+            open: false,
+            active: false
+        };
+        
+    }
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            active: false
+        };
+    }
+    
     return (
         <View style={styles.container}>
             <FloatingAction
