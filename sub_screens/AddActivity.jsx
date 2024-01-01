@@ -33,7 +33,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
         if (data != undefined) {
             setExercises(data);
 
-            // Save API foods to local
+            // Save API data to local
             saveExercisesToLocal(data);
         }
     }
@@ -306,7 +306,6 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
             </View>
         )
     }
-
 
     return (
         <View style={globalStyles.container}>
