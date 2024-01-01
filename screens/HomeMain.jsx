@@ -31,10 +31,11 @@ export default function HomeMain({ navigation }) {
     const [proteinEaten, setProteinEaten] = useState(0);
     const [fatEaten, setFatEaten] = useState(0); 
     
-    const [breakfast, setBreakfast] = useState();
-    const [lunch, setLunch] = useState();
-    const [dinner, setDinner] = useState();
-    const [snack, setSnack] = useState();
+    const [b, setB] = useState([]);
+    const [l, setL] = useState([]);
+    const [d, setD] = useState([]);
+    const [s, setS] = useState([]);
+    let breakfast, lunch, dinner, snack;
 
     // Exercises
     const [exercises, setExercises] = useState();
@@ -107,13 +108,6 @@ export default function HomeMain({ navigation }) {
         }
     }
 
-    const resetNutrition = () => {
-        setkcalEaten(0);
-        setcarbEaten(0);
-        setFatEaten(0);
-        setProteinEaten(0);
-    }
-
     const sumNutrition = (meal) => {
         let [kcal, carb, fat, pro] = [0, 0, 0, 0];
         meal.map((item) => {
@@ -125,12 +119,22 @@ export default function HomeMain({ navigation }) {
         return { kcal, carb, fat, pro };
     }
 
-    const updateNutrition = (meal) => {
-        const { kcal, carb, fat, pro } = sumNutrition(meal);
-        setkcalEaten(old => old + Math.round(kcal));
-        setcarbEaten(old => old + Math.round(carb));
-        setFatEaten(old => old + Math.round(fat));
-        setProteinEaten(old => old + Math.round(pro));
+    const updateNutrition = () => {
+        meals = [breakfast, lunch, dinner, snack];
+        let k = 0, c = 0, f = 0, p = 0;
+        meals.map((item) => {
+            if (item !== undefined) {
+                const { kcal, carb, fat, pro } = sumNutrition(item);
+                k += kcal;
+                c += carb;
+                f += fat;
+                p += pro;
+            }
+        })
+        setkcalEaten(Math.round(k));
+        setcarbEaten(Math.round(c));
+        setFatEaten(Math.round(f));
+        setProteinEaten(Math.round(p));
     }
 
     const saveMealToLocal = async(type, meal) => {
@@ -146,26 +150,27 @@ export default function HomeMain({ navigation }) {
     const getMealLocal = async(type) => {
         try {
             const value = await AsyncStorage.getItem(type);
-            if (value !== null) {
+            if (value !== null && value !== undefined) {
                 const meal = JSON.parse(value);
                 if (meal.date == date && meal.userID == user.uid) {
-                    //console.log("Meal matched date and id");
                     switch (type) {
                         case 'breakfast':
-                            setBreakfast(meal);
+                            breakfast = meal.meal;
+                            setB(meal.meal);
                             break;
                         case 'lunch':
-                            setLunch(meal);
+                            lunch = meal.meal;
+                            setL(meal.meal);
                             break;
                         case 'dinner':
-                            setDinner(meal);
+                            dinner = meal.meal;
+                            setD(meal.meal);
                             break;
                         case 'snack':
-                            setSnack(meal);
+                            snack = meal.meal;
+                            setS(meal.meal);
                             break;
                     }
-                    if (meal !== undefined) 
-                        updateNutrition(meal.meal);
                 }
                 else {
                     console.log("ID or meal not matched");
@@ -193,22 +198,21 @@ export default function HomeMain({ navigation }) {
 
         if (docSnap) {
             let meal = docSnap.data();
-            switch (type) {
-                case 'breakfast':
-                    setBreakfast(meal);
-                    break;
-                case 'lunch':
-                    setLunch(meal);
-                    break;
-                case 'dinner':
-                    setDinner(meal);
-                    break;
-                case 'snack':
-                    setSnack(meal);
-                    break;
-            }
             if (meal !== undefined) {
-                updateNutrition(meal.meal);
+                switch (type) {
+                    case 'breakfast':
+                        setB(meal.meal);
+                        break;
+                    case 'lunch':
+                        setL(meal.meal);
+                        break;
+                    case 'dinner':
+                        setD(meal.meal);
+                        break;
+                    case 'snack':
+                        setS(meal.meal);
+                        break;
+                }
                 saveMealToLocal(type, meal);
             }
         } 
@@ -300,8 +304,6 @@ export default function HomeMain({ navigation }) {
     }, []);
 
     useEffect(() => {
-        // Reset all value
-        resetNutrition();
         if (user !== undefined) {
             // Get user data
             getDataLocal();
@@ -320,17 +322,34 @@ export default function HomeMain({ navigation }) {
         // Get user data
         getDataLocal();
         // Get Nutrition
-        resetNutrition();
         getMealLocal('breakfast');
         getMealLocal('lunch');
         getMealLocal('dinner');
         getMealLocal('snack');
         // Fetch exercise
         getExercisesLocal();
+
         setTimeout(() => {
           setRefreshing(false);
-        }, 2000);
-      }, []);
+        }, 1000);
+    }, []);
+
+    useEffect(() => {
+        if (b.length > 0) {
+            breakfast = b;
+        }
+        if (l.length > 0) {
+            lunch = l;
+        }
+        if (d.length > 0) {
+            dinner = d;
+        }
+        if (s.length > 0) {
+            snack = s;
+        }
+        updateNutrition();
+    }, [b, l, d, s]);
+
 
     const getNutriValue = (tdee, carbRatio, proteinRatio, fatRatio) => {
         let carb = Math.round(tdee * carbRatio / 400);
@@ -495,22 +514,22 @@ export default function HomeMain({ navigation }) {
                     <MealItem 
                         type='breakfast' 
                         handleNav={() => {handleNavigation('breakfast')}}
-                        meal={breakfast}
+                        meal={b}
                     />
                     <MealItem 
                         type='lunch' 
                         handleNav={() => {handleNavigation('lunch')}}
-                        meal={lunch}
+                        meal={l}
                     />
                     <MealItem 
                         type='dinner' 
                         handleNav={() => {handleNavigation('dinner')}}
-                        meal={dinner}
+                        meal={d}
                     />
                     <MealItem 
                         type='snack' 
                         handleNav={() => {handleNavigation('snack')}}
-                        meal={snack}
+                        meal={s}
                     />
                 </View>
                 <View>

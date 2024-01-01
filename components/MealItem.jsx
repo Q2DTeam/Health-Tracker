@@ -1,6 +1,6 @@
 // Display a full meal
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -22,9 +22,10 @@ export default function MealItem({ type, handleNav, meal }) {
             break;
     }
 
+
     let sum = 0;
     if (meal !== undefined) {
-        meal.meal.map((item) => {
+        meal.map((item) => {
             sum += item.kcal;
         })
     }
