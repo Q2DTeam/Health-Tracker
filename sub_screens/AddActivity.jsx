@@ -152,7 +152,7 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
                     text1: 'Exercise was added successfully to your diary',
                 });
                 setChanged(true);
-            }, 1000);
+            }, 100);
         }
 
         function AddActivityCustom() {
@@ -160,21 +160,22 @@ export default function AddActivity({ closeModal, activities, setActivities, mod
             const [customKcal, setCustomKcal] = useState(kcal);
             const [customDur, setCustomDur] = useState(duration.toString());
     
-            const handleChange = (val) => {
-                let ratio = val / duration;
+            const handleChange = (v) => {
+                let val = Number(v);
                 setCustomDur(val);
+                let ratio = val / duration;
                 setCustomKcal(Math.round(kcal * ratio));
             }
     
             const handlePlus = () => {
-                let dur = parseInt(customDur) + 1;
-                setCustomDur(dur.toString());
+                let dur = Number(customDur) + 1;
+                setCustomDur(dur);
                 setCustomKcal(Math.round(kcal * dur / duration));
             }
     
             const handleMinus = () => {
-                let dur = parseInt(customDur) - 1;
-                setCustomDur(dur.toString());
+                let dur = Number(customDur) - 1;
+                setCustomDur(dur);
                 setCustomKcal(Math.round(kcal * dur / duration));
             }
     

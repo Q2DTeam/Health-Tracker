@@ -59,7 +59,6 @@ export default function MealInfo({ navigation, route }) {
         try {
             const jsonValue = JSON.stringify(recObj);
             await AsyncStorage.setItem(title, jsonValue);
-            console.log(`${title} saved to local!`);
         } catch (error) {
             console.log(error);
         }
@@ -105,7 +104,7 @@ export default function MealInfo({ navigation, route }) {
                         <MaterialCommunityIcons name='chevron-left' size={40} color='#fff' />
                     </TouchableOpacity>
                     <Text style={globalStyles.headerTitle}>{title[0].toUpperCase() + title.slice(1)}</Text>
-                    <Text style={styles.kcalText}>{mealKcal} kcal</Text>
+                    <Text style={styles.kcalText}>{Math.round(mealKcal)} kcal</Text>
                 </View>
             </View>
         )

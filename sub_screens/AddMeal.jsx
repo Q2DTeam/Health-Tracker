@@ -207,7 +207,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                 else {
                     const oldItem = temp[index];
                     const newTemp = temp.filter((item) => item.id != newFood.id);
-                    newFood.serving += oldItem.serving;
+                    newFood.serving += Math.round(oldItem.serving);
                     newFood.kcal += oldItem.kcal;
                     newFood.carb += oldItem.carb;
                     newFood.fat += oldItem.fat;
@@ -220,7 +220,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                     text1: 'Food was added successfully to your diary',
                 });
                 setChanged(true);
-            }, 1000);
+            }, 100);
         }
 
         function AddMealCustom() {

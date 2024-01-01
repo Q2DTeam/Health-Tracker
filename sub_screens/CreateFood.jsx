@@ -92,17 +92,17 @@ export default function CreateFood({ cancelFunc, foods, setFoods }) {
         const newFood = {
             id: Math.floor(Math.random() * 1001) + 21,
             name: values.name,
-            serving: serving,
+            serving: Number(serving),
             unit: unit,
-            calorie: values.calorie,
-            fat: values.fat,
-            protein: values.protein,
-            carb: values.carb,
+            calorie: Number(values.calorie),
+            fat: Number(values.fat),
+            protein: Number(values.protein),
+            carb: Number(values.carb),
         }
         saveFoodToLocal(newFood);
         saveFoodToDb(newFood);
-        setFoods(old => [newFood, ...old]);
         cancelFunc();
+        setFoods(old => [newFood, ...old]);
     }
 
     function Header() {

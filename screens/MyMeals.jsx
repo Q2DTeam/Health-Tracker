@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, Modal, TextInput, FlatList, RefreshControl } from 'react-native';
 import { auth } from '../utils/firebase';
-import { db, doc, getDoc } from '../utils/firestore';
+import { db, doc, getDoc, setDoc } from '../utils/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import styles
@@ -157,7 +157,7 @@ export default function MyMeals() {
         );
     }
 
-    function FoodItem({ id, name, kcal, carb, protein, fat, serving, unit }) {
+    function FoodItem({ id, name, kcal, serving, unit }) {
         const handleDelete = () => {
             Alert.alert('Confirm delete', 'Do you want to delete this food?', [
                 {
@@ -165,6 +165,7 @@ export default function MyMeals() {
                     onPress: () => {
                         const newFoods = foods.filter((item) => item.id != id);
                         setFoods(newFoods);
+                        setFilteredFoods(newFoods);
                         saveFoodToDb(newFoods);
                         saveFoodToLocal(newFoods);
                     },
