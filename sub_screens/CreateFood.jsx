@@ -80,7 +80,7 @@ export default function CreateFood({ cancelFunc, foods, setFoods }) {
         let serving = 1;
         let unit = '';
         if (values.unit.length > 0 && values.serving.length > 0) {
-            unit = `${values.unit} (${values.serving})`;
+            unit = `${values.unit} (${values.serving} ${measure})`;
         }
         else if (values.unit.length > 0) {
             unit = values.unit;
