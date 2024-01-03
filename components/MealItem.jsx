@@ -22,12 +22,14 @@ export default function MealItem({ type, handleNav, meal }) {
             break;
     }
 
-
-    let sum = 0;
-    if (meal !== undefined) {
-        meal.map((item) => {
-            sum += item.kcal;
-        })
+    function sum() {
+        let sum = 0;
+        if (meal !== undefined) {
+            meal.map((item) => {
+                sum += item.kcal;
+            })
+        }
+        return sum;
     }
 
     return (
@@ -46,7 +48,7 @@ export default function MealItem({ type, handleNav, meal }) {
                 <View style={styles.titleContainer}>
                     <View style={{marginLeft: 20}}>
                         <Text style={{ fontSize: 18, fontFamily: 'inter-semibold' }}>{type[0].toUpperCase() + type.slice(1)}</Text>
-                        <Text>{parseInt(sum)} kcal</Text>
+                        <Text>{parseInt(sum())} kcal</Text>
                     </View>
                     <TouchableOpacity style={styles.detailBtn} onPress={handleNav}>
                         <MaterialCommunityIcons name='pencil-box' size={30} />

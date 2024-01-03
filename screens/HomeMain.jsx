@@ -173,11 +173,47 @@ export default function HomeMain({ navigation }) {
                     }
                 }
                 else {
-                    console.log("ID or meal not matched");
+                    console.log("ID or date not matched");
+                    switch (type) {
+                        case 'breakfast':
+                            breakfast = [];
+                            setB([]);
+                            break;
+                        case 'lunch':
+                            lunch = [];
+                            setL([]);
+                            break;
+                        case 'dinner':
+                            dinner = [];
+                            setD([]);
+                            break;
+                        case 'snack':
+                            snack = [];
+                            setS([]);
+                            break;
+                    }
                     await getMeal(type);
                 }
             }
             else {
+                switch (type) {
+                    case 'breakfast':
+                        breakfast = [];
+                        setB([]);
+                        break;
+                    case 'lunch':
+                        lunch = [];
+                        setL([]);
+                        break;
+                    case 'dinner':
+                        dinner = [];
+                        setD([]);
+                        break;
+                    case 'snack':
+                        snack = [];
+                        setS([]);
+                        break;
+                }
                 await getMeal(type);
             }
         } catch (error) {
@@ -303,6 +339,7 @@ export default function HomeMain({ navigation }) {
         return subscriber;
     }, []);
 
+    // Run after app opens
     useEffect(() => {
         if (user !== undefined) {
             // Get user data
@@ -316,6 +353,7 @@ export default function HomeMain({ navigation }) {
             getExercisesLocal();
         }
     }, [user, date]);
+    
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
