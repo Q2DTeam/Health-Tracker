@@ -224,8 +224,8 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
         }
 
         function AddMealCustom() {
-            const sliceColors = [globalColors.vibrantBlue, globalColors.lunchOrange, globalColors.snackPurple];
-            const [customServ, setCustomServ] = useState(serving.toString());
+            const sliceColors = [globalColors.vibrantBlue, globalColors.lunchOrange, globalColors.snackPurple, globalColors.chillGreen];
+            const [customServ, setCustomServ] = useState(serving);
             const [customKcal, setCustomKcal] = useState(kcal);
             const [customCarb, setCustomCarb] = useState(carb);
             const [customPro, setCustomPro] = useState(protein);
@@ -234,20 +234,22 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
             const [customAdding, setCustomAdding] = useState(false);
     
             const getRatio = () => {
-                carbEnergy = Math.round(customCarb * 400 / customKcal);
-                proEnergy = Math.round(customPro * 400 / customKcal);
-                fatEnergy = 100 - (carbEnergy + proEnergy);
-                if (proEnergy < 0 || carbEnergy < 0 || fatEnergy < 0) {
-                    return [30, 30, 40];
-                }
-                return [carbEnergy, proEnergy, fatEnergy];
+                let carbEnergy = Math.round(customCarb * 400 / customKcal);
+                let proEnergy = Math.round(customPro * 400 / customKcal);
+                let fatEnergy = Math.round(customPro * 900 / customKcal);
+                let others = 100 - (carbEnergy + proEnergy + fatEnergy);
+
+                if (others < 0) 
+                    others = 0;
+                return [carbEnergy, proEnergy, fatEnergy, others];
             }
 
             let nutritions = getRatio();
     
-            const handleChange = (val) => {
-                if (val <= 0 || val == undefined | val == null) {
-
+            const handleChange = (v) => {
+                let val = Number(v);
+                if (val <= 0 || val == undefined || val == null) {
+                    setCustomServ(0);
                 }
                 else {
                     let ratio = val / serving;
@@ -310,7 +312,7 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                     <View style={customCard.mid}>
                         <TextInput style={customCard.input}
                             keyboardType='numeric'
-                            value={customServ}
+                            value={customServ.toString()}
                             onChangeText={(val) => {
                                 handleChange(val);
                             }}
@@ -337,6 +339,10 @@ export default function AddMeal({ title, closeModal, meal, setMeal, modified }) 
                             <View style={styles.infoItem}>
                                 <FontAwesome name='circle' color={globalColors.snackPurple} size={18} />
                                 <Text style={styles.infoName}>Fats: {customFat} g</Text>
+                            </View>
+                            <View style={styles.infoItem}>
+                                <FontAwesome name='circle' color={globalColors.chillGreen} size={18} />
+                                <Text style={styles.infoName}>Micronutrients</Text>
                             </View>
                         </View>
                     </View>
