@@ -68,12 +68,12 @@ const styles = StyleSheet.create({
     },
     bottomText: {
         color: '#fff', 
-        fontSize: 18, 
+        fontSize: 20, 
         textAlign: 'center'
     },
     bottomTextBold: {
         color: '#fff', 
-        fontSize: 18, 
+        fontSize: 20, 
         textAlign: 'center',
         fontWeight: 'bold',
     }
